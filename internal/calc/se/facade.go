@@ -12,6 +12,7 @@ package se
 */
 import "C"
 import (
+	"fmt"
 	"unsafe"
 )
 
@@ -35,4 +36,24 @@ func JulDay(year int, month int, day int, hour float64, gregCal bool) float64 {
 	cGregFlag := C.int(gregFlag)
 	result := float64(C.swe_julday(cYear, cMonth, cDay, cHour, cGregFlag))
 	return result
+}
+
+// PointPositions accesses the SE to calculate positions for celestial points
+func PointPositions(jdUt float64, body int, flags int) ([6]float64, error) {
+	var cPos [6]C.double
+	cSerr := make([]C.char, C.AS_MAXCH)
+	cJdUt := C.double(jdUt)
+	cBody := C.int(body)
+	cFlags := C.int(flags)
+	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
+	err := C.GoString(&cSerr[0])
+	if result < 0 {
+		var emptyArray [6]float64
+		return emptyArray, fmt.Errorf("PointPositions error: %s", err)
+	}
+	pos := make([]float64, 6)
+	for i := 0; i < 6; i++ {
+		pos[i] = float64(cPos[i])
+	}
+	return [6]float64(pos), nil
 }

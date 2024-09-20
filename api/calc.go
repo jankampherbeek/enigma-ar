@@ -17,3 +17,9 @@ func JulDay(request domain.JulDayRequest) domain.FloatResponse {
 	err := 0
 	return domain.FloatResponse{jd, err}
 }
+
+func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
+	positions, err := calc.FullPositions(request)
+	// TODO log if error occurs
+	return positions, err
+}

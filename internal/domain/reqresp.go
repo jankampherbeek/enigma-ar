@@ -8,16 +8,42 @@
 package domain
 
 // FloatResponse Response for a floating point value
-type FloatResponse struct {
+type FloatResponse struct { // TODO remove, this response is obsolete
 	Value  float64 `json:"value"`
 	Result int     `json:"result"`
 }
 
 // JulDayRequest Request for the calculation of a Julian Day number
-type JulDayRequest struct {
+type JulDayRequest struct { // TODO change into general struct for date/time, remove Json
 	Year  int     `json:"year"`
 	Month int     `json:"month"`
 	Day   int     `json:"day"`
 	Ut    float64 `json:"ut"`
 	Greg  bool    `json:"greg"`
+}
+
+// PointPositionsRequest Request for the calculation of all positions for one or more points
+type PointPositionsRequest struct {
+	Points   []int
+	JdUt     float64
+	Coord    CoordinateSystem
+	ObsPos   ObserverPosition
+	Tropical bool
+}
+
+// PointPosResult Calculated positions for a single point
+type PointPosResult struct {
+	Point     int
+	LonPos    float64
+	LonSpeed  float64
+	LatPos    float64
+	LatSpeed  float64
+	RaPos     float64
+	RaSpeed   float64
+	DeclPos   float64
+	DeclSpeed float64
+	RadvPos   float64
+	RadvSpeed float64
+	AzimPos   float64
+	AltitPos  float64
 }
