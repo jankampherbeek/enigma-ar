@@ -12,7 +12,7 @@ import (
 	"enigma-ar/internal/domain"
 )
 
-func JulDay(request domain.JulDayRequest) float64 {
+func JulDay(request domain.DateTime) float64 {
 	jd := calc.JulianDay(request.Year, request.Month, request.Day, request.Ut, request.Greg)
 	return jd
 }

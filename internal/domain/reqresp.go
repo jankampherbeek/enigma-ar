@@ -7,13 +7,13 @@
 
 package domain
 
-// JulDayRequest Request for the calculation of a Julian Day number
-type JulDayRequest struct { // TODO change into general struct for date/time, remove Json
-	Year  int     `json:"year"`
-	Month int     `json:"month"`
-	Day   int     `json:"day"`
-	Ut    float64 `json:"ut"`
-	Greg  bool    `json:"greg"`
+// DateTime Representation of a date and time in UT
+type DateTime struct {
+	Year  int
+	Month int
+	Day   int
+	Ut    float64
+	Greg  bool
 }
 
 // PointPositionsRequest Request for the calculation of all positions for one or more points

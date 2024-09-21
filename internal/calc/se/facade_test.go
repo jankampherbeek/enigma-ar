@@ -35,10 +35,29 @@ func TestPointPositions(t *testing.T) {
 	result, err := PointPositions(julDay, body, flags)
 	if err != nil {
 		t.Errorf("PointPositions(2_470_000, SE_MERCURY, 256) returns error %s", err)
+	} else {
+		for i := 0; i <= 3; i++ {
+			if math.Abs(result[i]-expected[i]) > DELTA {
+				t.Errorf("PointPositionsJ(2_470_000, SE_MERCURY, 256) = %f; want %f", result[i], expected[i])
+			}
+		}
 	}
-	for i := 0; i <= 3; i++ {
+
+}
+
+func TestHorizontalPosition(t *testing.T) {
+	jdUt := 2_434_406.8177083335
+	geoLong := 6.9
+	geoLat := 52.216666666666669
+	geoHeight := 0.0
+	pointRa := 317.18784726228648
+	pointDecl := -16.422932391786961
+	flags := 2048
+	expected := []float64{297.4812938568067, 0.0, 0.50662370470219853}
+	result := HorizontalPosition(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
+	for i := 0; i <= 2; i++ {
 		if math.Abs(result[i]-expected[i]) > DELTA {
-			t.Errorf("PointPositionsJ(2_470_000, SE_MERCURY, 256) = %f; want %f", result[i], expected[i])
+			t.Errorf("HorizontalPosition(2_434_406.8177, 6.9, 52.2166, 0.0, 0.0, 317.1878, -16.4229, 2048) = %f; want %f", result[i], expected[i])
 		}
 	}
 }

@@ -57,3 +57,22 @@ func PointPositions(jdUt float64, body int, flags int) ([6]float64, error) {
 	}
 	return [6]float64(pos), nil
 }
+
+// HorizontalPosition converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
+func HorizontalPosition(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
+	var cHorCoord [3]C.double
+	cJdUt := C.double(jdUt)
+	cFlags := C.int(flags)
+	cAtPress := C.double(0.0)
+	cAtTemp := C.double(0.0)
+	geoCoord := []float64{geoLong, geoLat, geoHeight}
+	pointCoord := []float64{pointRa, pointDecl}
+	cGeoCoord := (*C.double)(&geoCoord[0])
+	cPointCoord := (*C.double)(&pointCoord[0])
+	_ = C.swe_azalt(cJdUt, cFlags, cGeoCoord, cAtPress, cAtTemp, cPointCoord, &cHorCoord[0])
+	pos := make([]float64, 3)
+	for i := 0; i < 3; i++ {
+		pos[i] = float64(cHorCoord[i])
+	}
+	return [3]float64(pos)
+}
