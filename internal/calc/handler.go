@@ -32,7 +32,11 @@ func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResul
 		if errEqu != nil {
 			return positions, errEqu
 		}
-		// todo calculate horizontal coordinates
+		height := 0.0
+		pointRa := posEqu[0]
+		pointDecl := posEqu[1]
+		horFlags := domain.SEFLG_EQUATORIAL
+		posHor := se.HorizontalPosition(request.JdUt, request.GeoLong, request.GeoLong, height, pointRa, pointDecl, horFlags)
 		positions = append(positions, domain.PointPosResult{
 			Point:     point,
 			LonPos:    posEcl[0],
@@ -45,8 +49,8 @@ func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResul
 			DeclSpeed: posEqu[4],
 			RadvPos:   posEcl[2],
 			RadvSpeed: posEcl[5],
-			AzimPos:   0.0,
-			AltitPos:  0.0,
+			AzimPos:   posHor[0],
+			AltitPos:  posHor[2],
 		})
 	}
 	return positions, nil

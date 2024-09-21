@@ -20,6 +20,8 @@ type DateTime struct {
 type PointPositionsRequest struct {
 	Points   []int
 	JdUt     float64
+	GeoLong  float64
+	GeoLat   float64
 	Coord    CoordinateSystem
 	ObsPos   ObserverPosition
 	Tropical bool
