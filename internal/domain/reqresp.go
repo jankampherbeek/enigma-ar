@@ -7,12 +7,6 @@
 
 package domain
 
-// FloatResponse Response for a floating point value
-type FloatResponse struct { // TODO remove, this response is obsolete
-	Value  float64 `json:"value"`
-	Result int     `json:"result"`
-}
-
 // JulDayRequest Request for the calculation of a Julian Day number
 type JulDayRequest struct { // TODO change into general struct for date/time, remove Json
 	Year  int     `json:"year"`

@@ -12,8 +12,8 @@ import (
 	"enigma-ar/internal/domain"
 )
 
-// CalcJd handles the calculation of a Julian day number.
-func CalcJd(year int, month int, day int, ut float64, greg bool) float64 {
+// JulianDay handles the calculation of a Julian day number.
+func JulianDay(year int, month int, day int, ut float64, greg bool) float64 {
 	return se.JulDay(year, month, day, ut, greg)
 }
 

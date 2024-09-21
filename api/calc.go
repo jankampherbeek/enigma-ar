@@ -12,10 +12,9 @@ import (
 	"enigma-ar/internal/domain"
 )
 
-func JulDay(request domain.JulDayRequest) domain.FloatResponse {
-	jd := calc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
-	err := 0
-	return domain.FloatResponse{jd, err}
+func JulDay(request domain.JulDayRequest) float64 {
+	jd := calc.JulianDay(request.Year, request.Month, request.Day, request.Ut, request.Greg)
+	return jd
 }
 
 func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
