@@ -14,6 +14,7 @@ import "C"
 import (
 	"errors"
 	"fmt"
+	"math"
 	"unsafe"
 )
 
@@ -117,4 +118,20 @@ func (hp *HousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, g
 		ascMc[i] = float64(cAscMc[i])
 	}
 	return cusps, ascMc, nil
+}
+
+func CoordTransform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64 {
+	cValuesIn := (*C.double)(&valuesIn[0])
+	var correctedEsp = math.Abs(eps) // SE expects positive epsilon for equatorial 2 ecliptical
+	if ec2Equ {                      // and negatieve epsilon for ecliptical to equatorial
+		correctedEsp *= -1
+	}
+	cEps := C.double(eps)
+	var cValuesOut [3]C.double
+	C.swe_cotrans(cValuesIn, cValuesOut, cEps)
+	valuesOut := make([]float64, 3)
+	for i := 0; i < int(3); i++ {
+		valuesOut[i] = float64(cValuesOut[i])
+	}
+	return valuesOut
 }
