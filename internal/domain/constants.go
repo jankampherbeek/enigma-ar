@@ -70,3 +70,32 @@ const (
 	SEFLG_TOPOCTR    = 32768 // 32 * 1024
 	SEFLG_SIDEREAL   = 65536 // 64 * 1024
 )
+
+// House systems
+const (
+	NoHouses        = 'W'
+	Placidus        = 'P'
+	Koch            = 'K'
+	Porphyri        = 'O'
+	Regiomontanus   = 'R'
+	Campanus        = 'C'
+	Alcabitius      = 'B'
+	TopoCentric     = 'T'
+	Krusinski       = 'U'
+	Apc             = 'Y'
+	Morin           = 'M'
+	WholeSign       = 'W'
+	EqualAsc        = 'A'
+	EqualMc         = 'D'
+	EqualAries      = 'N'
+	Vehlow          = 'V'
+	Axial           = 'X'
+	Horizon         = 'H'
+	Carter          = 'F'
+	Gauquelin       = 'G'
+	SunShine        = 'i'
+	SunShineTreindl = 'I'
+	PullenSd        = 'L'
+	PullenSr        = 'Q'
+	Sripati         = 'S'
+)

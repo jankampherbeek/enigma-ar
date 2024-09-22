@@ -12,6 +12,7 @@ package se
 */
 import "C"
 import (
+	"errors"
 	"fmt"
 	"unsafe"
 )
@@ -75,4 +76,45 @@ func HorizontalPosition(jdUt float64, geoLong float64, geoLat float64, geoHeight
 		pos[i] = float64(cHorCoord[i])
 	}
 	return [3]float64(pos)
+}
+
+type HousePosCalculator interface {
+	CalcHousePos(houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64, error)
+}
+
+type HousePos struct{}
+
+func NewHousePos() *HousePos {
+	return &HousePos{}
+}
+
+// CalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
+// Depending on the value of flags, tropical (0) positions or sidereal (65536) positions are returned.
+// Values returned: array with cusps, starting at index 1, array with positions of asc, mc, armc, vertex, eq asc,
+// co-asc Koch, co-asc Munkasey and three empty values.
+func (hp *HousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
+	cJdUt := C.double(jdUt)
+	cGeolat := C.double(geoLat)
+	cGeolong := C.double(geoLong)
+	cHouseSys := C.int(houseSys)
+	cFlags := C.int(flags)
+
+	var cCusps [13]C.double
+	var cAscMc [10]C.double
+
+	result := C.swe_houses_ex(cJdUt, cFlags, cGeolat, cGeolong, cHouseSys, &cCusps[0], &cAscMc[0])
+	if result < 0 {
+		fmt.Printf("Error in HousePositions: %d", result)
+		err := errors.New("Error in HousePositions")
+		return make([]float64, 13), make([]float64, 10), err
+	}
+	cusps := make([]float64, 13)
+	for i := 0; i < int(13); i++ {
+		cusps[i] = float64(cCusps[i])
+	}
+	ascMc := make([]float64, 10)
+	for i := 0; i < int(10); i++ {
+		ascMc[i] = float64(cAscMc[i])
+	}
+	return cusps, ascMc, nil
 }

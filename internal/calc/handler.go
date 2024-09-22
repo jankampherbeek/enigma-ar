@@ -36,7 +36,7 @@ func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResul
 		pointRa := posEqu[0]
 		pointDecl := posEqu[1]
 		horFlags := domain.SEFLG_EQUATORIAL
-		posHor := se.HorizontalPosition(request.JdUt, request.GeoLong, request.GeoLong, height, pointRa, pointDecl, horFlags)
+		posHor := se.HorizontalPosition(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
 		positions = append(positions, domain.PointPosResult{
 			Point:     point,
 			LonPos:    posEcl[0],
@@ -55,6 +55,31 @@ func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResul
 	}
 	return positions, nil
 }
+
+/*func HousePos(hsys rune, jdUt float64, geoLong float64, geoLat float64, tropical bool) ([]domain.HousePosResult, []domain.HousePosResult, error) {
+	cuspPos := make([]domain.HousePosResult, 0)
+	mcAscPos := make([]domain.HousePosResult, 0)
+	flagsEcl := SeFlags(domain.Ecliptical, domain.Geocentric, tropical)
+	flagsEqu := SeFlags(domain.Equatorial, domain.Geocentric, tropical)
+	hp := se.NewHousePos()
+	cuspsEcl, mcAscEcl, errEcl := hp.CalcHousePos(hsys, jdUt, geoLat, geoLong, flagsEcl)
+	if errEcl != nil {
+		return cuspPos, mcAscPos, errEcl
+	}
+	cuspsEqu, mcAscEqu, errEqu := hp.CalcHousePos(hsys, jdUt, geoLat, geoLong, flagsEqu)
+	if errEqu != nil {
+		return cuspPos, mcAscPos, errEqu
+	}
+
+	horFlags := domain.SEFLG_EQUATORIAL
+	height := 0.0
+	for i := 0; i < len(cuspPos); i++ {
+		posHor := se.HorizontalPosition(jdUt, geoLong, geoLat, height, cuspsEqu[i], pointDecl, horFlags)
+
+	}
+
+	//houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64,
+}*/
 
 // SeFlags calculates the total of all flags for the SE.
 func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {

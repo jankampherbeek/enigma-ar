@@ -43,3 +43,12 @@ type PointPosResult struct {
 	AzimPos   float64
 	AltitPos  float64
 }
+
+// HousePosResult Calculated positions for a cusp or other mundane point
+type HousePosResult struct {
+	LonPos   float64
+	RaPos    float64
+	DeclPos  float64
+	AzimPos  float64
+	AltitPos float64
+}
