@@ -120,8 +120,19 @@ func (hp *HousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, g
 	return cusps, ascMc, nil
 }
 
-func CoordTransform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64 {
-	cValuesIn := (*C.double)(&valuesIn[0])
+type CoordinateTransformer interface {
+	Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64
+}
+
+type CoordinateTransform struct{}
+
+func NewCoordinateTransform() *CoordinateTransform {
+	return &CoordinateTransform{}
+}
+
+// Transform eclipti to equatorial or the other way around. Valuesin and valuesout contain resp. long, lat, distance or ra, decl, distance.
+func (ct CoordinateTransform) Transform(valuesIn [3]float64, eps float64, ec2Equ bool) []float64 {
+	cValuesIn := (*C.double)(valuesIn[0])
 	var correctedEsp = math.Abs(eps) // SE expects positive epsilon for equatorial 2 ecliptical
 	if ec2Equ {                      // and negatieve epsilon for ecliptical to equatorial
 		correctedEsp *= -1
