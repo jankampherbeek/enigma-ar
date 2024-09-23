@@ -12,23 +12,51 @@ import (
 	"enigma-ar/internal/domain"
 )
 
-// JulianDay handles the calculation of a Julian day number.
-func JulianDay(year int, month int, day int, ut float64, greg bool) float64 {
-	return se.JulDay(year, month, day, ut, greg)
+type JulDayCalculator interface {
+	CalcJd(year int, month int, day int, ut float64, greg bool) float64
 }
 
-// FullPositions calculates fully defined positions for one or more celestial points
-func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
+type PointPosCalculator interface {
+	CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
+}
+
+type JulDayCalculation struct {
+	seCalc se.SeJulDayCalculation
+}
+
+func NewJulDayCalculation() JulDayCalculator {
+	sjc := se.NewSeJulDayCalculation()
+	return JulDayCalculation{sjc}
+}
+
+// CalcJd handles the calculation of a Julian day number.
+func (jdc JulDayCalculation) CalcJd(year int, month int, day int, ut float64, greg bool) float64 {
+	return jdc.seCalc.CalcJd(year, month, day, ut, greg)
+}
+
+type PointPosCalculation struct {
+	sePointCalc  se.SePointPosCalculation
+	seHorPosCalc se.SeHorPosCalculation
+}
+
+func NewPointPosCalculation() PointPosCalculation {
+	ppc := se.NewSePointPosCalculation()
+	hpc := se.NewSeHorPosCalculation()
+	return PointPosCalculation{ppc, hpc}
+}
+
+// CalcPointPos calculates fully defined positions for one or more celestial points
+func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
 	positions := make([]domain.PointPosResult, 0)
 	eclFlags := SeFlags(domain.Ecliptical, request.ObsPos, request.Tropical)
 	equFlags := SeFlags(domain.Equatorial, request.ObsPos, request.Tropical)
 	for i := 0; i < len(request.Points); i++ {
 		var point = request.Points[i]
-		posEcl, errEcl := se.PointPositions(request.JdUt, point, eclFlags)
+		posEcl, errEcl := calc.sePointCalc.CalcPointPos(request.JdUt, point, eclFlags)
 		if errEcl != nil {
 			return positions, errEcl
 		}
-		posEqu, errEqu := se.PointPositions(request.JdUt, point, equFlags)
+		posEqu, errEqu := calc.sePointCalc.CalcPointPos(request.JdUt, point, equFlags)
 		if errEqu != nil {
 			return positions, errEqu
 		}
@@ -36,7 +64,7 @@ func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResul
 		pointRa := posEqu[0]
 		pointDecl := posEqu[1]
 		horFlags := domain.SEFLG_EQUATORIAL
-		posHor := se.HorizontalPosition(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
+		posHor := calc.seHorPosCalc.CalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
 		positions = append(positions, domain.PointPosResult{
 			Point:     point,
 			LonPos:    posEcl[0],

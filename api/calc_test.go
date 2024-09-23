@@ -16,8 +16,8 @@ import (
 
 func TestCalc(t *testing.T) {
 	request := domain.DateTime{2024, 5, 6, 20.5, true}
-
-	result := calc.JulianDay(request.Year, request.Month, request.Day, request.Ut, request.Greg)
+	jdCalc := calc.NewJulDayCalculation()
+	result := jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
 	expected := 2460437.3541666665
 	difference := math.Abs(result - expected)
 	if difference > 0.000001 {

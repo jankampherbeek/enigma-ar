@@ -18,6 +18,22 @@ import (
 	"unsafe"
 )
 
+type SeJulDayCalculator interface {
+	CalcJd(year int, month int, day int, hour float64, gregCal bool) float64
+}
+
+type SePointPosCalculator interface {
+	CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
+}
+
+type SeHorizontalPosCalculator interface {
+	CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
+}
+
+type SeHousePosCalculator interface {
+	CalcHousePos(houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64, error)
+}
+
 // SetEphePath initializes the SE and defines the location for the ephemeris files.
 func SetEphePath(path string) {
 	var _path *C.char = C.CString(path)
@@ -25,8 +41,14 @@ func SetEphePath(path string) {
 	C.swe_set_ephe_path(_path)
 }
 
-// JulDay accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
-func JulDay(year int, month int, day int, hour float64, gregCal bool) float64 {
+type SeJulDayCalculation struct{}
+
+func NewSeJulDayCalculation() SeJulDayCalculation {
+	return SeJulDayCalculation{}
+}
+
+// CalculateJd accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
+func (jdc SeJulDayCalculation) CalcJd(year int, month int, day int, hour float64, gregCal bool) float64 {
 	cYear := C.int(year)
 	cMonth := C.int(month)
 	cDay := C.int(day)
@@ -40,8 +62,14 @@ func JulDay(year int, month int, day int, hour float64, gregCal bool) float64 {
 	return result
 }
 
-// PointPositions accesses the SE to calculate positions for celestial points
-func PointPositions(jdUt float64, body int, flags int) ([6]float64, error) {
+type SePointPosCalculation struct{}
+
+func NewSePointPosCalculation() SePointPosCalculation {
+	return SePointPosCalculation{}
+}
+
+// CalculatePointPos accesses the SE to calculate positions for celestial points
+func (ppc SePointPosCalculation) CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
@@ -60,8 +88,14 @@ func PointPositions(jdUt float64, body int, flags int) ([6]float64, error) {
 	return [6]float64(pos), nil
 }
 
-// HorizontalPosition converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
-func HorizontalPosition(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
+type SeHorPosCalculation struct{}
+
+func NewSeHorPosCalculation() SeHorPosCalculation {
+	return SeHorPosCalculation{}
+}
+
+// CalculateHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
+func (hpc SeHorPosCalculation) CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
 	var cHorCoord [3]C.double
 	cJdUt := C.double(jdUt)
 	cFlags := C.int(flags)
@@ -79,21 +113,17 @@ func HorizontalPosition(jdUt float64, geoLong float64, geoLat float64, geoHeight
 	return [3]float64(pos)
 }
 
-type HousePosCalculator interface {
-	CalcHousePos(houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64, error)
-}
+type SeHousePos struct{}
 
-type HousePos struct{}
-
-func NewHousePos() *HousePos {
-	return &HousePos{}
+func NewSeHousePos() *SeHousePos {
+	return &SeHousePos{}
 }
 
 // CalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
 // Depending on the value of flags, tropical (0) positions or sidereal (65536) positions are returned.
 // Values returned: array with cusps, starting at index 1, array with positions of asc, mc, armc, vertex, eq asc,
 // co-asc Koch, co-asc Munkasey and three empty values.
-func (hp *HousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
+func (hp *SeHousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
 	cJdUt := C.double(jdUt)
 	cGeolat := C.double(geoLat)
 	cGeolong := C.double(geoLong)
@@ -120,29 +150,39 @@ func (hp *HousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, g
 	return cusps, ascMc, nil
 }
 
-type CoordinateTransformer interface {
+// Coordinate transformation
+
+type SeCoordinateTransformer interface {
 	Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64
 }
 
-type CoordinateTransform struct{}
+type SeCoordinateTransform struct{}
 
-func NewCoordinateTransform() *CoordinateTransform {
-	return &CoordinateTransform{}
+func NewSeCoordinateTransform() *SeCoordinateTransform {
+	return &SeCoordinateTransform{}
 }
 
-// Transform eclipti to equatorial or the other way around. Valuesin and valuesout contain resp. long, lat, distance or ra, decl, distance.
-func (ct CoordinateTransform) Transform(valuesIn [3]float64, eps float64, ec2Equ bool) []float64 {
-	cValuesIn := (*C.double)(valuesIn[0])
+// Transform ecliptic to equatorial or the other way around. Valuesin and valuesout contain resp. long, lat, distance or ra, decl, distance.
+func (ct SeCoordinateTransform) Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64 {
+	cValuesIn := (*C.double)(&valuesIn[0])
 	var correctedEsp = math.Abs(eps) // SE expects positive epsilon for equatorial 2 ecliptical
 	if ec2Equ {                      // and negatieve epsilon for ecliptical to equatorial
 		correctedEsp *= -1
 	}
 	cEps := C.double(eps)
 	var cValuesOut [3]C.double
-	C.swe_cotrans(cValuesIn, cValuesOut, cEps)
+	C.swe_cotrans(cValuesIn, &cValuesOut[0], cEps)
 	valuesOut := make([]float64, 3)
 	for i := 0; i < int(3); i++ {
 		valuesOut[i] = float64(cValuesOut[i])
 	}
 	return valuesOut
 }
+
+/*func Swe_cotrans(xpo *[6]float64, xpn *[6]float64, eps float64) {
+	_xpo := (*C.double)(&xpo[0])
+	_xpn := (*C.double)(&xpn[0])
+	_eps := C.double(eps)
+
+	C.swe_cotrans(_xpo, _xpn, _eps)
+}*/

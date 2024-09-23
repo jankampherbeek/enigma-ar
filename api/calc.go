@@ -12,13 +12,41 @@ import (
 	"enigma-ar/internal/domain"
 )
 
-func JulDay(request domain.DateTime) float64 {
-	jd := calc.JulianDay(request.Year, request.Month, request.Day, request.Ut, request.Greg)
+type JulDayServer interface {
+	JulDay(request domain.DateTime) float64
+}
+
+type FullPointServer interface {
+	FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
+}
+
+type JulDayService struct {
+	jdCalc calc.JulDayCalculator
+}
+
+func NewJulDayService(jdCalc calc.JulDayCalculator) JulDayService {
+	return JulDayService{
+		calc.NewJulDayCalculation(),
+	}
+}
+
+func (jds JulDayService) JulDay(request domain.DateTime) float64 {
+	jd := jds.jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
 	return jd
 }
 
-func FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
-	positions, err := calc.FullPositions(request)
+type FullPointService struct {
+	fpCalc calc.PointPosCalculator
+}
+
+func newFullPointService() FullPointService {
+	return FullPointService{
+		calc.NewPointPosCalculation(),
+	}
+}
+
+func (fps FullPointService) FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
+	positions, err := fps.fpCalc.CalcPointPos(request)
 	// TODO log if error occurs
 	return positions, err
 }

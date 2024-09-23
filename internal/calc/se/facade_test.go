@@ -16,7 +16,7 @@ import (
 const DELTA = 1e-8
 
 func TestJulDay(t *testing.T) {
-	result := JulDay(2024, 5, 6, 20.5, true)
+	result := SeJulDayCalculation{}.CalcJd(2024, 5, 6, 20.5, true)
 	expected := 2460437.3541666665
 	difference := math.Abs(result - expected)
 	if difference > 0.000001 {
@@ -32,7 +32,7 @@ func TestPointPositions(t *testing.T) {
 	flags := domain.SEFLG_SWIEPH + domain.SEFLG_SPEED
 	// TODO check all 6 values
 	expected := []float64{132.309351305555, 1.309320472222, 1.106102572, 1.572654666667}
-	result, err := PointPositions(julDay, body, flags)
+	result, err := SePointPosCalculation{}.CalcPointPos(julDay, body, flags)
 	if err != nil {
 		t.Errorf("PointPositions(2_470_000, SE_MERCURY, 256) returns error %s", err)
 	} else {
@@ -54,7 +54,7 @@ func TestHorizontalPosition(t *testing.T) {
 	pointDecl := -16.422932391786961
 	flags := 2048
 	expected := []float64{297.4812938568067, 0.0, 0.50662370470219853}
-	result := HorizontalPosition(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
+	result := SeHorPosCalculation{}.CalcHorPos(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
 	for i := 0; i <= 2; i++ {
 		if math.Abs(result[i]-expected[i]) > DELTA {
 			t.Errorf("HorizontalPosition(2_434_406.8177, 6.9, 52.2166, 0.0, 0.0, 317.1878, -16.4229, 2048) = %f; want %f", result[i], expected[i])
