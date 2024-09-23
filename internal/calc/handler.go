@@ -21,7 +21,7 @@ type PointPosCalculator interface {
 }
 
 type JulDayCalculation struct {
-	seCalc se.SeJulDayCalculation
+	seCalc se.SeJulDayCalculator
 }
 
 func NewJulDayCalculation() JulDayCalculator {
@@ -31,15 +31,19 @@ func NewJulDayCalculation() JulDayCalculator {
 
 // CalcJd handles the calculation of a Julian day number.
 func (jdc JulDayCalculation) CalcJd(year int, month int, day int, ut float64, greg bool) float64 {
-	return jdc.seCalc.CalcJd(year, month, day, ut, greg)
+	var gregFlag = 1
+	if !greg {
+		gregFlag = 0
+	}
+	return jdc.seCalc.SeCalcJd(year, month, day, ut, gregFlag)
 }
 
 type PointPosCalculation struct {
-	sePointCalc  se.SePointPosCalculation
+	sePointCalc  se.SePointPosCalculator
 	seHorPosCalc se.SeHorPosCalculation
 }
 
-func NewPointPosCalculation() PointPosCalculation {
+func NewPointPosCalculation() PointPosCalculator {
 	ppc := se.NewSePointPosCalculation()
 	hpc := se.NewSeHorPosCalculation()
 	return PointPosCalculation{ppc, hpc}
@@ -52,11 +56,11 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 	equFlags := SeFlags(domain.Equatorial, request.ObsPos, request.Tropical)
 	for i := 0; i < len(request.Points); i++ {
 		var point = request.Points[i]
-		posEcl, errEcl := calc.sePointCalc.CalcPointPos(request.JdUt, point, eclFlags)
+		posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(request.JdUt, point, eclFlags)
 		if errEcl != nil {
 			return positions, errEcl
 		}
-		posEqu, errEqu := calc.sePointCalc.CalcPointPos(request.JdUt, point, equFlags)
+		posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(request.JdUt, point, equFlags)
 		if errEqu != nil {
 			return positions, errEqu
 		}

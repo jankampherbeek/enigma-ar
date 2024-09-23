@@ -16,7 +16,7 @@ import (
 const DELTA = 1e-8
 
 func TestJulDay(t *testing.T) {
-	result := SeJulDayCalculation{}.CalcJd(2024, 5, 6, 20.5, true)
+	result := SeJulDayCalculation{}.SeCalcJd(2024, 5, 6, 20.5, 1)
 	expected := 2460437.3541666665
 	difference := math.Abs(result - expected)
 	if difference > 0.000001 {
@@ -32,7 +32,7 @@ func TestPointPositions(t *testing.T) {
 	flags := domain.SEFLG_SWIEPH + domain.SEFLG_SPEED
 	// TODO check all 6 values
 	expected := []float64{132.309351305555, 1.309320472222, 1.106102572, 1.572654666667}
-	result, err := SePointPosCalculation{}.CalcPointPos(julDay, body, flags)
+	result, err := SePointPosCalculation{}.SeCalcPointPos(julDay, body, flags)
 	if err != nil {
 		t.Errorf("PointPositions(2_470_000, SE_MERCURY, 256) returns error %s", err)
 	} else {

@@ -19,11 +19,11 @@ import (
 )
 
 type SeJulDayCalculator interface {
-	CalcJd(year int, month int, day int, hour float64, gregCal bool) float64
+	SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64
 }
 
 type SePointPosCalculator interface {
-	CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
+	SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
 }
 
 type SeHorizontalPosCalculator interface {
@@ -43,20 +43,16 @@ func SetEphePath(path string) {
 
 type SeJulDayCalculation struct{}
 
-func NewSeJulDayCalculation() SeJulDayCalculation {
+func NewSeJulDayCalculation() SeJulDayCalculator {
 	return SeJulDayCalculation{}
 }
 
 // CalculateJd accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
-func (jdc SeJulDayCalculation) CalcJd(year int, month int, day int, hour float64, gregCal bool) float64 {
+func (jdc SeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
 	cYear := C.int(year)
 	cMonth := C.int(month)
 	cDay := C.int(day)
 	cHour := C.double(hour)
-	var gregFlag int32 = 1
-	if !gregCal {
-		gregFlag = 0
-	}
 	cGregFlag := C.int(gregFlag)
 	result := float64(C.swe_julday(cYear, cMonth, cDay, cHour, cGregFlag))
 	return result
@@ -64,12 +60,12 @@ func (jdc SeJulDayCalculation) CalcJd(year int, month int, day int, hour float64
 
 type SePointPosCalculation struct{}
 
-func NewSePointPosCalculation() SePointPosCalculation {
+func NewSePointPosCalculation() SePointPosCalculator {
 	return SePointPosCalculation{}
 }
 
 // CalculatePointPos accesses the SE to calculate positions for celestial points
-func (ppc SePointPosCalculation) CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
+func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
