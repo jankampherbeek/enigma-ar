@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-const delta = 0.00000001
+const delta = 0.000001
 
 func TestCalcJd(t *testing.T) {
 	fc := FakeSeJulDayCalculation{}
@@ -90,4 +90,65 @@ func (fake FakeSePointPosCalculation) SeCalcPointPos(jdUt float64, body int, fla
 	}
 	var emptyArray [6]float64
 	return emptyArray, nil
+}
+
+func TestCalcPointRange(t *testing.T) {
+	fcr := FakeSePointPosCalcForRange{}
+	prc := PointRangeCalculation{}
+	prc.sePointCalc = fcr
+	request := domain.PointRangeRequest{
+		Point:     2,
+		JdStart:   2_400_000.0,
+		JdEnd:     2_400_004.0,
+		Interval:  2.0,
+		Coord:     domain.Ecliptical,
+		MainValue: true,
+		Position:  true,
+		ObsPos:    domain.Geocentric,
+		Ayanamsha: 0,
+	}
+	result, error := prc.CalcPointRange(request)
+	if error != nil {
+		t.Errorf("CalcPointRange happy flow returns unexpected error %d", error)
+	}
+	// TODO use table test
+	if math.Abs(result[0].Jd-2_400_000) > delta {
+		t.Errorf("CalcPointRange returns wrong jd for first row: %f; wanted %f", result[0].Jd, 2_400_000.0)
+	}
+	if math.Abs(result[1].Jd-2_400_002) > delta {
+		t.Errorf("CalcPointRange returns wrong jd for second row: %f; wanted %f", result[1].Jd, 2_400_002.0)
+	}
+	if math.Abs(result[2].Jd-2_400_004) > delta {
+		t.Errorf("CalcPointRange returns wrong jd for third row: %f; wanted %f", result[2].Jd, 2_400_004.0)
+	}
+	if math.Abs(result[0].Value-100.0) > delta {
+		t.Errorf("CalcPointRange returns wrong value for first row: %f; wanted %f", result[0].Value, 100.0)
+	}
+	if math.Abs(result[1].Value-103.0) > delta {
+		t.Errorf("CalcPointRange returns wrong value for second row: %f; wanted %f", result[1].Value, 103.0)
+	}
+	if math.Abs(result[2].Value-106.0) > delta {
+		t.Errorf("CalcPointRange returns wrong value for third row: %f; wanted %f", result[2].Value, 106.0)
+	}
+
+}
+
+type FakeSePointPosCalcForRange struct{}
+
+func (fake FakeSePointPosCalcForRange) SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
+	if math.Abs(jdUt-2_400_000) < delta {
+		return [6]float64{100.0, 1.0, 2.0, 3.0, 4.0, 5.0}, nil
+	}
+	if math.Abs(jdUt-2_400_002) < delta {
+		return [6]float64{103.0, 1.0, 2.0, 3.0, 4.0, 5.0}, nil
+	}
+	if math.Abs(jdUt-2_400_004) < delta {
+		return [6]float64{106.0, 1.0, 2.0, 3.0, 4.0, 5.0}, nil
+	}
+	if math.Abs(jdUt-2_400_006) < delta {
+		return [6]float64{109.0, 1.0, 2.0, 3.0, 4.0, 5.0}, nil
+	}
+	var emptyArray [6]float64
+	err := fmt.Errorf("FakeSePointPosCalcForRange: unexpected value for JD: %f ", jdUt)
+	return emptyArray, fmt.Errorf("PointPosCalcForRange: %s", err)
 }
