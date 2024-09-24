@@ -64,7 +64,8 @@ func NewSePointPosCalculation() SePointPosCalculator {
 	return SePointPosCalculation{}
 }
 
-// CalculatePointPos accesses the SE to calculate positions for celestial points
+// CalculatePointPos accesses the SE to calculate positions for celestial points.
+// The results that are returned are subsequently: longitude or ra, latitude or declination, distance, speed in long. or ra, speed in lat. or decl, speed in dist.
 func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)

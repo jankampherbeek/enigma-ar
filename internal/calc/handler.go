@@ -20,6 +20,10 @@ type PointPosCalculator interface {
 	CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
 }
 
+type PointRangeCalculator interface {
+	CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error)
+}
+
 type JulDayCalculation struct {
 	seCalc se.SeJulDayCalculator
 }
@@ -86,6 +90,47 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		})
 	}
 	return positions, nil
+}
+
+type PointRangeCalculation struct {
+	sePointCalc se.SePointPosCalculator
+}
+
+func NewPointRangeCalculation() PointRangeCalculator {
+	ppc := se.NewSePointPosCalculation()
+	return PointRangeCalculation{ppc}
+}
+
+func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
+	point := request.Point
+	flags := SeFlags(request.Coord, request.ObsPos, request.Ayanamsha == 0)
+	// TODO handle topocentric
+	// TODO handle sidereal
+	var rangePositions []domain.PointRangeResult
+	var resultIndex int
+	if request.Position {
+		if request.MainValue {
+			resultIndex = 0
+		} else {
+			resultIndex = 4
+		}
+	} else {
+		if request.MainValue {
+			resultIndex = 1
+		} else {
+			resultIndex = 5
+		}
+	}
+	// TODO handle RADV/Distance
+	for i := request.JdStart; i <= request.JdEnd; i += request.Interval {
+		sePos, err := prc.sePointCalc.SeCalcPointPos(i, point, flags)
+		if err != nil {
+			return rangePositions, err
+		}
+		calcValue := sePos[resultIndex]
+		rangePositions = append(rangePositions, domain.PointRangeResult{i, calcValue}) // TODO improve appending
+	}
+	return rangePositions, nil
 }
 
 /*func HousePos(hsys rune, jdUt float64, geoLong float64, geoLat float64, tropical bool) ([]domain.HousePosResult, []domain.HousePosResult, error) {

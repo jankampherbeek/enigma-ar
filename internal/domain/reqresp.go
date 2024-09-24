@@ -44,6 +44,30 @@ type PointPosResult struct {
 	AltitPos  float64
 }
 
+// PointRangeResult calculated value for position or speed for a given date/time, to be used in a range of positions.
+type PointRangeResult struct {
+	Jd    float64
+	Value float64
+}
+
+// PointRangeRequest for the calculation of a range of positions or speeds for a given point.
+// The Interval is in days and can be fractional.
+// MainValue indicates if longitude or ra is used (true) or latitude or declination.
+// It does not have effect if the coord is radv (distance).
+// Position indicates that the position is used (true) or the speed (false).
+// If the Ayanamsha is zero, a tropical zodiac is used, otherwise a sidereal zodiac with the given ayanamsha.
+type PointRangeRequest struct {
+	Point     int
+	JdStart   float64
+	JdEnd     float64
+	Interval  float64
+	Coord     CoordinateSystem
+	MainValue bool
+	Position  bool
+	ObsPos    ObserverPosition
+	Ayanamsha int
+}
+
 // HousePosResult Calculated positions for a cusp or other mundane point
 type HousePosResult struct {
 	LonPos   float64

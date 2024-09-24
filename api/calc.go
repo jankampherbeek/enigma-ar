@@ -20,6 +20,10 @@ type FullPointServer interface {
 	FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
 }
 
+type PointRangeServer interface {
+	DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error)
+}
+
 type JulDayService struct {
 	jdCalc calc.JulDayCalculator
 }
@@ -39,7 +43,7 @@ type FullPointService struct {
 	fpCalc calc.PointPosCalculator
 }
 
-func newFullPointService() FullPointService {
+func NewFullPointService() FullPointService {
 	return FullPointService{
 		calc.NewPointPosCalculation(),
 	}
@@ -49,4 +53,18 @@ func (fps FullPointService) FullPositions(request domain.PointPositionsRequest) 
 	positions, err := fps.fpCalc.CalcPointPos(request)
 	// TODO log if error occurs
 	return positions, err
+}
+
+type PointRangeService struct {
+	prCalc calc.PointRangeCalculator
+}
+
+func NewPointRangeService() PointRangeService {
+	return PointRangeService{
+		calc.NewPointRangeCalculation(),
+	}
+}
+
+func (prs PointRangeService) DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
+	return prs.prCalc.CalcPointRange(request)
 }
