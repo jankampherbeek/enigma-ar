@@ -99,3 +99,49 @@ const (
 	PullenSr        = 'Q'
 	Sripati         = 'S'
 )
+
+// Ayanamshas
+// the range 0..40 is checked with a guard clause in qpi's for cqlculation
+const (
+	None                  = 0
+	Fagan                 = 1
+	Lahiri                = 2
+	DeLuce                = 3
+	Raman                 = 4
+	UshaShashi            = 5
+	Krishnamurti          = 6
+	DjwhalKhul            = 7
+	Yukteshwar            = 8
+	Bhasin                = 9
+	Kugler1               = 10
+	Kugler2               = 11
+	Kugler3               = 12
+	Huber                 = 13
+	EtaPiscium            = 14
+	Aldebaran15Tau        = 15
+	Hipparchus            = 16
+	Sassanian             = 17
+	GalactCtr0Sag         = 18
+	J2000                 = 19
+	J1900                 = 20
+	B1950                 = 21
+	SuryaSiddhanta        = 22
+	SuryaSiddhantaMeanSun = 23
+	Aryabhata             = 24
+	AryabhataMeanSun      = 25
+	SsRevati              = 26
+	SsCitra               = 27
+	TrueCitra             = 28
+	TrueRevati            = 29
+	TruePushya            = 30
+	GalacticCtrBrand      = 31
+	GalacticEqIau1958     = 32
+	GalacticEq            = 33
+	GalacticEqMidMula     = 34
+	Skydram               = 35
+	TrueMula              = 36
+	Dhruva                = 37
+	Aryabhata522          = 38
+	Britton               = 39
+	GalacticCtrOCap       = 40
+)

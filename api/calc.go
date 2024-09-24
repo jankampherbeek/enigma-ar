@@ -66,5 +66,8 @@ func NewPointRangeService() PointRangeService {
 }
 
 func (prs PointRangeService) DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
+	// TODO check valdness of request:
+	// existing id for point, jdEnd after jdStart, existing value for Ayanamsha, interval positive
+
 	return prs.prCalc.CalcPointRange(request)
 }
