@@ -28,17 +28,17 @@ func TestPointPositions(t *testing.T) {
 	ephePath := "..\\..\\..\\sedata" // path is relative from current package
 	SetEphePath(ephePath)
 	julDay := 2_470_000.0 // 2050/7/12 12:00
-	body := domain.SE_MERCURY
-	flags := domain.SEFLG_SWIEPH + domain.SEFLG_SPEED
+	body := domain.SeMercury
+	flags := domain.SeflgSwieph + domain.SeflgSpeed
 	// TODO check all 6 values
 	expected := []float64{132.309351305555, 1.309320472222, 1.106102572, 1.572654666667}
 	result, err := SePointPosCalculation{}.SeCalcPointPos(julDay, body, flags)
 	if err != nil {
-		t.Errorf("PointPositions(2_470_000, SE_MERCURY, 256) returns error %s", err)
+		t.Errorf("PointPositions(2_470_000, SeMercury, 256) returns error %s", err)
 	} else {
 		for i := 0; i <= 3; i++ {
 			if math.Abs(result[i]-expected[i]) > DELTA {
-				t.Errorf("PointPositionsJ(2_470_000, SE_MERCURY, 256) = %f; want %f", result[i], expected[i])
+				t.Errorf("PointPositionsJ(2_470_000, SeMercury, 256) = %f; want %f", result[i], expected[i])
 			}
 		}
 	}

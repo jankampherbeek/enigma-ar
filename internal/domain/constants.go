@@ -12,63 +12,63 @@ package domain
 // Celestial points as used by the SE.
 // _RAM = School of Ram, _URA = Uranian.
 const (
-	SE_ADMETOS_URA    = 45
-	SE_APOLLON_URA    = 44
-	SE_ASTRAEA        = 10005
-	SE_CERES          = 17
-	SE_CHIRON         = 15
-	SE_CUPIDO_URA     = 40
-	SE_DEMETER_RAM    = 51
-	SE_EARTH          = 14
-	SE_ECL_NUT        = -1 // Obliquity/nutation
-	SE_ERIS           = 1009001
-	SE_HADES_URA      = 41
-	SE_HAUMEA         = 146108
-	SE_HERMES_RAM     = 50
-	SE_HUYA           = 48628
-	SE_HYGIEIA        = 10010
-	SE_INTP_APOG      = 21
-	SE_ISIS           = 48
-	SE_IXION          = 38978
-	SE_JUNO           = 19
-	SE_JUPITER        = 5
-	SE_KRONOS_URA     = 43
-	SE_MAKEMAKE       = 146472
-	SE_MARS           = 4
-	SE_MEAN_APOGEE    = 12
-	SE_MEAN_NODE      = 10
-	SE_MERCURY        = 2
-	SE_MOON           = 1
-	SE_NEPTUNE        = 8
-	SE_NESSUS         = 17066
-	SE_ORCUS          = 100482
-	SE_OSCU_APOG      = 13
-	SE_PALLAS         = 18
-	SE_PERSEPHONE_RAM = 49
-	SE_PHOLUS         = 16
-	SE_PLUTO          = 9
-	SE_POSEIDON_URA   = 47
-	SE_QUAOAR         = 60000
-	SE_SATURN         = 6
-	SE_SEDNA          = 100377
-	SE_SUN            = 0
-	SE_TRUE_NODE      = 11
-	SE_URANUS         = 7
-	SE_VARUNA         = 30000
-	SE_VENUS          = 3
-	SE_VESTA          = 20
-	SE_VULCANUS_URA   = 46
-	SE_ZEUS_URA       = 42
+	SeAdmetosUra    = 45
+	SeApollonUra    = 44
+	SeAstraea       = 10005
+	SeCeres         = 17
+	SeChiron        = 15
+	SeCupidoUra     = 40
+	SeDemeterRam    = 51
+	SeEarth         = 14
+	SeEclNut        = -1 // Obliquity/nutation
+	SeEris          = 1009001
+	SeHadesUra      = 41
+	SeHaumea        = 146108
+	SeHermesRam     = 50
+	SeHuya          = 48628
+	SeHygieia       = 10010
+	SeIntpApog      = 21
+	SeIsis          = 48
+	SeIxion         = 38978
+	SeJuno          = 19
+	SeJupiter       = 5
+	SeKronosUra     = 43
+	SeMakemake      = 146472
+	SeMars          = 4
+	SeMeanApogee    = 12
+	SeMeanNode      = 10
+	SeMercury       = 2
+	SeMoon          = 1
+	SeNeptune       = 8
+	SeNessus        = 17066
+	SeOrcus         = 100482
+	SeOscuApog      = 13
+	SePallas        = 18
+	SePersephoneRam = 49
+	SePholus        = 16
+	SePluto         = 9
+	SePoseidonUra   = 47
+	SeQuaoar        = 60000
+	SeSaturn        = 6
+	SeSedna         = 100377
+	SeSun           = 0
+	SeTrueNode      = 11
+	SeUranus        = 7
+	SeVaruna        = 30000
+	SeVenus         = 3
+	SeVesta         = 20
+	SeVulcanusUra   = 46
+	SeZeusUra       = 42
 )
 
 // SE flags
 const (
-	SEFLG_SWIEPH     = 2 // use Swiss Eph
-	SEFLG_HELIOC     = 8
-	SEFLG_SPEED      = 256
-	SEFLG_EQUATORIAL = 2048
-	SEFLG_TOPOCTR    = 32768 // 32 * 1024
-	SEFLG_SIDEREAL   = 65536 // 64 * 1024
+	SeflgSwieph     = 2 // use Swiss Eph
+	SeflgHelioc     = 8
+	SeflgSpeed      = 256
+	SeflgEquatorial = 2048
+	SeflgTopoctr    = 32768 // 32 * 1024
+	SeflgSidereal   = 65536 // 64 * 1024
 )
 
 // House systems
@@ -101,7 +101,7 @@ const (
 )
 
 // Ayanamshas
-// the range 0..40 is checked with a guard clause in qpi's for cqlculation
+// the range 0..40 is checked with a guard clause in api's for clculation.
 const (
 	None                  = 0
 	Fagan                 = 1

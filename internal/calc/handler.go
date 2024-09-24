@@ -71,7 +71,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		height := 0.0
 		pointRa := posEqu[0]
 		pointDecl := posEqu[1]
-		horFlags := domain.SEFLG_EQUATORIAL
+		horFlags := domain.SeflgEquatorial
 		posHor := calc.seHorPosCalc.CalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
 		positions = append(positions, domain.PointPosResult{
 			Point:     point,
@@ -160,18 +160,18 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 
 // SeFlags calculates the total of all flags for the SE.
 func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {
-	flags := domain.SEFLG_SWIEPH + domain.SEFLG_SPEED // always use SE + speed
+	flags := domain.SeflgSwieph + domain.SeflgSpeed // always use SE + speed
 	if coord == domain.Equatorial {
-		flags += domain.SEFLG_EQUATORIAL
+		flags += domain.SeflgEquatorial
 	}
 	if obsPos == domain.Topocentric {
-		flags += domain.SEFLG_TOPOCTR
+		flags += domain.SeflgTopoctr
 	}
 	if obsPos == domain.Heliocentric {
-		flags += domain.SEFLG_HELIOC
+		flags += domain.SeflgHelioc
 	}
 	if coord == domain.Equatorial && !tropical {
-		flags += domain.SEFLG_SIDEREAL
+		flags += domain.SeflgSidereal
 	}
 	return flags
 }
