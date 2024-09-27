@@ -8,8 +8,8 @@
 package api
 
 import (
+	"enigma-ar/domain"
 	"enigma-ar/internal/calc"
-	"enigma-ar/internal/domain"
 	"math"
 	"testing"
 )

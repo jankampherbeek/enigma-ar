@@ -8,8 +8,8 @@
 package calc
 
 import (
-	"enigma-ar/internal/calc/se"
-	"enigma-ar/internal/domain"
+	domain2 "enigma-ar/domain"
+	"enigma-ar/internal/se"
 )
 
 type JulDayCalculator interface {
@@ -17,11 +17,11 @@ type JulDayCalculator interface {
 }
 
 type PointPosCalculator interface {
-	CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
+	CalcPointPos(request domain2.PointPositionsRequest) ([]domain2.PointPosResult, error)
 }
 
 type PointRangeCalculator interface {
-	CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error)
+	CalcPointRange(request domain2.PointRangeRequest) ([]domain2.PointRangeResult, error)
 }
 
 type JulDayCalculation struct {
@@ -54,10 +54,10 @@ func NewPointPosCalculation() PointPosCalculator {
 }
 
 // CalcPointPos calculates fully defined positions for one or more celestial points
-func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
-	positions := make([]domain.PointPosResult, 0)
-	eclFlags := SeFlags(domain.Ecliptical, request.ObsPos, request.Tropical)
-	equFlags := SeFlags(domain.Equatorial, request.ObsPos, request.Tropical)
+func (calc PointPosCalculation) CalcPointPos(request domain2.PointPositionsRequest) ([]domain2.PointPosResult, error) {
+	positions := make([]domain2.PointPosResult, 0)
+	eclFlags := SeFlags(domain2.Ecliptical, request.ObsPos, request.Tropical)
+	equFlags := SeFlags(domain2.Equatorial, request.ObsPos, request.Tropical)
 	for i := 0; i < len(request.Points); i++ {
 		var point = request.Points[i]
 		posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(request.JdUt, point, eclFlags)
@@ -71,9 +71,9 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		height := 0.0
 		pointRa := posEqu[0]
 		pointDecl := posEqu[1]
-		horFlags := domain.SeflgEquatorial
+		horFlags := domain2.SeflgEquatorial
 		posHor := calc.seHorPosCalc.CalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
-		positions = append(positions, domain.PointPosResult{
+		positions = append(positions, domain2.PointPosResult{
 			Point:     point,
 			LonPos:    posEcl[0],
 			LonSpeed:  posEcl[3],
@@ -101,12 +101,12 @@ func NewPointRangeCalculation() PointRangeCalculator {
 	return PointRangeCalculation{ppc}
 }
 
-func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
+func (prc PointRangeCalculation) CalcPointRange(request domain2.PointRangeRequest) ([]domain2.PointRangeResult, error) {
 	point := request.Point
 	flags := SeFlags(request.Coord, request.ObsPos, request.Ayanamsha == 0)
 	// TODO handle topocentric
 	// TODO handle sidereal
-	var rangePositions []domain.PointRangeResult
+	var rangePositions []domain2.PointRangeResult
 	var resultIndex int
 	if request.Position {
 		if request.MainValue {
@@ -128,7 +128,7 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 			return rangePositions, err
 		}
 		calcValue := sePos[resultIndex]
-		rangePositions = append(rangePositions, domain.PointRangeResult{i, calcValue}) // TODO improve appending
+		rangePositions = append(rangePositions, domain2.PointRangeResult{i, calcValue}) // TODO improve appending
 	}
 	return rangePositions, nil
 }
@@ -159,19 +159,19 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 }*/
 
 // SeFlags calculates the total of all flags for the SE.
-func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {
-	flags := domain.SeflgSwieph + domain.SeflgSpeed // always use SE + speed
-	if coord == domain.Equatorial {
-		flags += domain.SeflgEquatorial
+func SeFlags(coord domain2.CoordinateSystem, obsPos domain2.ObserverPosition, tropical bool) int {
+	flags := domain2.SeflgSwieph + domain2.SeflgSpeed // always use SE + speed
+	if coord == domain2.Equatorial {
+		flags += domain2.SeflgEquatorial
 	}
-	if obsPos == domain.Topocentric {
-		flags += domain.SeflgTopoctr
+	if obsPos == domain2.Topocentric {
+		flags += domain2.SeflgTopoctr
 	}
-	if obsPos == domain.Heliocentric {
-		flags += domain.SeflgHelioc
+	if obsPos == domain2.Heliocentric {
+		flags += domain2.SeflgHelioc
 	}
-	if coord == domain.Equatorial && !tropical {
-		flags += domain.SeflgSidereal
+	if coord == domain2.Equatorial && !tropical {
+		flags += domain2.SeflgSidereal
 	}
 	return flags
 }

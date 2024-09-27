@@ -8,7 +8,7 @@
 package calc
 
 import (
-	"enigma-ar/internal/domain"
+	domain2 "enigma-ar/domain"
 	"fmt"
 	"math"
 	"testing"
@@ -41,13 +41,13 @@ func TestCalcPointPos(t *testing.T) {
 	// test happy flow
 	var phf []int
 	phf = append(phf, 2)
-	requestHF := domain.PointPositionsRequest{
+	requestHF := domain2.PointPositionsRequest{
 		Points:   phf,
 		JdUt:     123.456,
 		GeoLong:  0.0,
 		GeoLat:   0.0,
-		Coord:    domain.Ecliptical,
-		ObsPos:   domain.Geocentric,
+		Coord:    domain2.Ecliptical,
+		ObsPos:   domain2.Geocentric,
 		Tropical: true,
 	}
 	resultHF, errorHF := ppc.CalcPointPos(requestHF)
@@ -62,13 +62,13 @@ func TestCalcPointPos(t *testing.T) {
 	}
 	var pError []int
 	pError = append(pError, -100)
-	requestError := domain.PointPositionsRequest{
+	requestError := domain2.PointPositionsRequest{
 		Points:   pError,
 		JdUt:     123.456,
 		GeoLong:  0.0,
 		GeoLat:   0.0,
-		Coord:    domain.Ecliptical,
-		ObsPos:   domain.Geocentric,
+		Coord:    domain2.Ecliptical,
+		ObsPos:   domain2.Geocentric,
 		Tropical: true,
 	}
 	_, errorErr := ppc.CalcPointPos(requestError)
@@ -96,15 +96,15 @@ func TestCalcPointRange(t *testing.T) {
 	fcr := FakeSePointPosCalcForRange{}
 	prc := PointRangeCalculation{}
 	prc.sePointCalc = fcr
-	request := domain.PointRangeRequest{
+	request := domain2.PointRangeRequest{
 		Point:     2,
 		JdStart:   2_400_000.0,
 		JdEnd:     2_400_004.0,
 		Interval:  2.0,
-		Coord:     domain.Ecliptical,
+		Coord:     domain2.Ecliptical,
 		MainValue: true,
 		Position:  true,
-		ObsPos:    domain.Geocentric,
+		ObsPos:    domain2.Geocentric,
 		Ayanamsha: 0,
 	}
 	result, error := prc.CalcPointRange(request)
