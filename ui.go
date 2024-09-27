@@ -91,9 +91,9 @@ func makeBox() *fyne.Container {
 	button5 := widget.NewButton("Counting", func() { fmt.Println("Counting clicked.") })
 	button5.Importance = widget.MediumImportance
 
-	btnNewChart := widget.NewButton(("New"), func() { fmt.Println("New chart....") })
+	btnNewChart := widget.NewButton("New", func() { fmt.Println("New chart....") })
 	btnNewChart.Importance = widget.HighImportance
-	btnSearchChart := widget.NewButton(("Search"), func() { fmt.Println("Search chart....") })
+	btnSearchChart := widget.NewButton("Search", func() { fmt.Println("Search chart....") })
 	btnSearchChart.Importance = widget.MediumImportance
 
 	text2 := canvas.NewText("Text 2", color.Black)

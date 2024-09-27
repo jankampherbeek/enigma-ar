@@ -51,7 +51,7 @@ func NewSeJulDayCalculation() SeJulDayCalculator {
 	return SeJulDayCalculation{}
 }
 
-// CalculateJd accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
+// SeJulDayCalculation accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
 func (jdc SeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
 	cYear := C.int(year)
 	cMonth := C.int(month)
@@ -68,7 +68,7 @@ func NewSePointPosCalculation() SePointPosCalculator {
 	return SePointPosCalculation{}
 }
 
-// CalculatePointPos accesses the SE to calculate positions for celestial points.
+// SeCalcPointPos accesses the SE to calculate positions for celestial points.
 // The results that are returned are subsequently: longitude or ra, latitude or declination, distance, speed in long. or ra, speed in lat. or decl, speed in dist.
 func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double
@@ -80,7 +80,7 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	err := C.GoString(&cSerr[0])
 	if result < 0 {
 		var emptyArray [6]float64
-		return emptyArray, fmt.Errorf("PointPositions error: %s", err)
+		return emptyArray, fmt.Errorf("PointPositions error: %v", err)
 	}
 	pos := make([]float64, 6)
 	for i := 0; i < 6; i++ {
@@ -95,7 +95,7 @@ func NewSeHorPosCalculation() SeHorPosCalculation {
 	return SeHorPosCalculation{}
 }
 
-// CalculateHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
+// CalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
 func (hpc SeHorPosCalculation) CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
 	var cHorCoord [3]C.double
 	cJdUt := C.double(jdUt)
@@ -136,16 +136,16 @@ func (hp *SeHousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64,
 
 	result := C.swe_houses_ex(cJdUt, cFlags, cGeolat, cGeolong, cHouseSys, &cCusps[0], &cAscMc[0])
 	if result < 0 {
-		fmt.Printf("Error in HousePositions: %d", result)
-		err := errors.New("Error in HousePositions")
+		fmt.Printf("Error in HousePositions: %v", result)
+		err := errors.New("error in housepositions")
 		return make([]float64, 13), make([]float64, 10), err
 	}
 	cusps := make([]float64, 13)
-	for i := 0; i < int(13); i++ {
+	for i := 0; i < 13; i++ {
 		cusps[i] = float64(cCusps[i])
 	}
 	ascMc := make([]float64, 10)
-	for i := 0; i < int(10); i++ {
+	for i := 0; i < 10; i++ {
 		ascMc[i] = float64(cAscMc[i])
 	}
 	return cusps, ascMc, nil
@@ -174,7 +174,7 @@ func (ct SeCoordinateTransform) Transform(valuesIn *[3]float64, eps float64, ec2
 	var cValuesOut [3]C.double
 	C.swe_cotrans(cValuesIn, &cValuesOut[0], cEps)
 	valuesOut := make([]float64, 3)
-	for i := 0; i < int(3); i++ {
+	for i := 0; i < 3; i++ {
 		valuesOut[i] = float64(cValuesOut[i])
 	}
 	return valuesOut

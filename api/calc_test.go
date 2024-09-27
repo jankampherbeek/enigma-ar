@@ -15,7 +15,7 @@ import (
 )
 
 func TestCalcInt(t *testing.T) {
-	request := domain.DateTime{2024, 5, 6, 20.5, true}
+	request := domain.DateTime{Year: 2024, Month: 5, Day: 6, Ut: 20.5, Greg: true}
 	jdCalc := calc.NewJulDayCalculation()
 	result := jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
 	expected := 2460437.3541666665

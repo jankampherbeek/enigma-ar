@@ -107,9 +107,9 @@ func TestCalcPointRange(t *testing.T) {
 		ObsPos:    domain2.Geocentric,
 		Ayanamsha: 0,
 	}
-	result, error := prc.CalcPointRange(request)
-	if error != nil {
-		t.Errorf("CalcPointRange happy flow returns unexpected error %d", error)
+	result, err := prc.CalcPointRange(request)
+	if err != nil {
+		t.Errorf("CalcPointRange happy flow returns unexpected error %d", err)
 	}
 	// TODO use table test
 	if math.Abs(result[0].Jd-2_400_000) > delta {
