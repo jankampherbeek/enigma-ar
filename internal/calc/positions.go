@@ -139,8 +139,8 @@ func (prc PointRangeCalculation) CalcPointRange(request domain2.PointRangeReques
 /*func HousePos(hsys rune, jdUt float64, geoLong float64, geoLat float64, tropical bool) ([]domain.HousePosResult, []domain.HousePosResult, error) {
 	cuspPos := make([]domain.HousePosResult, 0)
 	mcAscPos := make([]domain.HousePosResult, 0)
-	flagsEcl := SeFlags(domain.Ecliptical, domain.Geocentric, tropical)
-	flagsEqu := SeFlags(domain.Equatorial, domain.Geocentric, tropical)
+	flagsEcl := SeFlags(domain.Ecliptical, domain.ObsPosGeocentric, tropical)
+	flagsEqu := SeFlags(domain.Equatorial, domain.ObsPosGeocentric, tropical)
 	hp := se.NewHousePos()
 	cuspsEcl, mcAscEcl, errEcl := hp.CalcHousePos(hsys, jdUt, geoLat, geoLong, flagsEcl)
 	if errEcl != nil {
@@ -160,21 +160,3 @@ func (prc PointRangeCalculation) CalcPointRange(request domain2.PointRangeReques
 
 	//houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64,
 }*/
-
-// SeFlags calculates the total of all flags for the SE.
-func SeFlags(coord domain2.CoordinateSystem, obsPos domain2.ObserverPosition, tropical bool) int {
-	flags := domain2.SeflgSwieph + domain2.SeflgSpeed // always use SE + speed
-	if coord == domain2.Equatorial {
-		flags += domain2.SeflgEquatorial
-	}
-	if obsPos == domain2.Topocentric {
-		flags += domain2.SeflgTopoctr
-	}
-	if obsPos == domain2.Heliocentric {
-		flags += domain2.SeflgHelioc
-	}
-	if coord == domain2.Equatorial && !tropical {
-		flags += domain2.SeflgSidereal
-	}
-	return flags
-}

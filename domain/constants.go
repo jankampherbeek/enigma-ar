@@ -67,7 +67,7 @@ const (
 	SeflgHelioc     = 8
 	SeflgSpeed      = 256
 	SeflgEquatorial = 2048
-	SeflgTopoctr    = 32768 // 32 * 1024
+	SeflgTopoc      = 32768 // 32 * 1024
 	SeflgSidereal   = 65536 // 64 * 1024
 )
 

@@ -22,7 +22,7 @@ const (
 type ObserverPosition int
 
 const (
-	Geocentric ObserverPosition = iota
-	Topocentric
-	Heliocentric
+	ObsPosGeocentric ObserverPosition = iota
+	ObsPosTopocentric
+	ObsPosHeliocentric
 )

@@ -47,7 +47,7 @@ func TestCalcPointPos(t *testing.T) {
 		GeoLong:  0.0,
 		GeoLat:   0.0,
 		Coord:    domain2.Ecliptical,
-		ObsPos:   domain2.Geocentric,
+		ObsPos:   domain2.ObsPosGeocentric,
 		Tropical: true,
 	}
 	resultHF, errorHF := ppc.CalcPointPos(requestHF)
@@ -68,7 +68,7 @@ func TestCalcPointPos(t *testing.T) {
 		GeoLong:  0.0,
 		GeoLat:   0.0,
 		Coord:    domain2.Ecliptical,
-		ObsPos:   domain2.Geocentric,
+		ObsPos:   domain2.ObsPosGeocentric,
 		Tropical: true,
 	}
 	_, errorErr := ppc.CalcPointPos(requestError)
@@ -104,7 +104,7 @@ func TestCalcPointRange(t *testing.T) {
 		Coord:     domain2.Ecliptical,
 		MainValue: true,
 		Position:  true,
-		ObsPos:    domain2.Geocentric,
+		ObsPos:    domain2.ObsPosGeocentric,
 		Ayanamsha: 0,
 	}
 	result, err := prc.CalcPointRange(request)
