@@ -12,6 +12,32 @@ import (
 	"image/color"
 )
 
+func makeHeader() *widget.Label {
+	aTitle := "Enigma Astrology Research - version 1.0"
+	return widget.NewLabelWithStyle(aTitle, fyne.TextAlignCenter, fyne.TextStyle{
+		Bold:      true,
+		Italic:    false,
+		Monospace: false,
+		Symbol:    false,
+		TabWidth:  0,
+	})
+
+}
+
+func makeButton() *widget.Button {
+	b := widget.NewButton("Tutorial",
+		func() {
+			showTutorial("Please study....")
+		})
+	b.Importance = widget.HighImportance
+	return b
+
+}
+
+func showTutorial(text string) {
+	fmt.Println(text)
+}
+
 type Circle struct {
 	widget.BaseWidget
 }
