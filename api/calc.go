@@ -12,14 +12,17 @@ import (
 	"enigma-ar/internal/calc"
 )
 
+// JulDayServer returns the calculated juilian day number for ephemeris time.
 type JulDayServer interface {
 	JulDay(request domain.DateTime) float64
 }
 
+// FullPointServer returns all positions and speeds (ecliptical, equatorial and horizontal) for a given point.
 type FullPointServer interface {
 	FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
 }
 
+// PointRangeServer returns the positions for a range of julian day numbers.
 type PointRangeServer interface {
 	DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error)
 }

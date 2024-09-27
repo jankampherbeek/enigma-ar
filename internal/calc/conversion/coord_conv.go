@@ -9,6 +9,7 @@ package conversion
 
 import "enigma-ar/internal/se"
 
+// ChangeEclToEqu converts ecliptical coordinates to equatorial coordinates.
 func ChangeEclToEqu(longitude float64, latitude float64, eps float64) (ra float64, decl float64) {
 	var coords = [3]float64{longitude, latitude, 1.0}
 	ct := se.NewSeCoordinateTransform()

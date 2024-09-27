@@ -12,14 +12,17 @@ import (
 	"enigma-ar/internal/se"
 )
 
+// JulDayCalculator calculates the Julian Day for Epehemeris Time.
 type JulDayCalculator interface {
 	CalcJd(year int, month int, day int, ut float64, greg bool) float64
 }
 
+// PointPosCalculator calculates a fully defined set of positions and speeds, in ecliptical, equatorial and horizontal coordinates.
 type PointPosCalculator interface {
 	CalcPointPos(request domain2.PointPositionsRequest) ([]domain2.PointPosResult, error)
 }
 
+// PointRangeCalculator calculates the positions or speeds for a range of subsequent julian day numbers.
 type PointRangeCalculator interface {
 	CalcPointRange(request domain2.PointRangeRequest) ([]domain2.PointRangeResult, error)
 }
@@ -128,7 +131,7 @@ func (prc PointRangeCalculation) CalcPointRange(request domain2.PointRangeReques
 			return rangePositions, err
 		}
 		calcValue := sePos[resultIndex]
-		rangePositions = append(rangePositions, domain2.PointRangeResult{i, calcValue}) // TODO improve appending
+		rangePositions = append(rangePositions, domain2.PointRangeResult{Jd: i, Value: calcValue}) // TODO improve appending
 	}
 	return rangePositions, nil
 }

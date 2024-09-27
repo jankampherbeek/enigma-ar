@@ -18,18 +18,22 @@ import (
 	"unsafe"
 )
 
+// SeJulDayCalculator retrieves the julian day number for ephemeris time from the SE.
 type SeJulDayCalculator interface {
 	SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64
 }
 
+// SePointPosCalculator retrieves the positions and speed for ecliptical or equatorial coordinates.
 type SePointPosCalculator interface {
 	SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
 }
 
+// SeHorizontalPosCalculator retrieves the horizontal positions (azimuth and altitude) from the SE.
 type SeHorizontalPosCalculator interface {
 	CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
 }
 
+// SeHousePosCalculator retrieves the housepositions and several other mundane points from the SE.
 type SeHousePosCalculator interface {
 	CalcHousePos(houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64, error)
 }
