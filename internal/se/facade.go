@@ -12,6 +12,7 @@ package se
 */
 import "C"
 import (
+	"enigma-ar/domain"
 	"errors"
 	"fmt"
 	"math"
@@ -28,14 +29,19 @@ type SePointPosCalculator interface {
 	SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
 }
 
-// SeHorizontalPosCalculator retrieves the horizontal positions (azimuth and altitude) from the SE.
-type SeHorizontalPosCalculator interface {
-	CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
+// SeEpsilonCalculator retrieves the value for the obliquity of the earths axis, either true (corrected for nutation) or mean.
+type SeEpsilonCalculator interface {
+	SeCalcEpsilon(jdUt float64, trueEps bool) (float64, error)
+}
+
+// SeHorPosCalculator retrieves the horizontal positions (azimuth and altitude) from the SE.
+type SeHorPosCalculator interface {
+	SeCalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
 }
 
 // SeHousePosCalculator retrieves the housepositions and several other mundane points from the SE.
 type SeHousePosCalculator interface {
-	CalcHousePos(houseSys rune, jdUt float64, geoLat float64, geoLong float64, flags int32) ([]float64, []float64, error)
+	SeCalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error)
 }
 
 // SetEphePath initializes the SE and defines the location for the ephemeris files.
@@ -80,7 +86,7 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	err := C.GoString(&cSerr[0])
 	if result < 0 {
 		var emptyArray [6]float64
-		return emptyArray, fmt.Errorf("PointPositions error: %v", err)
+		return emptyArray, fmt.Errorf("SeCalcPointPos error: %v", err)
 	}
 	pos := make([]float64, 6)
 	for i := 0; i < 6; i++ {
@@ -89,14 +95,37 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	return [6]float64(pos), nil
 }
 
+type SeEpsilonCalculation struct{} // TODO create test for SeEpsilonCalculation
+
+func NewSeEpsilonCalculation() SeEpsilonCalculator {
+	return SeEpsilonCalculation{}
+}
+
+func (ec SeEpsilonCalculation) SeCalcEpsilon(jdUt float64, trueEps bool) (float64, error) {
+	var cPos [6]C.double
+	cSerr := make([]C.char, C.AS_MAXCH)
+	cJdUt := C.double(jdUt)
+	cBody := C.int(domain.SeEclNut)
+	cFlags := C.int(domain.SeflgSwieph)
+	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
+	err := C.GoString(&cSerr[0])
+	if result < 0 {
+		return 0.0, fmt.Errorf("SeCalcEpsilon error: %v", err)
+	}
+	if trueEps {
+		return float64(cPos[0]), nil
+	}
+	return float64(cPos[1]), nil
+}
+
 type SeHorPosCalculation struct{}
 
-func NewSeHorPosCalculation() SeHorPosCalculation {
+func NewSeHorPosCalculation() SeHorPosCalculator {
 	return SeHorPosCalculation{}
 }
 
 // CalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
-func (hpc SeHorPosCalculation) CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
+func (hpc SeHorPosCalculation) SeCalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
 	var cHorCoord [3]C.double
 	cJdUt := C.double(jdUt)
 	cFlags := C.int(flags)
@@ -114,17 +143,16 @@ func (hpc SeHorPosCalculation) CalcHorPos(jdUt float64, geoLong float64, geoLat 
 	return [3]float64(pos)
 }
 
-type SeHousePos struct{}
+type SeHousePosCalculation struct{}
 
-func NewSeHousePos() *SeHousePos {
-	return &SeHousePos{}
+func NewSeHousePosCalculation() SeHousePosCalculator {
+	return SeHousePosCalculation{}
 }
 
-// CalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
-// Depending on the value of flags, tropical (0) positions or sidereal (65536) positions are returned.
+// SeCalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
 // Values returned: array with cusps, starting at index 1, array with positions of asc, mc, armc, vertex, eq asc,
 // co-asc Koch, co-asc Munkasey and three empty values.
-func (hp *SeHousePos) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
+func (hp SeHousePosCalculation) SeCalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
 	cJdUt := C.double(jdUt)
 	cGeolat := C.double(geoLat)
 	cGeolong := C.double(geoLong)

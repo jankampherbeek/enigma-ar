@@ -27,6 +27,10 @@ type PointRangeServer interface {
 	DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error)
 }
 
+type FullChartServer interface {
+	DefineFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error)
+}
+
 type JulDayService struct {
 	jdCalc calc.JulDayCalculator
 }
@@ -69,8 +73,22 @@ func NewPointRangeService() PointRangeService {
 }
 
 func (prs PointRangeService) DefinePointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
-	// TODO check valdness of request:
+	// TODO check validness of request:
 	// existing id for point, jdEnd after jdStart, existing value for Ayanamsha, interval positive
 
 	return prs.prCalc.CalcPointRange(request)
+}
+
+type FullChartService struct {
+	fcc calc.FullChartCalculator
+}
+
+func NewFullChartServer() FullChartServer {
+	return FullChartService{calc.NewFullChartCalculator()}
+}
+
+func (fcs FullChartService) DefineFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error) {
+
+	return fcs.fcc.CalcFullChart(request)
+
 }

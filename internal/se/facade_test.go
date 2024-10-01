@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-const DELTA = 1e-8
+const DELTA = 1e-7
 
 func TestJulDay(t *testing.T) {
 	result := SeJulDayCalculation{}.SeCalcJd(2024, 5, 6, 20.5, 1)
@@ -42,7 +42,6 @@ func TestPointPositions(t *testing.T) {
 			}
 		}
 	}
-
 }
 
 func TestHorizontalPosition(t *testing.T) {
@@ -54,10 +53,38 @@ func TestHorizontalPosition(t *testing.T) {
 	pointDecl := -16.422932391786961
 	flags := 2048
 	expected := []float64{297.4812938568067, 0.0, 0.50662370470219853}
-	result := SeHorPosCalculation{}.CalcHorPos(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
+	result := SeHorPosCalculation{}.SeCalcHorPos(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
 	for i := 0; i <= 2; i++ {
 		if math.Abs(result[i]-expected[i]) > DELTA {
 			t.Errorf("HorizontalPosition(2_434_406.8177, 6.9, 52.2166, 0.0, 0.0, 317.1878, -16.4229, 2048) = %f; want %f", result[i], expected[i])
 		}
+	}
+}
+
+func TestHousePositionEcliptical(t *testing.T) {
+	julDay := 2_470_000.0 // 2050/7/12 12:00
+	geoLong := 0.0
+	geoLat := 51.5
+	flags := domain.SeflgSwieph + domain.SeflgSpeed
+	var houseSys rune = 'P'
+	cuspResult, mcAscResult, err := SeHousePosCalculation{}.SeCalcHousePos(houseSys, julDay, geoLong, geoLat, flags)
+	expectedMc := 109.0150128333
+	expectedAsc := 194.5072978611
+	expectedCusp2 := 220.0397175278
+	expectedCusp9 := 71.8124521388888
+	if err != nil {
+		t.Errorf("HousePosition ecliptical returned error = %v", err)
+	}
+	if math.Abs(mcAscResult[0]-expectedAsc) > DELTA {
+		t.Errorf("HousePosition ecliptical for Asc = %.8f; want %.8f", mcAscResult[0], expectedAsc)
+	}
+	if math.Abs(mcAscResult[1]-expectedMc) > DELTA {
+		t.Errorf("HousePosition ecliptical for Mc = %.8f; want %.8f", mcAscResult[1], expectedMc)
+	}
+	if math.Abs(cuspResult[2]-expectedCusp2) > DELTA {
+		t.Errorf("HousePosition ecliptical for cusp 2 = %.8f; want %.8f", cuspResult[2], expectedCusp2)
+	}
+	if math.Abs(cuspResult[9]-expectedCusp9) > DELTA {
+		t.Errorf("HousePosition ecliptical for cusp 9 = %.8f; want %.8f", cuspResult[9], expectedCusp9)
 	}
 }

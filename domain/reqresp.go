@@ -44,12 +44,6 @@ type PointPosResult struct {
 	AltitPos  float64
 }
 
-// PointRangeResult calculated value for position or speed for a given date/time, to be used in a range of positions.
-type PointRangeResult struct {
-	Jd    float64
-	Value float64
-}
-
 // PointRangeRequest for the calculation of a range of positions or speeds for a given point.
 // The Interval is in days and can be fractional.
 // MainValue indicates if longitude or ra is used (true) or latitude or declination.
@@ -68,11 +62,48 @@ type PointRangeRequest struct {
 	Ayanamsha int
 }
 
-// HousePosResult Calculated positions for a cusp or other mundane point
+// PointRangeResult calculated value for position or speed for a given date/time, to be used in a range of positions.
+type PointRangeResult struct {
+	Jd    float64
+	Value float64
+}
+
+// HousePosRequest for the calculation of cusps and other mundane poiints.
+type HousePosRequest struct {
+	HouseSys rune
+	JdUt     float64
+	GeoLong  float64
+	GeoLat   float64
+}
+
+// HousePosResult Calculated positions for a single cusp or other mundane point.
 type HousePosResult struct {
 	LonPos   float64
 	RaPos    float64
 	DeclPos  float64
 	AzimPos  float64
 	AltitPos float64
+}
+
+// FullChartRequest for the calculation of a complete chart with positions of points and mundane positions.
+type FullChartRequest struct {
+	Points    []int
+	HouseSys  rune
+	Ayanamsha int
+	CoordSys  CoordinateSystem
+	ObsPos    ObserverPosition
+	ProjType  ProjectionType
+	Jd        float64
+	GeoLong   float64
+	GeoLat    float64
+}
+
+// FullChartResult contains the calculated positions for a complete chart. Use housecusps from index 1, zero is an empty placeholder.
+type FullChartResponse struct {
+	Points    []PointPosResult
+	Mc        HousePosResult
+	Asc       HousePosResult
+	Vertex    HousePosResult
+	EastPoint HousePosResult
+	Cusps     []HousePosResult
 }
