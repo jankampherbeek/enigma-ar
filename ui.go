@@ -10,6 +10,8 @@ import (
 	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"image/color"
+	"log"
+	"os"
 )
 
 func makeHeader() *widget.Label {
@@ -112,9 +114,18 @@ func makeBox() *fyne.Container {
 	return leftBox
 }
 
+func loadTranslation(path string) fyne.StaticResource {
+	data, err := os.ReadFile(path)
+	if err != nil {
+		log.Fatalf("Failed to load translation file: %v", err)
+	}
+	return *fyne.NewStaticResource(path, data)
+}
+
 func handleUi() {
 	myApp := app.New()
 	myWindow := myApp.NewWindow("Resizable Circle")
+
 	labelDescription := widget.NewLabel("Description of chart: name, date, time, coordinates")
 	labelDescription.Importance = widget.MediumImportance
 	labelSettings := widget.NewLabel("Placeholder for settings: housesystem, parallax, ayanamsha bodies included etc.")
