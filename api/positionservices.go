@@ -12,11 +12,6 @@ import (
 	"enigma-ar/internal/calc"
 )
 
-// JulDayServer returns the calculated juilian day number for ephemeris time.
-type JulDayServer interface {
-	JulDay(request domain.DateTime) float64
-}
-
 // FullPointServer returns all positions and speeds (ecliptical, equatorial and horizontal) for a given point.
 type FullPointServer interface {
 	FullPositions(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
@@ -29,21 +24,6 @@ type PointRangeServer interface {
 
 type FullChartServer interface {
 	DefineFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error)
-}
-
-type JulDayService struct {
-	jdCalc calc.JulDayCalculator
-}
-
-func NewJulDayService(jdCalc calc.JulDayCalculator) JulDayService {
-	return JulDayService{
-		calc.NewJulDayCalculation(),
-	}
-}
-
-func (jds JulDayService) JulDay(request domain.DateTime) float64 {
-	jd := jds.jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
-	return jd
 }
 
 type FullPointService struct {

@@ -14,7 +14,7 @@ import (
 	"testing"
 )
 
-func TestCalcInt(t *testing.T) {
+func TestJulDay(t *testing.T) {
 	request := domain.DateTime{Year: 2024, Month: 5, Day: 6, Ut: 20.5, Greg: true}
 	jdCalc := calc.NewJulDayCalculation()
 	result := jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
@@ -23,8 +23,4 @@ func TestCalcInt(t *testing.T) {
 	if difference > 0.000001 {
 		t.Errorf("Julday(2024,5,6,20.5, true) = %f; want %f", result, expected)
 	}
-}
-
-func TestCalc(t *testing.T) {
-
 }

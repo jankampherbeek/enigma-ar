@@ -13,11 +13,6 @@ import (
 	"enigma-ar/internal/se"
 )
 
-// JulDayCalculator calculates the Julian Day for Epehemeris Time.
-type JulDayCalculator interface {
-	CalcJd(year int, month int, day int, ut float64, greg bool) float64
-}
-
 // PointPosCalculator calculates a fully defined set of positions and speeds, in ecliptical, equatorial and horizontal coordinates.
 type PointPosCalculator interface {
 	CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error)
@@ -36,24 +31,6 @@ type HousePosCalculator interface {
 // FullChartCalculator calculates a full chart with celestial points and houses.
 type FullChartCalculator interface {
 	CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error)
-}
-
-type JulDayCalculation struct {
-	seCalc se.SeJulDayCalculator
-}
-
-func NewJulDayCalculation() JulDayCalculator {
-	sjc := se.NewSeJulDayCalculation()
-	return JulDayCalculation{sjc}
-}
-
-// CalcJd handles the calculation of a Julian day number.
-func (jdc JulDayCalculation) CalcJd(year int, month int, day int, ut float64, greg bool) float64 {
-	var gregFlag = 1
-	if !greg {
-		gregFlag = 0
-	}
-	return jdc.seCalc.SeCalcJd(year, month, day, ut, gregFlag)
 }
 
 type PointPosCalculation struct {
