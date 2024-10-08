@@ -1,9 +1,15 @@
-package main
+/*
+ *  Enigma Astrology Research.
+ *  Copyright (c) Jan Kampherbeek.
+ *  Enigma is open source.
+ *  Please check the file copyright.txt in the root of the source for further details.
+ */
+
+package frontend
 
 import (
 	"fmt"
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/app"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
@@ -100,15 +106,13 @@ func makeBox() *fyne.Container {
 
 	text2 := canvas.NewText("Text 2", color.Black)
 	text2.TextSize = 36
-	enigmaHead := canvas.NewText("Enigma 1.0", color.Black)
-	enigmaHead.TextSize = 36
 	labelGlobalBtns := widget.NewLabel("Modules")
 	labelGlobalBtns.Importance = widget.MediumImportance
 	labelLocalBtns := widget.NewLabel("Charts")
 	labelLocalBtns.Importance = widget.MediumImportance
 	labelDescription := widget.NewLabel("Description of chart: namew, date, time, coordinates")
 	labelDescription.Importance = widget.MediumImportance
-	boxGlobal := container.New(layout.NewVBoxLayout(), enigmaHead, labelGlobalBtns, button1, button2, button3, button4, button5)
+	boxGlobal := container.New(layout.NewVBoxLayout(), labelGlobalBtns, button1, button2, button3, button4, button5)
 	boxLocal := container.New(layout.NewVBoxLayout(), labelLocalBtns, btnNewChart, btnSearchChart)
 	leftBox := container.New(layout.NewVBoxLayout(), boxGlobal, boxLocal)
 	return leftBox
@@ -122,21 +126,30 @@ func loadTranslation(path string) fyne.StaticResource {
 	return *fyne.NewStaticResource(path, data)
 }
 
-func handleUi() {
-	myApp := app.New()
-	myWindow := myApp.NewWindow("Resizable Circle")
+func (gm *GuiMgr) createChartsMain() *fyne.Container {
+	content := container.NewCenter(
+		widget.NewLabel(gm.Rosetta.GetText("btnTutorial")),
+	)
+	return content
+}
 
-	labelDescription := widget.NewLabel("Description of chart: name, date, time, coordinates")
-	labelDescription.Importance = widget.MediumImportance
-	labelSettings := widget.NewLabel("Placeholder for settings: housesystem, parallax, ayanamsha bodies included etc.")
-	circle := NewCircle()
-	content := container.NewBorder(
-		labelDescription,
-		labelSettings,
-		makeBox(),
-		nil,
-		circle)
-	myWindow.SetContent(content)
-	myWindow.Resize(fyne.NewSize(900, 700))
-	myWindow.ShowAndRun()
+func MakeUI(app fyne.App) {
+
+	mainWindow := app.NewWindow("Enigma 1.0")
+	mainWindow.Resize(fyne.NewSize(1024, 768))
+	mainWindow.SetMaster()
+	guiMgr := NewGuiMgr(mainWindow)
+
+	homeView := NewHomeView(guiMgr)
+	guiMgr.Register("home", homeView)
+	guiMgr.Register("charts", NewChartsView(guiMgr))
+	guiMgr.Register("config", NewConfigView(guiMgr))
+	guiMgr.Register("calc", NewCalcView(guiMgr))
+	guiMgr.Register("counts", NewCountsView(guiMgr))
+	guiMgr.Register("cycles", NewCyclesView(guiMgr))
+	guiMgr.Register("manual", NewManualView(guiMgr))
+
+	mainWindow.SetContent(homeView)
+
+	mainWindow.ShowAndRun()
 }

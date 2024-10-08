@@ -1,0 +1,7 @@
+btnTutorial = Handleiding
+btnCharts = Horoscopen
+btnCycles = Cycli
+btnCalculators = Calculators
+btnCounting = Tellingen
+btnChartsNew = Nieuw
+btnChartsSearch = Zoeken

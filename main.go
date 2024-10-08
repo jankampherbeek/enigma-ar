@@ -7,6 +7,12 @@
 
 package main
 
+import (
+	frontend "enigma-ar/frontend"
+	"fyne.io/fyne/v2/app"
+)
+
 func main() {
-	handleUi()
+	enigmaApp := app.NewWithID("com.radixpro.enigma")
+	frontend.MakeUI(enigmaApp)
 }

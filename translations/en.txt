@@ -1,0 +1,7 @@
+btnTutorial = Tutorial
+btnCharts = Horoscopes
+btnCycles = Cycles
+btnCalculators = Calculators
+btnCounting = Counting
+btnChartsNew = New
+btnChartsSearch = Search
