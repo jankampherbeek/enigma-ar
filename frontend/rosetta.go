@@ -8,10 +8,9 @@
 package frontend
 
 import (
-	"bufio"
+	"enigma-ar/api"
 	"fmt"
 	"log"
-	"os"
 	"strings"
 	"sync"
 )
@@ -20,6 +19,7 @@ import (
 // TODO check comment about singleton in Rosetta
 // Rosetta is a singleton that keeps track of the current language and retrieves texts for this language.
 type Rosetta struct {
+	persApi     api.PersistencyServer
 	currentLang string
 	texts       map[string]string
 }
@@ -34,6 +34,7 @@ func NewRosetta() *Rosetta {
 	lang := "en" // TODO read language from configuration
 	once.Do(func() {
 		instance = &Rosetta{
+			persApi:     api.NewPersistencyService(),
 			currentLang: lang,
 			texts:       make(map[string]string),
 		}
@@ -65,28 +66,22 @@ func (r *Rosetta) GetText(rbKey string) string {
 }
 
 func (r *Rosetta) readTextsForLanguage() {
+
 	relativePath := fmt.Sprintf("./translations/%s.txt", r.currentLang)
-	file, err := os.Open(relativePath)
+	lines, err := r.persApi.ReadLines(relativePath)
 	if err != nil {
-		log.Fatalf("failed to open file: %s", err)
+		log.Printf("rosetta.readTextsForLanguage: failed to read lines from file: %s", err)
 	}
-	defer file.Close()
-	r.texts = make(map[string]string)
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		parts := strings.Split(line, "=")
-		if len(parts) == 2 {
-			key := strings.TrimSpace(parts[0])
-			value := strings.TrimSpace(parts[1])
-			r.texts[key] = value
-		} else {
-			log.Fatalf("Rosetta: No = sign found in line: %s", line)
+	for i := 0; i < len(lines); i++ {
+		line := lines[i]
+		if !strings.Contains(line, "#") {
+			parts := strings.Split(line, "=")
+			if len(parts) == 2 {
+				key := strings.TrimSpace(parts[0])
+				value := strings.TrimSpace(parts[1])
+				r.texts[key] = value
+			}
 		}
-		fmt.Println(line)
 	}
 
-	if err := scanner.Err(); err != nil {
-		log.Fatalf("error reading file: %s", err)
-	}
 }
