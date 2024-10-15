@@ -13,7 +13,6 @@ import (
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
-	"fyne.io/fyne/v2/theme"
 	"fyne.io/fyne/v2/widget"
 	"image/color"
 	"log"
@@ -45,47 +44,6 @@ func makeButton() *widget.Button {
 func showTutorial(text string) {
 	fmt.Println(text)
 }
-
-type Circle struct {
-	widget.BaseWidget
-}
-
-func NewCircle() *Circle {
-	c := &Circle{}
-	c.ExtendBaseWidget(c)
-	return c
-}
-
-func (c *Circle) CreateRenderer() fyne.WidgetRenderer {
-	circle := canvas.NewCircle(color.NRGBA{R: 0, G: 0, B: 255, A: 255})
-	return &circleRenderer{circle: circle}
-}
-
-type circleRenderer struct {
-	circle *canvas.Circle
-}
-
-func (r *circleRenderer) Layout(size fyne.Size) {
-	r.circle.Resize(size)
-}
-
-func (r *circleRenderer) MinSize() fyne.Size {
-	return fyne.NewSize(50, 50) // Minimum size for the circle
-}
-
-func (r *circleRenderer) Refresh() {
-	canvas.Refresh(r.circle)
-}
-
-func (r *circleRenderer) BackgroundColor() color.Color {
-	return theme.BackgroundColor()
-}
-
-func (r *circleRenderer) Objects() []fyne.CanvasObject {
-	return []fyne.CanvasObject{r.circle}
-}
-
-func (r *circleRenderer) Destroy() {}
 
 func makeBox() *fyne.Container {
 	//header := makeHeader()
@@ -133,12 +91,169 @@ func (gm *GuiMgr) createChartsMain() *fyne.Container {
 	return content
 }
 
+func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
+	r := gm.Rosetta
+	languageItem := fyne.NewMenuItem("Language", func() {
+		fmt.Println("Language clicked.")
+	})
+
+	langEnItem := fyne.NewMenuItem("English", func() {
+		r.SetLanguage("en")
+		gm.Refresh("Home")
+		// TODO persist language
+	})
+	langDuItem := fyne.NewMenuItem("Nederlands / Dutch", func() {
+		r.SetLanguage("nl")
+		gm.Refresh("Home")
+		// TODO persist language
+	})
+	langGeItem := fyne.NewMenuItem("Deutsch / German", func() {
+		r.SetLanguage("ge")
+		gm.Refresh("Home")
+		// TODO persist language
+	})
+	langFrItem := fyne.NewMenuItem("Français / French", func() {
+		r.SetLanguage("fr")
+		gm.Refresh("Home")
+		// TODO persist language
+	})
+	languageItem.ChildMenu = fyne.NewMenu("", langEnItem, langDuItem, langGeItem, langFrItem)
+
+	settingsItem := fyne.NewMenuItem("Settings", func() {
+		fmt.Println("Settings clicked.")
+	})
+	configItem := fyne.NewMenuItem("Configuration", func() {
+		fmt.Println("Configuration clicked.")
+	})
+	generalMenu := fyne.NewMenu("General", languageItem, settingsItem, configItem)
+
+	newChartItem := fyne.NewMenuItem("New chart", func() {
+		fmt.Println("New chart clicked.")
+	})
+	searchChartItem := fyne.NewMenuItem("Search chart", func() {
+		fmt.Println("Search chart clicked.")
+	})
+	importChartsItem := fyne.NewMenuItem("Import charts", func() {
+		fmt.Println("Import charts clicked.")
+	})
+	chartMenu := fyne.NewMenu("Charts", newChartItem, searchChartItem, importChartsItem)
+
+	aspectsItem := fyne.NewMenuItem("Aspects", func() {
+		fmt.Println("Aspects clicked.")
+	})
+	harmonicsItem := fyne.NewMenuItem("Harmonics", func() {
+		fmt.Println("Harmonics clicked.")
+	})
+	midpointsItem := fyne.NewMenuItem("Midpoints", func() {
+		fmt.Println("Midpoints clicked.")
+	})
+	declDiagramItem := fyne.NewMenuItem("Declination diagram", func() {
+		fmt.Println("Declination diagram clicked.")
+	})
+	declStripItem := fyne.NewMenuItem("Declination strip", func() {
+		fmt.Println("Declination strip clicked.")
+	})
+	declParallelsItem := fyne.NewMenuItem("Parallels", func() {
+		fmt.Println("Parallels clicked.")
+	})
+	declLongEquivItem := fyne.NewMenuItem("Longitude equivalents", func() {
+		fmt.Println("Longitude equivalents clicked.")
+	})
+	declinationItem := fyne.NewMenuItem("Declination", func() {
+		fmt.Println("Declination clicked.")
+	})
+	declinationItem.ChildMenu = fyne.NewMenu("", declDiagramItem, declStripItem, declParallelsItem, declLongEquivItem)
+	analysisMenu := fyne.NewMenu("Analysis", aspectsItem, harmonicsItem, midpointsItem, declinationItem)
+
+	newProgEventItem := fyne.NewMenuItem("New event", func() {
+		fmt.Println("New event clicked.")
+	})
+	searchProgEventItem := fyne.NewMenuItem("Search event", func() {
+		fmt.Println("Search event clicked.")
+	})
+	primDirMenuItem := fyne.NewMenuItem("Primary directions", func() {
+		fmt.Println("Primary directions clicked.")
+	})
+	secDirMenuItem := fyne.NewMenuItem("Secondary directions", func() {
+		fmt.Println("Secondary directions clicked.")
+	})
+	symDirMenuItem := fyne.NewMenuItem("Symbolic directions", func() {
+		fmt.Println("Symbolic directions clicked.")
+	})
+	transitMenuItem := fyne.NewMenuItem("Transits", func() {
+		fmt.Println("Transits clicked.")
+	})
+	oobCalMenuItem := fyne.NewMenuItem("OOB Calendar", func() {
+		fmt.Println("OOB Calendar clicked.")
+	})
+	progressiveMenu := fyne.NewMenu("Progressive", newProgEventItem, searchProgEventItem, primDirMenuItem, secDirMenuItem, symDirMenuItem, transitMenuItem, oobCalMenuItem)
+
+	availableResearchDataItem := fyne.NewMenuItem("Available research data", func() {
+		fmt.Println("Available research data clicked.")
+	})
+	addResearchData := fyne.NewMenuItem("Add research data", func() {
+		fmt.Println("Add research data clicked.")
+	})
+	removeResearchData := fyne.NewMenuItem("Remove research data", func() {
+		fmt.Println("Remove research data clicked.")
+	})
+	researchDataMenu := fyne.NewMenu("Research data", availableResearchDataItem, addResearchData, removeResearchData)
+
+	newResearchMenuItem := fyne.NewMenuItem("New research project", func() {
+		fmt.Println("New research project clicked.")
+	})
+	searchResearchMenuItem := fyne.NewMenuItem("Search research project", func() {
+		fmt.Println("Search research project clicked.")
+	})
+	deleteResearchMenuItem := fyne.NewMenuItem("Delete research project", func() {
+		fmt.Println("Delete research project clicked.")
+	})
+	researchProjectMenu := fyne.NewMenu("Research projects", newResearchMenuItem, searchResearchMenuItem, deleteResearchMenuItem)
+
+	newCycleMenuItem := fyne.NewMenuItem("New cycle", func() {
+		fmt.Println("New cycle clicked.")
+	})
+	searchCycleMenuItem := fyne.NewMenuItem("Search cycle", func() {
+		fmt.Println("Search cycle clicked.")
+	})
+	deleteCycleMenuItem := fyne.NewMenuItem("Delete cycle", func() {
+		fmt.Println("Delete cycle clicked.")
+	})
+	cyclesMenu := fyne.NewMenu("Cycles", newCycleMenuItem, searchCycleMenuItem, deleteCycleMenuItem)
+
+	calcJdNrMenuItem := fyne.NewMenuItem("Julian day number from date/time", func() {
+		fmt.Println("Julian day number from date/timeclicked.")
+	})
+	calcDateMenuItem := fyne.NewMenuItem("Date/time from Julian date number", func() {
+		fmt.Println("Date/time from Julian day number clicked.")
+	})
+	celcObliquityMenuItem := fyne.NewMenuItem("Celculate obliquity", func() {
+		fmt.Println("Calculate obliquity clicked.")
+	})
+	calcMenu := fyne.NewMenu("Calculations", calcJdNrMenuItem, calcDateMenuItem, celcObliquityMenuItem)
+
+	aboutMenuItem := fyne.NewMenuItem("About Enigma", func() {
+		fmt.Println("About Enigma clicked.")
+	})
+	manualMenuItem := fyne.NewMenuItem("User manual", func() {
+		fmt.Println("User manual clicked.")
+	})
+	whatsNewItem := fyne.NewMenuItem("Whats New", func() {
+		fmt.Println("Whats New clicked.")
+	})
+	helpMenu := fyne.NewMenu("Help", aboutMenuItem, manualMenuItem, whatsNewItem)
+
+	mainMenu := fyne.NewMainMenu(generalMenu, chartMenu, analysisMenu, progressiveMenu, researchDataMenu, researchProjectMenu, cyclesMenu, calcMenu, helpMenu)
+	return mainMenu
+}
+
 func MakeUI(app fyne.App) {
 
 	mainWindow := app.NewWindow("Enigma 1.0")
+	guiMgr := NewGuiMgr(mainWindow)
 	mainWindow.Resize(fyne.NewSize(1024, 768))
 	mainWindow.SetMaster()
-	guiMgr := NewGuiMgr(mainWindow)
+	mainWindow.SetMainMenu(CreateMenu(guiMgr))
 
 	homeView := NewHomeView(guiMgr)
 	guiMgr.Register("home", homeView)

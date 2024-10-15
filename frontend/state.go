@@ -38,3 +38,9 @@ func (gm *GuiMgr) Show(name string) {
 		gm.window.Show()
 	}
 }
+
+func (gm *GuiMgr) Refresh(name string) {
+	if view, ok := gm.views[name]; ok {
+		view.Refresh()
+	}
+}
