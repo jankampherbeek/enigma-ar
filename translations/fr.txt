@@ -1,0 +1,65 @@
+####################################
+# French texts
+####################################
+# g_ general
+# m_ menu
+# r_as_ references aspects
+# r_ay_ references ayanamshas
+# r_cp_ references celestial points
+# r_cs_ references coordinate systems
+# r_hs_ references houses
+# r_op_ references observer positions
+# r_sg_ references signs
+# r_tz_ references timezones
+# v_ views
+####################################
+
+m_analysis = Analyse
+m_analysis_aspects = Aspects
+m_analysis_decl_diagram = Diagramme de déclinaison
+m_analysis_decl_long_equiv = Équivalents de longitude
+m_analysis_decl_parallels = Parallèles
+m_analysis_decl_strip = Bande de déclinaison
+m_analysis_declinations = Déclinaison
+m_analysis_harmonics = Harmoniques
+m_analysis_midpoints = Demi-sommes
+m_calc_datetime = Date/heur à partir de jd
+m_calc_jd = Numéro de jour julien (jd)
+m_calc_obliquity = L'obliquité
+m_calculations = Calculs
+m_charts = Horoscopes
+m_charts_import = Importer horoscopes
+m_charts_new = Nouveau horoscope
+m_charts_search = Rechercher horoscope
+m_cycle_delete = Supprimer cycle
+m_cycle_new = Nouveau cycle
+m_cycle_search = Rechercher cycle
+m_cycles = Cycles
+m_general = Général
+m_general_config = Configuration
+m_general_settings = Paramètres
+m_help = Aide
+m_help_about = À propos d'Enigma
+m_help_user_manual = Manuel de l'utilisateur
+m_help_whats_new = Quoi de neuf
+m_lang_dutch = Néerlandais / Nederlands
+m_lang_eng = Anglais / English
+m_lang_french = Français
+m_lang_german = Allemand / Deutsch
+m_language = Langue
+m_prog_new_event = Nouvel événement
+m_prog_oob_calendar = Calendrier hors limites (OOB)
+m_prog_prim_dir = Directions primaires
+m_prog_search_event = Rechercher événement
+m_prog_sec_dir = Direction secondaires
+m_prog_sym_dir = Directions symboliques
+m_prog_transits = Transits
+m_progressive = Progressif
+m_res_data_add = Ajouter des données
+m_res_data_available = Données disponibles
+m_res_data_delete = Supprimer des données
+m_res_proj_delete =  Supprimer projet
+m_res_proj_new = Nouveau projet
+m_res_proj_search = Rechercher projet
+m_research_data = Données de recherche
+m_research_projects = Projets de recherche

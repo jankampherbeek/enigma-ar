@@ -1,0 +1,65 @@
+####################################
+# German texts
+####################################
+# g_ general
+# m_ menu
+# r_as_ references aspects
+# r_ay_ references ayanamshas
+# r_cp_ references celestial points
+# r_cs_ references coordinate systems
+# r_hs_ references houses
+# r_op_ references observer positions
+# r_sg_ references signs
+# r_tz_ references timezones
+# v_ views
+####################################
+
+m_analysis = Analyse
+m_analysis_aspects = Aspekte
+m_analysis_decl_diagram = Deklinationsdiagramm
+m_analysis_decl_long_equiv = Längengradäquivalente
+m_analysis_decl_parallels = Parallele
+m_analysis_decl_strip = Deklinationsstreifen
+m_analysis_declinations = Deklination
+m_analysis_harmonics = Harmonische
+m_analysis_midpoints = Mittelpunkte
+m_calc_datetime = Datum/Zeit von JD
+m_calc_jd = Julianischer Tag (JD)
+m_calc_obliquity = Neigung der Erdachse 
+m_calculations = Berechnungen
+m_charts = Horoskope
+m_charts_import = Horoskope importieren
+m_charts_new = Neus Horoskop
+m_charts_search = Horoskop suchen
+m_cycle_delete = Zyklus löschen
+m_cycle_new = Neuer Zyklus
+m_cycle_search = Zyklus suchen
+m_cycles = Zyklen
+m_general = Allgemein
+m_general_config = Konfiguration
+m_general_settings = Einstellungen
+m_help = Hilfe
+m_help_about = Über Enigma 
+m_help_user_manual = Benutzerhandbuch
+m_help_whats_new = Was ist neu
+m_lang_dutch = Niederländisch / Nederlands
+m_lang_eng = Englisch / English
+m_lang_french = Französisch / Français
+m_lang_german = Deutsch
+m_language = Sprache
+m_prog_new_event = Neues Ereignis
+m_prog_oob_calendar = Außerhalb des Bereichs Kalender (OOB)
+m_prog_prim_dir = Primärdirektionen
+m_prog_search_event = Ereignis suchen
+m_prog_sec_dir = Sekundardirektionen
+m_prog_sym_dir = Symbolische Direktionen
+m_prog_transits = Transite
+m_progressive = Progressiv
+m_res_data_add = Daten hinzufügen
+m_res_data_available = Verfügbare Daten
+m_res_data_remove = Daten entfernen
+m_res_proj_delete = Projekt entfernen
+m_res_proj_new = Neues Projekt
+m_res_proj_search = Projekt suchen
+m_research_data = Forschungsdaten
+m_research_projects = Forschungsprojekte
