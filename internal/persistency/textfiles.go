@@ -38,3 +38,28 @@ func ReadTextLines(path string) ([]string, error) {
 	}
 	return lines, nil
 }
+
+// TODO create a test for WriteTextLines that accesses a specific test file.
+// WriteTextLines writes text lins to a file and overwrites the existing lines.
+func WriteTextLines(path string, lines []string) error {
+	file, err := os.Create(path)
+	if err != nil {
+		log.Fatalf("failed to access file: %s", err)
+	}
+	defer file.Close()
+
+	w := bufio.NewWriter(file)
+	for _, line := range lines {
+		_, err := w.WriteString(line + "\n")
+		if err != nil {
+			log.Fatalf(
+				"failed to write to file: %s, resulted in error: %s", path, err)
+		}
+	}
+	err = w.Flush()
+	if err != nil {
+		log.Println("Error flushing buffer: ", err)
+		return err
+	}
+	return nil
+}

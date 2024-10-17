@@ -29,7 +29,7 @@ m_calc_obliquity = Neigung der Erdachse
 m_calculations = Berechnungen
 m_charts = Horoskope
 m_charts_import = Horoskope importieren
-m_charts_new = Neus Horoskop
+m_charts_new = Neues Horoskop
 m_charts_search = Horoskop suchen
 m_cycle_delete = Zyklus löschen
 m_cycle_new = Neuer Zyklus
@@ -57,9 +57,13 @@ m_prog_transits = Transite
 m_progressive = Progressiv
 m_res_data_add = Daten hinzufügen
 m_res_data_available = Verfügbare Daten
-m_res_data_remove = Daten entfernen
+m_res_data_delete = Daten entfernen
 m_res_proj_delete = Projekt entfernen
 m_res_proj_new = Neues Projekt
 m_res_proj_search = Projekt suchen
 m_research_data = Forschungsdaten
 m_research_projects = Forschungsprojekte
+
+# View main
+v_main_language_changed = Die Sprache wurde geändert. Starten Sie Enigma neu, um die neue Sprache zu verwenden.
+v_main_language_changed_title = Sprache geändert

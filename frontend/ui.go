@@ -12,6 +12,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/dialog"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"image/color"
@@ -91,37 +92,35 @@ func (gm *GuiMgr) createChartsMain() *fyne.Container {
 	return content
 }
 
+func handleLangChange(r *Rosetta, s Settings, w fyne.Window) {
+	r.SetLanguage("en")
+	s.DefineLanguage("en")
+	dialog.NewInformation(r.GetText("v_main_language_changed_title"), r.GetText("v_main_language_changed"), w).Show()
+}
+
 func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
 	r := gm.Rosetta
-	r.SetLanguage("fr")
+	s := NewSettings()
 	languageItem := fyne.NewMenuItem(r.GetText("m_language"), func() {
 		fmt.Println("Language clicked.")
 	})
 
 	langEnItem := fyne.NewMenuItem(r.GetText("m_lang_eng"), func() {
-		r.SetLanguage("en")
-		gm.Refresh("Home")
-		// TODO persist language
+		handleLangChange(r, s, gm.window)
 	})
 	langDuItem := fyne.NewMenuItem(r.GetText("m_lang_dutch"), func() {
-		r.SetLanguage("nl")
-		gm.Refresh("Home")
-		// TODO persist language
+		handleLangChange(r, s, gm.window)
 	})
 	langGeItem := fyne.NewMenuItem(r.GetText("m_lang_german"), func() {
-		r.SetLanguage("ge")
-		gm.Refresh("Home")
-		// TODO persist language
+		handleLangChange(r, s, gm.window)
 	})
 	langFrItem := fyne.NewMenuItem(r.GetText("m_lang_french"), func() {
-		r.SetLanguage("fr")
-		gm.Refresh("Home")
-		// TODO persist language
+		handleLangChange(r, s, gm.window)
 	})
 	languageItem.ChildMenu = fyne.NewMenu("", langEnItem, langDuItem, langGeItem, langFrItem)
 
 	settingsItem := fyne.NewMenuItem(r.GetText("m_general_settings"), func() {
-		fmt.Println("Settings clicked.")
+		fmt.Println("DefinedSettings clicked.")
 	})
 	configItem := fyne.NewMenuItem(r.GetText("m_general_config"), func() {
 		fmt.Println("Configuration clicked.")
@@ -252,6 +251,8 @@ func MakeUI(app fyne.App) {
 
 	mainWindow := app.NewWindow("Enigma 1.0")
 	guiMgr := NewGuiMgr(mainWindow)
+	settings := NewSettings()
+	guiMgr.Rosetta.SetLanguage(settings.GetLanguage())
 	mainWindow.Resize(fyne.NewSize(1024, 768))
 	mainWindow.SetMaster()
 	mainWindow.SetMainMenu(CreateMenu(guiMgr))

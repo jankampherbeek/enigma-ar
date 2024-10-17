@@ -63,3 +63,7 @@ m_res_proj_new = Nouveau projet
 m_res_proj_search = Rechercher projet
 m_research_data = Données de recherche
 m_research_projects = Projets de recherche
+
+# View main
+v_main_language_changed = La langue a été changée. Redémarrez Enigma pour utiliser la nouvelle langue.
+v_main_language_changed_title = Langue changé

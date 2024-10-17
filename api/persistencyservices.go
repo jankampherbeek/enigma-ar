@@ -14,6 +14,7 @@ import (
 // PersistencyServer provides services to access files or databases.
 type PersistencyServer interface {
 	ReadLines(path string) ([]string, error)
+	WriteLines(path string, lines []string) error
 }
 
 type PersistencyService struct{}
@@ -24,6 +25,10 @@ func NewPersistencyService() *PersistencyService {
 
 // ReadLines returns the lines as read from the specified file.
 func (ps PersistencyService) ReadLines(path string) ([]string, error) {
-	lines, err := persistency.ReadTextLines(path)
-	return lines, err
+	return persistency.ReadTextLines(path)
+}
+
+// WriteLines creates a new file and writes the lines to that file.
+func (ps PersistencyService) WriteLines(path string, lines []string) error {
+	return persistency.WriteTextLines(path, lines)
 }
