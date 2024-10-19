@@ -14,6 +14,11 @@
 # v_ views
 ####################################
 
+# General texts
+g_btn_close = Fermer
+g_btn_help = Aide
+
+# Menu's
 m_analysis = Analyse
 m_analysis_aspects = Aspects
 m_analysis_decl_diagram = Diagramme de déclinaison
@@ -63,6 +68,15 @@ m_res_proj_new = Nouveau projet
 m_res_proj_search = Rechercher projet
 m_research_data = Données de recherche
 m_research_projects = Projets de recherche
+
+#View calc jd
+v_calc_jd_title = Calculer le jour Julien
+v_calc_jd_date = Date(aaaa/mm/jj)
+v_calc_jd_time = Heure (*hh:mm:ss en TU)
+v_calc_jd_calendar = Calendrier
+v_calc_jd_result = Résultat du calcul
+v_calc_jd_error = Veuillez corriger la saisie
+v_calc_jd_btncalc = Calculer le JJ
 
 # View main
 v_main_language_changed = La langue a été changée. Redémarrez Enigma pour utiliser la nouvelle langue.

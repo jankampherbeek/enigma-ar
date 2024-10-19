@@ -14,6 +14,11 @@
 # v_ views
 ####################################
 
+# General texts
+g_btn_close = Schließen
+g_btn_help = Hilfe
+
+# Menu's
 m_analysis = Analyse
 m_analysis_aspects = Aspekte
 m_analysis_decl_diagram = Deklinationsdiagramm
@@ -63,6 +68,15 @@ m_res_proj_new = Neues Projekt
 m_res_proj_search = Projekt suchen
 m_research_data = Forschungsdaten
 m_research_projects = Forschungsprojekte
+
+#View calc jd
+v_calc_jd_title = Julianische Tageszahl berechnen
+v_calc_jd_date = Datum (jjjj/mm/dd)
+v_calc_jd_time = Zeit (hh:mm:ss in UT)
+v_calc_jd_calendar = Kalender
+v_calc_jd_result = Ergebnis der Berechnung
+v_calc_jd_error = Bitte korrigieren Sie die Eingabe
+v_calc_jd_btncalc = JD berechnen
 
 # View main
 v_main_language_changed = Die Sprache wurde geändert. Starten Sie Enigma neu, um die neue Sprache zu verwenden.

@@ -105,7 +105,6 @@ func MakeUI(app fyne.App) {
 	guiMgr.Register("home", homeView)
 	guiMgr.Register("charts", NewChartsView(guiMgr))
 	guiMgr.Register("config", NewConfigView(guiMgr))
-	guiMgr.Register("calc", NewCalcView(guiMgr))
 	guiMgr.Register("counts", NewCountsView(guiMgr))
 	guiMgr.Register("cycles", NewCyclesView(guiMgr))
 	guiMgr.Register("manual", NewManualView(guiMgr))

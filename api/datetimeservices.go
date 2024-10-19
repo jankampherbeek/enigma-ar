@@ -21,9 +21,10 @@ type JulDayService struct {
 	jdCalc calc.JulDayCalculator
 }
 
-func NewJulDayService(jdCalc calc.JulDayCalculator) *JulDayService {
+func NewJulDayService() *JulDayService {
+	jdCalc := calc.NewJulDayCalculation()
 	return &JulDayService{
-		calc.NewJulDayCalculation(),
+		jdCalc: jdCalc,
 	}
 }
 

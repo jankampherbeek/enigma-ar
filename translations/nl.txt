@@ -14,6 +14,11 @@
 # v_ views
 ####################################
 
+# General texts
+g_btn_close = Sluiten
+g_btn_help = Help
+
+# Menu's
 m_analysis = Analyse
 m_analysis_aspects = Aspecten
 m_analysis_decl_diagram = Declinatie diagram
@@ -63,6 +68,15 @@ m_res_proj_new = Nieuw project
 m_res_proj_search = Zoek project
 m_research_data = Onderzoeksdata
 m_research_projects = Onderzoeksprojecten
+
+#View calc jd
+v_calc_jd_title = Berekene het Juliaanse dagnummer
+v_calc_jd_date = Datum (jjjj/mm/dd)
+v_calc_jd_time = Tijd (uu:mm:ss in UT)
+v_calc_jd_calendar = Kalender
+v_calc_jd_result = Resultaat van de berekening
+v_calc_jd_error = Corrigeer s.v.p. de invoer
+v_calc_jd_btncalc = Bereken JD
 
 # View main
 v_main_language_changed = De taal is veranderd. Herstart Enigma om de nieuwe taal te gebruiken.

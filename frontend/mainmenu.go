@@ -25,7 +25,7 @@ func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
 	menuResearchData := createMenuResearchData(r)
 	menuResearchProject := createMenuResearchProject(r)
 	menuCycles := createMenuCycles(r)
-	menuCalc := createMenuCalc(r)
+	menuCalc := createMenuCalc(r, gm.window)
 	menuHelp := createMenuHelp(r)
 	mainMenu := fyne.NewMainMenu(menuGeneral, menuCharts, menuAnalysis, menuProgressive, menuResearchData, menuResearchProject, menuCycles, menuCalc, menuHelp)
 	return mainMenu
@@ -172,9 +172,9 @@ func createMenuCycles(r *Rosetta) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_cycles"), newCycleMenuItem, searchCycleMenuItem, deleteCycleMenuItem)
 }
 
-func createMenuCalc(r *Rosetta) *fyne.Menu {
+func createMenuCalc(r *Rosetta, w fyne.Window) *fyne.Menu {
 	calcJdNrMenuItem := fyne.NewMenuItem(r.GetText("m_calc_jd"), func() {
-		fmt.Println("Julian day number from date/timeclicked.")
+		CalcJdView(*r, w)
 	})
 	calcDateMenuItem := fyne.NewMenuItem(r.GetText("m_calc_datetime"), func() {
 		fmt.Println("Date/time from Julian day number clicked.")

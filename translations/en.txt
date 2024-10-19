@@ -14,6 +14,11 @@
 # v_ views
 ####################################
 
+# General texts
+g_btn_close = Close
+g_btn_help = Help
+
+# Menu's
 m_analysis = Analysis
 m_analysis_aspects = Aspects
 m_analysis_decl_diagram = Declination diagram
@@ -26,7 +31,7 @@ m_analysis_midpoints = Midpoints
 m_calc_datetime = Date/time from Julian day
 m_calc_jd = Julian day from date/timezones
 m_calc_obliquity = Obliquity
-m_calculations = Calcuations
+m_calculations = Calculations
 m_charts = Charts
 m_charts_import = Import charts
 m_charts_new = New chart
@@ -63,6 +68,15 @@ m_res_proj_new = New project
 m_res_proj_search = Search project
 m_research_data = Research data
 m_research_projects = Research projects
+
+#View calc jd
+v_calc_jd_title = Calculate Julian Day number
+v_calc_jd_date = Date (yyyy/mm/dd)
+v_calc_jd_time = Time (hh:mm:ss in UT)
+v_calc_jd_calendar = Calendar
+v_calc_jd_result = Result of calculation
+v_calc_jd_error = Please correct input
+v_calc_jd_btncalc = Calculate JD 
 
 # View main
 v_main_language_changed = The language has changed. Restart Enigma to use the new language.
