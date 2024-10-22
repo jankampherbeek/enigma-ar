@@ -19,7 +19,7 @@ func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
 	s := NewSettings()
 
 	menuGeneral := createMenuGeneral(r, s, gm.window)
-	menuCharts := createMenuCharts(r)
+	menuCharts := createMenuCharts(r, gm.window)
 	menuAnalysis := createMenuAnalysis(r)
 	menuProgressive := createMenuProgressive(r)
 	menuResearchData := createMenuResearchData(r)
@@ -65,9 +65,9 @@ func createMenuGeneral(r *Rosetta, s Settings, w fyne.Window) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_language"), languageItem, settingsItem, configItem)
 }
 
-func createMenuCharts(r *Rosetta) *fyne.Menu {
+func createMenuCharts(r *Rosetta, w fyne.Window) *fyne.Menu {
 	newChartItem := fyne.NewMenuItem(r.GetText("m_charts_new"), func() {
-		fmt.Println("New chart clicked.")
+		RadixInput(*r, w)
 	})
 	searchChartItem := fyne.NewMenuItem(r.GetText("m_charts_search"), func() {
 		fmt.Println("Search chart clicked.")

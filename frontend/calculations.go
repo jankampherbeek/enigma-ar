@@ -13,6 +13,7 @@ import (
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
 	"strconv"
 	"strings"
@@ -102,9 +103,9 @@ func CalcJdView(r Rosetta, w fyne.Window) {
 	})
 
 	btnHelp := widget.NewButton(helpText, func() {
-		// showHelp
+		ShowHelpWindow("calc_jd", r.GetLanguage(), w)
 	})
-	buttonBar := container.NewHBox(btnClose, btnHelp)
+	buttonBar := container.NewHBox(layout.NewSpacer(), btnClose, btnHelp)
 
 	viewContent := container.NewVBox(
 		title,

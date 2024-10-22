@@ -69,6 +69,60 @@ m_res_proj_search = Rechercher projet
 m_research_data = Données de recherche
 m_research_projects = Projets de recherche
 
+# References chart categories
+r_cc_female = Féminin
+r_cc_male = Masculin
+r_cc_event =Événement
+r_cc_horary = Horaire
+r_cc_election = Élection
+r_cc_other = Autre
+r_cc_unknown = Inconnu
+
+# References Rodden ratings
+r_rr_aa = Précis
+r_rr_a = Cité
+r_rr_b = (Auto)biographie
+r_rr_c = Attention, pas de source
+r_rr_dd = Données non fiables
+r_rr_x = Pas d'heure de naissance
+r_rr_xx = Pas de date de naissance
+r_rr_unknown = Inconnu
+
+# References timezones
+r_tz_ut = +00:00: UT/Temps Universel, GT/Temps de Greenwich
+r_tz_cet = +01:00: CET/Heure d'Europe Centrale
+r_tz_eet = +02:00: EET/Heure d'Europe de l'Est
+r_tz_eat = +03:00: EAT/Heure d'Afrique de l'Est, TRT/Heure de Turquie
+r_tz_irst = +03:30: IRST/Heure Standard d'Iran
+r_tz_amt = +04:00: AMT/Heure d'Arménie, MUT/Heure de Maurice
+r_tz_aft = +04:30: AFT/Heure d'Afghanistan
+r_tz_pkt = +05:00: PKT/Heure Standard du Pakistan, ORAT/Heure d'Oral
+r_tz_ist = +05:30: IST/Heure Standard de l'Inde
+r_tz_iot = +06:00: IOT/Heure des Chagos (Inde), OMST/Heure d'Omsk
+r_tz_mmt = +06:30: MMT/Heure Standard du Myanmar
+r_tz_ict = +07:00: ICT/Heure d'Indochine
+r_tz_wst = +08:00: WST/Heure Standard de l'Ouest, CST/Heure Standard de Chine
+r_tz_jst = +09:00: JST/Heure Standard du Japon
+r_tz_acst = +09:30: ACST/Heure Standard Centrale d'Australie
+r_tz_aest = +10:00: AEST/Heure Standard de l'Est Australien
+r_tz_lhst = +10:30: LHST/Heure Standard de Lord Howe
+r_tz_nct = +11:00: NCT/Heure de Nouvelle-Calédonie
+r_tz_nzst = +12:00: NZST/Heure Standard de Nouvelle-Zélande
+r_tz_sst = -11:00: SST/Heure Standard des Samoa
+r_tz_hast = -10:00: HAST/Heure Standard d'Hawaï-Aléoutiennes
+r_tz_mart = -09:30: MART/Heure des Îles Marquises
+r_tz_akst = -09:00: AKST/Heure Standard de l'Alaska
+r_tz_pst = -08:00: PST/Heure Standard du Pacifique
+r_tz_mst = -07:00: MST/Heure Standard des Rocheuses
+r_tz_cst = -06:00: CST/Heure Standard Centrale
+r_tz_est = -05:00: EST/Heure Standard de l'Est
+r_tz_ast = -04:00: AST/Heure Standard de l'Atlantique
+r_tz_nst = -03:30: NST/Heure Standard de Terre-Neuve
+r_tz_brt = -03:00: BRT/Heure du Brésil, ART/Heure de l'Argentine
+r_tz_gst = -02:00: GST/Heure de Géorgie du Sud
+r_tz_azot = -01:00: AZOT/Heure Standard des Açores
+r_tz_lmt = TML: Temps Moyen Local
+
 #View calc jd
 v_calc_jd_title = Calculer le jour Julien
 v_calc_jd_date = Date(aaaa/mm/jj)
@@ -77,6 +131,31 @@ v_calc_jd_calendar = Calendrier
 v_calc_jd_result = Résultat du calcul
 v_calc_jd_error = Veuillez corriger la saisie
 v_calc_jd_btncalc = Calculer le JJ
+
+#View input radix
+v_input_radix_title = Nouvelles données d'horoscope
+v_input_radix_name = Nom ou ID
+v_input_radix_description = Description
+v_input_radix_source = Source
+v_input_radix_rating = Évaluation
+v_input_radix_catchart = Catégorie
+v_input_radix_locname = Emplacement
+v_input_radix_country = Pays
+v_input_radix_map = Carte
+v_input_radix_geolong = Longitude géographique (ddd:mm:ss)
+v_input_radix_geolongdire = Est
+v_input_radix_geolongdirw = Ouest
+v_input_radix_geolat  = Latitude géographique (dd:mm:ss)
+v_input_radix_geolatdirn = Nord
+v_input_radix_geolatdirs = Sud
+v_input_radix_date = Date (aaaa/mm/jj)
+v_input_radix_calendar = Calendrier
+v_input_radix_yearcount = Ère
+v_input_radix_time = Heure (hh:mm:ss)
+v_input_radix_timezone = Fuseau horaire
+v_input_radix_dst = Heure d'été
+v_input_radix_geolonglmt = Longitude pour HML (ddd:mm:ss)
+v_input_radix_calc = Calculer l'horoscope
 
 # View main
 v_main_language_changed = La langue a été changée. Redémarrez Enigma pour utiliser la nouvelle langue.

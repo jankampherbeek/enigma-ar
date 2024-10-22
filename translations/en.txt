@@ -69,6 +69,60 @@ m_res_proj_search = Search project
 m_research_data = Research data
 m_research_projects = Research projects
 
+# References chart categories
+r_cc_female = Female
+r_cc_male = Male
+r_cc_event = Event
+r_cc_horary = Horary
+r_cc_election = Election
+r_cc_other = Other
+r_cc_unknown = Unknown
+
+# References Rodden ratings
+r_rr_aa = Accurate
+r_rr_a = Quoted
+r_rr_b = (Auto)biography
+r_rr_c = Caution, no source
+r_rr_dd = Dirty data
+r_rr_x = No birth time
+r_rr_xx = No birth date
+r_rr_unknown = Unknown
+
+# References timezones
+r_tz_ut = +00:00: UT/Universal Time, GT/Greenwich Time
+r_tz_cet = +01:00: CET/Central European Time
+r_tz_eet = +02:00: EET/Eastern European Time
+r_tz_eat = +03:00: EAT/East African Time, TRT/Turkey Time
+r_tz_irst = +03:30: IRST/Iran Standard Time
+r_tz_amt = +04:00: AMT/Armenia Time, MUT/Mauritius Time
+r_tz_aft = +04:30: AFT/Afghanistan Time
+r_tz_pkt = +05:00: PKT/Pakistan Standard Time, ORAT/Oral Time
+r_tz_ist = +05:30: IST/India Standard Time
+r_tz_iot = +06:00: IOT/Indian Chagos Time, OMST/Omsk Time
+r_tz_mmt = +06:30: MMT/Myanmar Standard Time
+r_tz_ict = +07:00: ICT/Indochina Time
+r_tz_wst = +08:00: WST/Western Standard Time, CST/China Standard Time
+r_tz_jst = +09:00: JST/Japan Standard Time
+r_tz_acst = +09:30: ACST/Australian Central Standard Time
+r_tz_aest = +10:00: AEST/Australian Eastern Standard Time
+r_tz_lhst = +10:30: LHST/Lord Howe Standard Time
+r_tz_nct = +11:00: NCT/New Caledonia Time
+r_tz_nzst = +12:00: NZST/New Zealand Standard Time
+r_tz_sst = -11:00: SST/Samoa Standard Time
+r_tz_hast = -10:00: HAST/Hawaii-Aleutian Standard Time
+r_tz_mart = -09:30: MART/Marquesas Islands Time
+r_tz_akst = -09:00: AKST/Alaska Standard Time
+r_tz_pst = -08:00: PST/Pacific Standard Time
+r_tz_mst = -07:00: MST/Mountain Standard Time
+r_tz_cst = -06:00: CST/Central Standard Time
+r_tz_est = -05:00: EST/Eastern Standard Time
+r_tz_ast = -04:00: AST/Atlantic Standard Time
+r_tz_nst = -03:30: NST/Newfoundland Standard Time
+r_tz_brt = -03:00: BRT/Brazil Time, ART/Argentina Time
+r_tz_gst = -02:00: GST/South Georgia Time
+r_tz_azot = 01:00: AZOT/Azores Standard Time
+r_tz_lmt = LMT: Local Mean Time
+
 #View calc jd
 v_calc_jd_title = Calculate Julian Day number
 v_calc_jd_date = Date (yyyy/mm/dd)
@@ -77,6 +131,31 @@ v_calc_jd_calendar = Calendar
 v_calc_jd_result = Result of calculation
 v_calc_jd_error = Please correct input
 v_calc_jd_btncalc = Calculate JD 
+
+#View input radix
+v_input_radix_title = Data new chart
+v_input_radix_name = Name or ID
+v_innput_radix_description = Description
+v_input_radix_source = Source
+v_input_radix_rating = Rating
+v_input_radix_catchart = Category
+v_input_radix_locname = Location
+v_input_radix_country = Country
+v_input_radix_map = Map
+v_input_radix_geolong = Geographic longitude (ddd:mm:ss)
+v_input_radix_geolongdire = East
+v_input_radix_geolongdirw = West
+v_input_radix_geolat  = Geographic latitude (dd:mm:ss)
+v_input_radix_geolatdirn = North
+v_input_radix_geolatdirs = South
+v_input_radix_date = Date (yyyy/mm/dd)
+v_input_radix_calendar = Calendar
+v_input_radix_yearcount = Chronology
+v_input_radix_time = Time (hh:mm:ss)
+v_input_radix_timezone = Time zone
+v_input_radix_dst = Daylight saving time
+v_input_radix_geolonglmt = Longitude for LMT (ddd:mm:ss)
+v_input_radix_calc = Calculate chart
 
 # View main
 v_main_language_changed = The language has changed. Restart Enigma to use the new language.

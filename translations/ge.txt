@@ -69,6 +69,60 @@ m_res_proj_search = Projekt suchen
 m_research_data = Forschungsdaten
 m_research_projects = Forschungsprojekte
 
+# References chart categories
+r_cc_female = Frau
+r_cc_male = Mann
+r_cc_event = Ereignis
+r_cc_horary = Stunden horoskop
+r_cc_election = Wahl horoskop
+r_cc_other = Andere
+r_cc_unknown = Unbekannt
+
+# References Rodden ratings
+r_rr_aa = Genau
+r_rr_a = Zitiert
+r_rr_b = (Auto)biografie
+r_rr_c = Achtung, keine Quelle
+r_rr_dd = Schmutzige Daten
+r_rr_x = Keine Geburtszeit
+r_rr_xx = Keine Geburtsdatum
+r_rr_unknown = Unbekannt
+
+# References timezones
+r_tz_ut = +00:00: UT/Universelle Zeit, GT/Greenwich Zeit
+r_tz_cet = +01:00: CET/Mitteleuropäische Zeit
+r_tz_eet = +02:00: EET/Osteuropäische Zeit
+r_tz_eat = +03:00: OAT/Ostafrikanische Zeit, TRT/Türkische Zeit
+r_tz_irst = +03:30: IRST/Iranische Standardzeit
+r_tz_amt = +04:00: AMT/Armenische Zeit, MUT/Mauritius Zeit
+r_tz_aft = +04:30: AFT/Afghanistan Zeit
+r_tz_pkt = +05:00: PKT/Pakistanische Standardzeit, ORAT/Oral Zeit
+r_tz_ist = +05:30: IST/Indische Standardzeit
+r_tz_iot = +06:00: IOT/Indisch-Chagos Zeit, OMST/Omsk Zeit
+r_tz_mmt = +06:30: MMT/Myanmar Standardzeit
+r_tz_ict = +07:00: ICT/Indochina Zeit
+r_tz_wst = +08:00: WST/Westliche Standardzeit, CST/Chinesische Standardzeit
+r_tz_jst = +09:00: JST/Japanische Standardzeit
+r_tz_acst = +09:30: ACST/Australische Zentralstandardzeit
+r_tz_aest = +10:00: AEST/Australische Oststandardzeit
+r_tz_lhst = +10:30: LHST/Lord Howe Standardzeit
+r_tz_nct = +11:00: NCT/Neukaledonien Zeit
+r_tz_nzst = +12:00: NZST/Neuseeland Standardzeit
+r_tz_sst = -11:00: SST/Samoa Standardzeit
+r_tz_hast = -10:00: HAST/Hawaii-Aleuten Standardzeit
+r_tz_mart = -09:30: MART/Marquesas-Inseln Zeit
+r_tz_akst = -09:00: AKST/Alaska Standardzeit
+r_tz_pst = -08:00: PST/Pazifische Standardzeit
+r_tz_mst = -07:00: MST/Mountain Standardzeit
+r_tz_cst = -06:00: CST/Central Standardzeit
+r_tz_est = -05:00: EST/Ostküsten-Standardzeit
+r_tz_ast = -04:00: AST/Atlantische Standardzeit
+r_tz_nst = -03:30: NST/Neufundland-Standardzeit
+r_tz_brt = -03:00: BRT/Brasilien Zeit, ART/Argentinische Zeit
+r_tz_gst = -02:00: GST/Südgeorgien Zeit
+r_tz_azot = -01:00: AZOT/Azoren-Standardzeit
+r_tz_lmt = MOZ: Mittlere Ortszeit
+
 #View calc jd
 v_calc_jd_title = Julianische Tageszahl berechnen
 v_calc_jd_date = Datum (jjjj/mm/dd)
@@ -77,6 +131,31 @@ v_calc_jd_calendar = Kalender
 v_calc_jd_result = Ergebnis der Berechnung
 v_calc_jd_error = Bitte korrigieren Sie die Eingabe
 v_calc_jd_btncalc = JD berechnen
+
+#View input radix
+v_input_radix_title = Neue Horoskopdaten
+v_input_radix_name = Name oder ID
+v_innput_radix_description = Beschreibung
+v_input_radix_source = Quelle
+v_input_radix_rating = Bewertung
+v_input_radix_catchart = Kategorie
+v_input_radix_locname = Standort
+v_input_radix_country = Land
+v_input_radix_map = Karte
+v_input_radix_geolong = Geographische Länge (ddd:mm:ss)
+v_input_radix_geolongdire = Ost
+v_input_radix_geolongdirw = West
+v_input_radix_geolat  = Geographische breite (dd:mm:ss)
+v_input_radix_geolatdirn = Nord
+v_input_radix_geolatdirs = Süd
+v_input_radix_date = Datum (jjjj/mm/tt)
+v_input_radix_calendar = Kalender
+v_input_radix_yearcount = Zeitrechnung
+v_input_radix_time = Zeit (hh:mm:ss)
+v_input_radix_timezone = Zeitzone
+v_input_radix_dst = Sommerzeit
+v_input_radix_geolonglmt = Länge für WOZ (ddd:mm:ss)
+v_input_radix_calc = Horoskop berechnen
 
 # View main
 v_main_language_changed = Die Sprache wurde geändert. Starten Sie Enigma neu, um die neue Sprache zu verwenden.
