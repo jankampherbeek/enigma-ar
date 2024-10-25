@@ -131,7 +131,9 @@ Clone the repository from GitHub: https://github.com/jankampherbeek/enigma-ar .
 
 
 
+## Icon
 
+The application icon is downloaded from https://www.svgrepo.com/svg/530151/space and slightly edited. The icon is in png format.
 
 
 

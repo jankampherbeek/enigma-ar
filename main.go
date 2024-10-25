@@ -8,11 +8,12 @@
 package main
 
 import (
-	frontend "enigma-ar/frontend"
+	"enigma-ar/frontend"
 	"fyne.io/fyne/v2/app"
 )
 
 func main() {
 	enigmaApp := app.NewWithID("com.radixpro.enigma")
+	enigmaApp.SetIcon(resourceIconPng)
 	frontend.MakeUI(enigmaApp)
 }

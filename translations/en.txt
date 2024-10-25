@@ -69,6 +69,12 @@ m_res_proj_search = Search project
 m_research_data = Research data
 m_research_projects = Research projects
 
+# References calendars
+r_cal_gregorian = Gregorian
+r_cal_julian_ce = Julian CE
+r_cal_julian_bce = Julian BCE
+r_cal_astronomical = Astronomical
+
 # References chart categories
 r_cc_female = Female
 r_cc_male = Male
@@ -79,13 +85,13 @@ r_cc_other = Other
 r_cc_unknown = Unknown
 
 # References Rodden ratings
-r_rr_aa = Accurate
-r_rr_a = Quoted
-r_rr_b = (Auto)biography
-r_rr_c = Caution, no source
-r_rr_dd = Dirty data
-r_rr_x = No birth time
-r_rr_xx = No birth date
+r_rr_aa = AA - Accurate
+r_rr_a = A - Quoted
+r_rr_b = B - (Auto)biography
+r_rr_c = C - Caution, no source
+r_rr_dd = DD - Dirty data
+r_rr_x = X - No birth time
+r_rr_xx = XX - No birth date
 r_rr_unknown = Unknown
 
 # References timezones
@@ -142,19 +148,19 @@ v_input_radix_catchart = Category
 v_input_radix_locname = Location
 v_input_radix_country = Country
 v_input_radix_map = Map
-v_input_radix_geolong = Geographic longitude (ddd:mm:ss)
-v_input_radix_geolongdire = East
-v_input_radix_geolongdirw = West
-v_input_radix_geolat  = Geographic latitude (dd:mm:ss)
-v_input_radix_geolatdirn = North
-v_input_radix_geolatdirs = South
-v_input_radix_date = Date (yyyy/mm/dd)
+v_input_radix_geolong = Geographic longitude
+v_input_radix_geolong_placeholder = ddd:mm:ss e (w for west)
+v_input_radix_geolat  = Geographic latitude
+v_input_radix_geolat_placeholder = dd:mm:ss n (s for south)
+v_input_radix_date = Date
+v_input_radix_date_placeholder = yyyy/mm/dd
 v_input_radix_calendar = Calendar
 v_input_radix_yearcount = Chronology
-v_input_radix_time = Time (hh:mm:ss)
+v_input_radix_time = Time
+v_input_radix_time_placeholder = hh:mm:ss
 v_input_radix_timezone = Time zone
 v_input_radix_dst = Daylight saving time
-v_input_radix_geolonglmt = Longitude for LMT (ddd:mm:ss)
+v_input_radix_geolonglmt = Longitude for LMT
 v_input_radix_calc = Calculate chart
 
 # View main

@@ -69,6 +69,12 @@ m_res_proj_search = Zoek project
 m_research_data = Onderzoeksdata
 m_research_projects = Onderzoeksprojecten
 
+# References calendars
+r_cal_gregorian = Gregoriaans
+r_cal_julian_ce = Juliaans n. Chr.
+r_cal_julian_bce = Juliaans v. Chr/
+r_cal_astronomical = Astronomisch
+
 # References chart categories
 r_cc_female = Vrouw
 r_cc_male = Man
@@ -79,13 +85,13 @@ r_cc_other = Anders
 r_cc_unknown = Onbekend
 
 # References Rodden ratings
-r_rr_aa = Accuraat
-r_rr_a = Geciteerd
-r_rr_b = (Auto)biografie
-r_rr_c = Pas op, geen bron
-r_rr_dd = Vuile data
-r_rr_x = Geen geboortetijd
-r_rr_xx = Geen geboortedatum
+r_rr_aa = AA - Accuraat
+r_rr_a = A - Geciteerd
+r_rr_b = B - (Auto)biografie
+r_rr_c = C - Pas op, geen bron
+r_rr_dd = DD - Vuile data
+r_rr_x = X - Geen geboortetijd
+r_rr_xx = XX - Geen geboortedatum
 r_rr_unknown = Onbekend
 
 # References timezones
@@ -142,19 +148,19 @@ v_input_radix_catchart = Categorie
 v_input_radix_locname = Locatie
 v_input_radix_country = Land
 v_input_radix_map = Kaart
-v_input_radix_geolong = Geografische lengte (ggg:mm:ss)
-v_input_radix_geolongdire = Oost
-v_input_radix_geolongdirw = West
+v_input_radix_geolong = Geografische lengte
+v_input_radix_geolong_placeholder = ggg:mm:ss e (w voor west)
 v_input_radix_geolat = Geografische breedte (gg:mm:ss)
-v_input_radix_geolatdirn = Noord
-v_input_radix_geolatdirs = Zuid
-v_input_radix_date = Datum (jjjj/mm/dd)
+v_input_radix_geolat_placeholder = gg:mm:ss n (z voor zuid)
+v_input_radix_date = Datum
+v_input_radix_date_placeholder = jjjj/mm/dd
 v_input_radix_calendar = Kalender
 v_input_radix_yearcount = Jaartelling
-v_input_radix_time = Tijd (uu:mm:ss)
+v_input_radix_time = Tijd
+v_input_radix_time_placeholder = uu:mm:ss
 v_input_radix_timezone = Tijdzone
 v_input_radix_dst = Zomertijd
-v_input_radix_geolonglmt = Lengte voor MPT (ggg:mm:ss)
+v_input_radix_geolonglmt = Lengte voor MPT
 v_input_radix_calc = Bereken horoscoop
 
 # View main

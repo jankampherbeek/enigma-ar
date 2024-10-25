@@ -2,7 +2,10 @@ module enigma-ar
 
 go 1.23.1
 
-require fyne.io/fyne/v2 v2.5.2
+require (
+	fyne.io/fyne/v2 v2.5.2
+	github.com/emirpasic/gods v1.18.1
+)
 
 require (
 	fyne.io/systray v1.11.0 // indirect
