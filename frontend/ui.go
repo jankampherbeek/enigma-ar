@@ -26,7 +26,7 @@ func MakeUI(app fyne.App) {
 	guiMgr := NewGuiMgr(mainWindow)
 	settings := NewSettings()
 	guiMgr.Rosetta.SetLanguage(settings.GetLanguage())
-	mainWindow.Resize(fyne.NewSize(1024, 768))
+	mainWindow.Resize(fyne.NewSize(1200, 900))
 	mainWindow.SetMaster()
 	mainWindow.SetMainMenu(CreateMenu(guiMgr))
 

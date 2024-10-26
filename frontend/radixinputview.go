@@ -17,16 +17,22 @@ import (
 	"image/color"
 )
 
-//const dateSeparator = "/"
-//const timeSeparator = ":"
-
 func RadixInput(r Rosetta, w fyne.Window) {
-	var inputPopUp *widget.PopUp
+	var popupInput *widget.PopUp
+
+	// define title and subtitles
 	txtTitle := canvas.NewText(r.GetText("v_input_radix_title"), color.Gray16{})
 	txtTitle.TextSize = 24
 	txtTitle.TextStyle = fyne.TextStyle{Bold: true}
 	txtTitle.Alignment = fyne.TextAlignCenter
+	txtSectionLocation := canvas.NewText("Location", color.Gray16{})
+	txtSectionLocation.TextSize = 18
+	txtSectionLocation.TextStyle = fyne.TextStyle{Bold: true}
+	txtSectionDateTime := canvas.NewText("Date and time", color.Gray16{})
+	txtSectionDateTime.TextSize = 18
+	txtSectionDateTime.TextStyle = fyne.TextStyle{Bold: true}
 
+	// define all labels
 	lblName := widget.NewLabel(r.GetText("v_input_radix_name"))
 	lblName.Importance = widget.HighImportance
 	lblDescription := widget.NewLabel(r.GetText("v_input_radix_description"))
@@ -35,7 +41,6 @@ func RadixInput(r Rosetta, w fyne.Window) {
 	lblCatChart := widget.NewLabel(r.GetText("v_input_radix_catchart"))
 	lblLocation := widget.NewLabel(r.GetText("v_input_radix_locname"))
 	lblCountry := widget.NewLabel(r.GetText("v_input_radix_country"))
-	//	mapText := r.GetText("v_input_radix_map")
 	lblGeoLong := widget.NewLabel(r.GetText("v_input_radix_geolong"))
 	lblGeoLong.Importance = widget.HighImportance
 	lblGeoLat := widget.NewLabel(r.GetText("v_input_radix_geolat"))
@@ -51,94 +56,94 @@ func RadixInput(r Rosetta, w fyne.Window) {
 	lblDst := widget.NewLabel(r.GetText("v_input_radix_dst"))
 	lblGeoLongLmt := widget.NewLabel(r.GetText("v_input_radix_geolonglmt"))
 
-	calcText := r.GetText("v_input_radix_calc")
-	closeText := r.GetText("g_btn_close")
-	helpText := r.GetText("g_btn_help")
+	// define input elements: entries
+	entryName := widget.NewEntry()
+	entryDescription := widget.NewEntry()
+	entrySource := widget.NewEntry()
+	entryLocation := widget.NewEntry()
+	// todo change entry for location into select based on the country (radix input)
+	entryGeoLong := widget.NewEntry()
+	entryGeoLong.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
+	entryGeoLat := widget.NewEntry()
+	entryGeoLat.PlaceHolder = r.GetText("v_input_radix_geolat_placeholder")
+	entryTime := widget.NewEntry()
+	entryTime.PlaceHolder = r.GetText("v_input_radix_time_placeholder")
+	entryDate := widget.NewEntry()
+	entryDate.PlaceHolder = r.GetText("v_input_radix_date_placeholder")
+	entryGeoLongLmt := widget.NewEntry()
+	entryGeoLongLmt.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
 
-	nameEntry := widget.NewEntry()
-	descriptionEntry := widget.NewEntry()
-	sourceEntry := widget.NewEntry()
-	locationEntry := widget.NewEntry()
-
-	geoLongEntry := widget.NewEntry()
-	geoLongEntry.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
-	geoLatEntry := widget.NewEntry()
-	geoLatEntry.PlaceHolder = r.GetText("v_input_radix_geolat_placeholder")
-	timeEntry := widget.NewEntry()
-	timeEntry.PlaceHolder = r.GetText("v_input_radix_time_placeholder")
-	dateEntry := widget.NewEntry()
-	dateEntry.PlaceHolder = r.GetText("v_input_radix_date_placeholder")
-	geoLongLmtEntry := widget.NewEntry()
-	geoLongLmtEntry.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
-	//	jdService := api.NewJulDayService()
-
-	calendarOptions := []string{}
+	// define input elements: selects
+	var optionsCalendar []string
 	for _, value := range domain.AllCalendars() {
-		calendarOptions = append(calendarOptions, r.GetText(value.TextId))
+		optionsCalendar = append(optionsCalendar, r.GetText(value.TextId))
 	}
-	selBoxCalendar := widget.NewSelect(calendarOptions, func(selected string) {})
+	selBoxCalendar := widget.NewSelect(optionsCalendar, func(selected string) {})
 	selBoxCalendar.SetSelected(r.GetText("r_cal_gregorian"))
 
-	ratingOptions := []string{}
+	var optionRating []string
 	for _, value := range domain.AllRatings() {
-		ratingOptions = append(ratingOptions, r.GetText(value.TextId))
+		optionRating = append(optionRating, r.GetText(value.TextId))
 	}
-	selBoxRating := widget.NewSelect(ratingOptions, func(selected string) {})
+	selBoxRating := widget.NewSelect(optionRating, func(selected string) {})
 	selBoxRating.SetSelected(r.GetText("r_rr_unknown"))
 
-	chartCatOptions := []string{}
+	var optionsChartCat []string
 	for _, value := range domain.AllChartCats() {
-		chartCatOptions = append(chartCatOptions, r.GetText(value.TextId))
+		optionsChartCat = append(optionsChartCat, r.GetText(value.TextId))
 	}
-	selBoxChartCat := widget.NewSelect(chartCatOptions, func(selected string) {})
+	selBoxChartCat := widget.NewSelect(optionsChartCat, func(selected string) {})
 	selBoxChartCat.SetSelected(r.GetText("r_cc_unknown"))
 
-	timeZoneOptions := []string{}
+	var optionsTimeZone []string
+	// todo use tz database to suggest a timezone
 	for _, value := range domain.AllTimeZones() {
-		timeZoneOptions = append(timeZoneOptions, r.GetText(value.TextId))
+		optionsTimeZone = append(optionsTimeZone, r.GetText(value.TextId))
 	}
-	selBoxTimeZone := widget.NewSelect(timeZoneOptions, func(selected string) {})
+	selBoxTimeZone := widget.NewSelect(optionsTimeZone, func(selected string) {})
 	selBoxTimeZone.SetSelected(r.GetText("r_tz_ut"))
 
-	countryOptions := []string{"US", "NL"}
-	selBoxCountry := widget.NewSelect(countryOptions, func(selected string) {})
+	optionsCountry := []string{"US", "NL"}
+	// TODO use geonames database to populate list of countreies in radix input
+	selBoxCountry := widget.NewSelect(optionsCountry, func(selected string) {})
 
-	dstCheck := widget.NewCheck("", func(b bool) {
+	// define the checkbox for DST
+	checkDst := widget.NewCheck("", func(b bool) {
 
 	})
 
-	btnCalc := widget.NewButton(calcText, func() {
+	// define buttons
+	txtCalc := r.GetText("v_input_radix_calc")
+	txtClose := r.GetText("g_btn_close")
+	txtHelp := r.GetText("g_btn_help")
+
+	btnCalc := widget.NewButton(txtCalc, func() {
+		// TODO implement activities for radix input
+		// validate input
+		// show any errors
+		// create RadixInputData
+		// calculate chart by calling DataVault.DefineFullChart(inputData)
 	})
 	btnCalc.Importance = widget.HighImportance
 
-	btnClose := widget.NewButton(closeText, func() {
-		inputPopUp.Hide()
+	btnClose := widget.NewButton(txtClose, func() {
+		popupInput.Hide()
 	})
 
-	btnHelp := widget.NewButton(helpText, func() {
+	btnHelp := widget.NewButton(txtHelp, func() {
+		// TODO create help page for radix input
 		ShowHelpWindow("input_radix", r.GetLanguage(), w)
 	})
 	buttonBar := container.NewHBox(layout.NewSpacer(), btnClose, btnHelp, btnCalc)
 
-	//lblSectionLocation := widget.NewLabelWithStyle("Location", fyne.TextAlignLeading, fyne.TextStyle{Bold: true})
-	txtSectionLocation := canvas.NewText("Location", color.Gray16{})
-	txtSectionLocation.TextSize = 18
-	txtSectionLocation.TextStyle = fyne.TextStyle{Bold: true}
-	//lblSectionDateTime := widget.NewLabelWithStyle("Date and Time", fyne.TextAlignLeading, fyne.TextStyle{Bold: true})
-
-	//lblSectionLocation.Importance = widget.HighImportance
-	//lblSectionDateTime.Importance = widget.HighImportance
-	txtSectionDateTime := canvas.NewText("Date and time", color.Gray16{})
-	txtSectionDateTime.TextSize = 18
-	txtSectionDateTime.TextStyle = fyne.TextStyle{Bold: true}
-	//lblSectionDateTime := widget.NewLabelWithStyle("Date and Time", fyne.TextAlignLeading, fyne.TextStyle{Bold: true})
+	// build formcontainer
 	formContainer := container.New(layout.NewFormLayout(),
 		lblName,
-		nameEntry,
+		entryName,
 		lblDescription,
-		descriptionEntry,
+		entryDescription,
 		lblSource,
-		sourceEntry,
+		entrySource,
 		lblCatChart,
 		selBoxChartCat,
 		lblRating,
@@ -148,45 +153,37 @@ func RadixInput(r Rosetta, w fyne.Window) {
 		lblCountry,
 		selBoxCountry,
 		lblLocation,
-		locationEntry,
+		entryLocation,
 		lblGeoLong,
-		geoLongEntry,
+		entryGeoLong,
 		lblGeoLat,
-		geoLatEntry,
+		entryGeoLat,
 		txtSectionDateTime,
 		widget.NewLabel(""),
 		lblDate,
-		dateEntry,
+		entryDate,
 		lblCalendar,
 		selBoxCalendar,
 		lblTime,
-		timeEntry,
+		entryTime,
 		lblTimeZone,
 		selBoxTimeZone,
 		lblGeoLongLmt,
-		geoLongLmtEntry,
+		entryGeoLongLmt,
 		lblDst,
-		dstCheck,
+		checkDst,
 	)
 
+	// create content
 	viewContent := container.NewVBox(
 		txtTitle,
 		formContainer,
-		/*		lblName,
-				nameEntry,
-				lblDescription,
-				descriptionEntry,
-				chartMetaContainer,
-				locationContainer,
-				coordinateContainer,
-				dateCalContainer,
-				fullTimeContainer,
-				fullLmtLongContainer,*/
 		buttonBar,
 	)
 
-	inputPopUp = widget.NewModalPopUp(viewContent, w.Canvas())
-	inputPopUp.Resize(fyne.NewSize(500, 700))
-	inputPopUp.Show()
+	// create popup
+	popupInput = widget.NewModalPopUp(viewContent, w.Canvas())
+	popupInput.Resize(fyne.NewSize(500, 800))
+	popupInput.Show()
 
 }

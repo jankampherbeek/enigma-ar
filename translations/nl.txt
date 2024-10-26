@@ -141,7 +141,7 @@ v_calc_jd_btncalc = Bereken JD
 #View input radix
 v_input_radix_title = Gegevens nieuwe horoscoop
 v_input_radix_name = Naam of id
-v_innput_radix_description = Beschrijving
+v_input_radix_description = Beschrijving
 v_input_radix_source = Bron
 v_input_radix_rating = Rating
 v_input_radix_catchart = Categorie

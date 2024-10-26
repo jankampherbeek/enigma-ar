@@ -141,7 +141,7 @@ v_calc_jd_btncalc = Calculate JD
 #View input radix
 v_input_radix_title = Data new chart
 v_input_radix_name = Name or ID
-v_innput_radix_description = Description
+v_input_radix_description = Description
 v_input_radix_source = Source
 v_input_radix_rating = Rating
 v_input_radix_catchart = Category

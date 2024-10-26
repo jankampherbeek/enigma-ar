@@ -141,7 +141,7 @@ v_calc_jd_btncalc = JD berechnen
 #View input radix
 v_input_radix_title = Neue Horoskopdaten
 v_input_radix_name = Name oder ID
-v_innput_radix_description = Beschreibung
+v_input_radix_description = Beschreibung
 v_input_radix_source = Quelle
 v_input_radix_rating = Bewertung
 v_input_radix_catchart = Kategorie

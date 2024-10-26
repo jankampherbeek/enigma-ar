@@ -8,6 +8,7 @@
 package frontend
 
 import (
+	"enigma-ar/domain"
 	"fyne.io/fyne/v2"
 	"log"
 )
@@ -43,4 +44,39 @@ func (gm *GuiMgr) Refresh(name string) {
 	if view, ok := gm.views[name]; ok {
 		view.Refresh()
 	}
+}
+
+type RadixInputData struct {
+	NameId      string
+	Description string
+	Source      string
+	Categorie   domain.ChartCat
+	Rating      domain.Rating
+	Country     string
+	Location    string
+	GeoLong     float64
+	GeoLat      float64
+	Year        int
+	Month       int
+	Day         int
+	Calendar    domain.Calendar
+	Hour        int
+	Minute      int
+	Second      int
+	TimeZone    domain.TimeZone
+	GeoLongLmt  float64 // zero if not applicable
+	Dst         bool
+}
+
+type DataVault struct {
+	InputData RadixInputData
+	Request   domain.PointPositionsRequest
+	Response  domain.FullChartResponse
+}
+
+func (dv DataVault) DefineChartForInput(inputData RadixInputData) {
+	dv.InputData = inputData
+	// define request
+	// fire request
+	// handle response
 }
