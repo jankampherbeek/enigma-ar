@@ -10,6 +10,7 @@ package frontend
 import (
 	"enigma-ar/domain"
 	"fyne.io/fyne/v2"
+	"golang.org/x/text/language"
 	"log"
 )
 
@@ -21,10 +22,12 @@ type GuiMgr struct {
 	views   map[string]fyne.CanvasObject
 }
 
-func NewGuiMgr(window fyne.Window) *GuiMgr {
+func NewGuiMgr(app fyne.App, window fyne.Window) *GuiMgr {
+
 	return &GuiMgr{
+		App:     app,
 		window:  window,
-		Rosetta: NewRosetta(),
+		Rosetta: NewRosetta(app),
 		views:   make(map[string]fyne.CanvasObject),
 	}
 }
@@ -44,6 +47,10 @@ func (gm *GuiMgr) Refresh(name string) {
 	if view, ok := gm.views[name]; ok {
 		view.Refresh()
 	}
+}
+
+func (gm *GuiMgr) SaveLanguage(lang language.Tag) {
+	gm.App.Preferences().SetString("language", lang.String())
 }
 
 type RadixInputData struct {

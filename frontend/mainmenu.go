@@ -18,7 +18,7 @@ func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
 	r := gm.Rosetta
 	s := NewSettings()
 
-	menuGeneral := createMenuGeneral(r, s, gm.window)
+	menuGeneral := createMenuGeneral(r, s, *gm)
 	menuCharts := createMenuCharts(r, gm.window)
 	menuAnalysis := createMenuAnalysis(r)
 	menuProgressive := createMenuProgressive(r)
@@ -31,28 +31,31 @@ func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
 	return mainMenu
 }
 
-func handleLangChange(r *Rosetta, s Settings, w fyne.Window, lang string) {
+func handleLangChange(r *Rosetta, s Settings, gm GuiMgr, lang string) {
+	w := gm.window
 	r.SetLanguage(lang)
 	s.DefineLanguage(lang)
 	dialog.NewInformation(r.GetText("v_main_language_changed_title"), r.GetText("v_main_language_changed"), w).Show()
+	gm.window.Content().Refresh() // TODO try to refresh menu after changing language. Also change rbitems.
+
 }
 
-func createMenuGeneral(r *Rosetta, s Settings, w fyne.Window) *fyne.Menu {
+func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 	languageItem := fyne.NewMenuItem(r.GetText("m_language"), func() {
 		fmt.Println("Language clicked.")
 	})
 
 	langEnItem := fyne.NewMenuItem(r.GetText("m_lang_eng"), func() {
-		handleLangChange(r, s, w, "en")
+		handleLangChange(r, s, gm, "en")
 	})
 	langDuItem := fyne.NewMenuItem(r.GetText("m_lang_dutch"), func() {
-		handleLangChange(r, s, w, "nl")
+		handleLangChange(r, s, gm, "nl")
 	})
 	langGeItem := fyne.NewMenuItem(r.GetText("m_lang_german"), func() {
-		handleLangChange(r, s, w, "ge")
+		handleLangChange(r, s, gm, "de")
 	})
 	langFrItem := fyne.NewMenuItem(r.GetText("m_lang_french"), func() {
-		handleLangChange(r, s, w, "fr")
+		handleLangChange(r, s, gm, "fr")
 	})
 	languageItem.ChildMenu = fyne.NewMenu("", langEnItem, langDuItem, langGeItem, langFrItem)
 

@@ -8,10 +8,14 @@
 package frontend
 
 import (
+	"encoding/json"
 	"enigma-ar/api"
-	"fmt"
-	"log"
-	"strings"
+	"fyne.io/fyne/v2"
+	"golang.org/x/text/language"
+	"golang.org/x/text/message"
+	"golang.org/x/text/message/catalog"
+	"os"
+	"path/filepath"
 	"sync"
 )
 
@@ -20,8 +24,9 @@ import (
 // Rosetta is a singleton that keeps track of the current language and retrieves texts for this language.
 type Rosetta struct {
 	persApi     api.PersistencyServer
-	currentLang string
-	texts       map[string]string
+	currentLang language.Tag
+	langCat     *catalog.Builder
+	printer     *message.Printer
 }
 
 var (
@@ -30,58 +35,99 @@ var (
 )
 
 // NewRosetta initializes the Rosetta singleton.
-func NewRosetta() *Rosetta {
-	lang := "en" // TODO read language from configuration
+func NewRosetta(a fyne.App) *Rosetta {
+
+	// On startup, load the user's preferred language
+	langPref := a.Preferences().StringWithFallback("language", language.English.String())
+	rLang := language.Make(langPref)
+	rLangCat := loadTranslations()
+	rPrinter := message.NewPrinter(rLang, message.Catalog(rLangCat))
+
 	once.Do(func() {
 		instance = &Rosetta{
 			persApi:     api.NewPersistencyService(),
-			currentLang: lang,
-			texts:       make(map[string]string),
+			currentLang: rLang,
+			langCat:     rLangCat,
+			printer:     rPrinter,
 		}
-		instance.readTextsForLanguage()
 	})
 	return instance
 }
 
 // SetLanguage sets the preferred language.
 func (r *Rosetta) SetLanguage(newLang string) {
-	if newLang != "en" && newLang != "nl" && newLang != "fr" && newLang != "ge" {
+	if newLang != "en" && newLang != "nl" && newLang != "fr" && newLang != "de" {
 		return
 	}
-	r.currentLang = newLang
-	r.readTextsForLanguage()
+	r.currentLang = language.English
+	if newLang == "nl" {
+		r.currentLang = language.Dutch
+	}
+	if newLang == "fr" {
+		r.currentLang = language.French
+	}
+	if newLang == "de" {
+		r.currentLang = language.German
+	}
+	r.printer = message.NewPrinter(r.currentLang, message.Catalog(r.langCat))
+	//r.readTextsForLanguage()
 }
 
-// GetLanguage returns the currently selected language.
+// GetLanguage returns the currently selected language. If the lanuage is not found, "en" is returned.
 func (r *Rosetta) GetLanguage() string {
-	return r.currentLang
+	if r.currentLang == language.French {
+		return "fr"
+	}
+	if r.currentLang == language.German {
+		return "ge"
+	}
+	if r.currentLang == language.Dutch {
+		return "nl"
+	}
+	return "en"
 }
 
 // GetText retrieves text in the current active language.
 func (r *Rosetta) GetText(rbKey string) string {
-	if text, found := r.texts[rbKey]; found {
-		return text
-	}
-	return "-- Text not found --"
+	return r.printer.Sprintf(rbKey)
 }
 
-func (r *Rosetta) readTextsForLanguage() {
-
-	relativePath := fmt.Sprintf("./translations/%s.txt", r.currentLang)
-	lines, err := r.persApi.ReadLines(relativePath)
+func loadTranslations() *catalog.Builder {
+	builder := catalog.NewBuilder()
+	// Load translation files from the locales directory
+	localesDir := "locales"
+	files, err := os.ReadDir(localesDir)
 	if err != nil {
-		log.Printf("rosetta.readTextsForLanguage: failed to read lines from file: %s", err)
+		panic(err)
 	}
-	for i := 0; i < len(lines); i++ {
-		line := lines[i]
-		if !strings.Contains(line, "#") {
-			parts := strings.Split(line, "=")
-			if len(parts) == 2 {
-				key := strings.TrimSpace(parts[0])
-				value := strings.TrimSpace(parts[1])
-				r.texts[key] = value
+	for _, file := range files {
+		if filepath.Ext(file.Name()) != ".json" {
+			continue
+		}
+
+		// Determine the language from the filename
+		langTag := language.MustParse(file.Name()[:len(file.Name())-len(".json")])
+
+		// Open and decode the JSON file
+		fpath := filepath.Join(localesDir, file.Name())
+		fileContent, err := os.ReadFile(fpath)
+		if err != nil {
+			panic(err)
+		}
+
+		messages := make(map[string]string)
+		if err := json.Unmarshal(fileContent, &messages); err != nil {
+			panic(err)
+		}
+
+		// Add messages to the catalog
+		for key, msg := range messages {
+			err := builder.SetString(langTag, key, msg)
+			if err != nil {
+				// TODO log error for unknown entry in Rosetta
 			}
 		}
 	}
 
+	return builder
 }

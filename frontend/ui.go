@@ -23,8 +23,9 @@ func (gm *GuiMgr) createChartsMain() *fyne.Container {
 func MakeUI(app fyne.App) {
 
 	mainWindow := app.NewWindow("Enigma 1.0")
-	guiMgr := NewGuiMgr(mainWindow)
+	guiMgr := NewGuiMgr(app, mainWindow)
 	settings := NewSettings()
+
 	guiMgr.Rosetta.SetLanguage(settings.GetLanguage())
 	mainWindow.Resize(fyne.NewSize(1200, 900))
 	mainWindow.SetMaster()
