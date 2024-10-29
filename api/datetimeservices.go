@@ -17,6 +17,10 @@ type JulDayServer interface {
 	JulDay(request *domain.DateTime) float64
 }
 
+type RevJulDayServer interface {
+	RevJulDay(jd float64, cal domain.Calendar) (int, int, int, float64)
+}
+
 type JulDayService struct {
 	jdCalc calc.JulDayCalculator
 }
@@ -28,8 +32,24 @@ func NewJulDayService() *JulDayService {
 	}
 }
 
-// JulDay returns the calculated juilian day number for ephemeris time.
+// JulDay returns the calculated julian day number for ephemeris time.
 func (jds JulDayService) JulDay(request *domain.DateTime) float64 {
 	jd := jds.jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
 	return jd
+}
+
+type RevJulDayService struct {
+	revJdCalc calc.RevJulDayCalculator
+}
+
+func NewRevJulDayService() *RevJulDayService {
+	revJdCalc := calc.NewRevJulDayCalculation()
+	return &RevJulDayService{
+		revJdCalc: revJdCalc,
+	}
+}
+
+// RevJulDay returns date and time for a given jd. The returnvalues are year, month, day and ut.
+func (rjds RevJulDayService) RevJulDay(jd float64, cal domain.Calendar) (int, int, int, float64) {
+	return rjds.revJdCalc.CalcRevJd(jd, cal == domain.CalGregorian)
 }

@@ -1,0 +1,2 @@
+workFolder=/enigma-ra
+darkMode=false

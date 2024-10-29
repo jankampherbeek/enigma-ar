@@ -120,7 +120,7 @@
 "v_input_radix_map" : "Map",
 "v_input_radix_geolong" : "Geographic longitude",
 "v_input_radix_geolong_placeholder" : "ddd:mm:ss e (w for west)",
-"v_input_radix_geolat " : "Geographic latitude",
+"v_input_radix_geolat" : "Geographic latitude",
 "v_input_radix_geolat_placeholder" : "dd:mm:ss n (s for south)",
 "v_input_radix_date" : "Date",
 "v_input_radix_date_placeholder" : "yyyy/mm/dd",

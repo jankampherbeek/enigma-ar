@@ -24,6 +24,11 @@ type SeJulDayCalculator interface {
 	SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64
 }
 
+// SeRevJulDayCalculator retrieves the date and time for a given jd nr from the SE.
+type SeRevJulDayCalculator interface {
+	SeRevCalcJd(jd float64, gragFlag int) (int, int, int, float64)
+}
+
 // SePointPosCalculator retrieves the positions and speed for ecliptical or equatorial coordinates.
 type SePointPosCalculator interface {
 	SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
@@ -66,6 +71,22 @@ func (jdc SeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float
 	cGregFlag := C.int(gregFlag)
 	result := float64(C.swe_julday(cYear, cMonth, cDay, cHour, cGregFlag))
 	return result
+}
+
+type SeRevJulDayCalculation struct{}
+
+func NewSeRevJulDayCalculation() SeRevJulDayCalculator {
+	return SeRevJulDayCalculation{}
+}
+
+// SeRevJulDayCalculation accesses the SE to calculate date and time from a julian day number. The return values are year,month,day and ut.
+func (rjdc SeRevJulDayCalculation) SeRevCalcJd(jd float64, gragFlag int) (int, int, int, float64) {
+	var cYear C.int
+	var cMonth C.int
+	var cDay C.int
+	var cHour C.double
+	C.swe_revjul(C.double(jd), C.int(gragFlag), &cYear, &cMonth, &cDay, &cHour)
+	return int(cYear), int(cMonth), int(cDay), float64(cHour)
 }
 
 type SePointPosCalculation struct{}

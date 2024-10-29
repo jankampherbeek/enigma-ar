@@ -8,7 +8,6 @@
 package frontend
 
 import (
-	"enigma-ar/domain"
 	"fyne.io/fyne/v2"
 	"golang.org/x/text/language"
 	"log"
@@ -53,11 +52,12 @@ func (gm *GuiMgr) SaveLanguage(lang language.Tag) {
 	gm.App.Preferences().SetString("language", lang.String())
 }
 
+/*
 type RadixInputData struct {
 	NameId      string
 	Description string
 	Source      string
-	Categorie   domain.ChartCat
+	ChartCat   domain.ChartCat
 	Rating      domain.Rating
 	Country     string
 	Location    string
@@ -87,3 +87,4 @@ func (dv DataVault) DefineChartForInput(inputData RadixInputData) {
 	// fire request
 	// handle response
 }
+*/

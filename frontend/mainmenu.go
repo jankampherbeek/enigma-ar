@@ -41,6 +41,7 @@ func handleLangChange(r *Rosetta, s Settings, gm GuiMgr, lang string) {
 }
 
 func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
+
 	languageItem := fyne.NewMenuItem(r.GetText("m_language"), func() {
 		fmt.Println("Language clicked.")
 	})
@@ -69,8 +70,9 @@ func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 }
 
 func createMenuCharts(r *Rosetta, w fyne.Window) *fyne.Menu {
+	radixInputView := NewRadixInputView()
 	newChartItem := fyne.NewMenuItem(r.GetText("m_charts_new"), func() {
-		RadixInput(*r, w)
+		radixInputView.RadixInputView(*r, w)
 	})
 	searchChartItem := fyne.NewMenuItem(r.GetText("m_charts_search"), func() {
 		fmt.Println("Search chart clicked.")

@@ -24,6 +24,21 @@ func TestJulDay(t *testing.T) {
 	}
 }
 
+func TestRevJulDay(t *testing.T) {
+	jd := 2460437.3541666665
+	resultYear, resultMonth, resultDay, resultUt := SeRevJulDayCalculation{}.SeRevCalcJd(jd, 1)
+	expectedYear := 2024
+	expectedMonth := 5
+	expectedDay := 6
+	expectedUt := 20.5
+	if resultYear != expectedYear || resultMonth != expectedMonth || resultDay != expectedDay {
+		t.Errorf("RevJulDay returns a wrong result for year, month, day: %d, %d, %d", resultYear, resultMonth, resultDay)
+	}
+	if math.Abs(expectedUt-resultUt) > 0.00001 {
+		t.Errorf("RevJulDay returns a wrong result for ut: %f", resultUt)
+	}
+}
+
 func TestPointPositions(t *testing.T) {
 	ephePath := "..\\..\\sedata" // path is relative from current package
 	SetEphePath(ephePath)

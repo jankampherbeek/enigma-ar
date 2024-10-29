@@ -17,7 +17,63 @@ import (
 	"image/color"
 )
 
-func RadixInput(r Rosetta, w fyne.Window) {
+type RadixInput interface {
+	RadixInputView(r Rosetta, w fyne.Window)
+}
+
+type ValidRadixInputData struct {
+	NameId      string
+	Description string
+	Source      string
+	ChartCat    domain.ChartCat
+	Rating      domain.Rating
+	Country     string
+	Location    string
+	GeoLong     float64
+	GeoLat      float64
+	Year        int
+	Month       int
+	Day         int
+	Calendar    domain.Calendar
+	Hour        int
+	Minute      int
+	Second      int
+	TimeZone    domain.TimeZone
+	GeoLongLmt  float64 // zero if not applicable
+	Dst         bool
+}
+
+type RadixInputData struct {
+	EntryNameId      *widget.Entry
+	EntryDescription *widget.Entry
+	EntrySource      *widget.Entry
+	EntryGeoLong     *widget.Entry
+	EntryGeoLat      *widget.Entry
+	EntryDate        *widget.Entry
+	EntryTime        *widget.Entry
+	SelBoxCalendar   *widget.Select
+	SelBoxChartCat   *widget.Select
+	SelBoxRating     *widget.Select
+	SelBoxTimeZone   *widget.Select
+	ValidData        ValidRadixInputData
+}
+
+func NewRadixInputView() RadixInputData {
+	return RadixInputData{
+		EntryNameId:      nil,
+		EntryDescription: nil,
+		EntrySource:      nil,
+		EntryGeoLong:     nil,
+		EntryGeoLat:      nil,
+		SelBoxCalendar:   nil,
+		SelBoxChartCat:   nil,
+		SelBoxRating:     nil,
+		SelBoxTimeZone:   nil,
+		ValidData:        ValidRadixInputData{},
+	}
+}
+
+func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 	var popupInput *widget.PopUp
 
 	// define title and subtitles
@@ -57,19 +113,19 @@ func RadixInput(r Rosetta, w fyne.Window) {
 	lblGeoLongLmt := widget.NewLabel(r.GetText("v_input_radix_geolonglmt"))
 
 	// define input elements: entries
-	entryName := widget.NewEntry()
-	entryDescription := widget.NewEntry()
-	entrySource := widget.NewEntry()
+	rid.EntryNameId = widget.NewEntry()
+	rid.EntryDescription = widget.NewEntry()
+	rid.EntrySource = widget.NewEntry()
 	entryLocation := widget.NewEntry()
-	// todo change entry for location into select based on the country (radix input)
-	entryGeoLong := widget.NewEntry()
-	entryGeoLong.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
-	entryGeoLat := widget.NewEntry()
-	entryGeoLat.PlaceHolder = r.GetText("v_input_radix_geolat_placeholder")
-	entryTime := widget.NewEntry()
-	entryTime.PlaceHolder = r.GetText("v_input_radix_time_placeholder")
-	entryDate := widget.NewEntry()
-	entryDate.PlaceHolder = r.GetText("v_input_radix_date_placeholder")
+	// todo change entry for location into select, based on the country (radix input)
+	rid.EntryGeoLong = widget.NewEntry()
+	rid.EntryGeoLong.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
+	rid.EntryGeoLat = widget.NewEntry()
+	rid.EntryGeoLat.PlaceHolder = r.GetText("v_input_radix_geolat_placeholder")
+	rid.EntryTime = widget.NewEntry()
+	rid.EntryTime.PlaceHolder = r.GetText("v_input_radix_time_placeholder")
+	rid.EntryDate = widget.NewEntry()
+	rid.EntryDate.PlaceHolder = r.GetText("v_input_radix_date_placeholder")
 	entryGeoLongLmt := widget.NewEntry()
 	entryGeoLongLmt.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
 
@@ -78,30 +134,30 @@ func RadixInput(r Rosetta, w fyne.Window) {
 	for _, value := range domain.AllCalendars() {
 		optionsCalendar = append(optionsCalendar, r.GetText(value.TextId))
 	}
-	selBoxCalendar := widget.NewSelect(optionsCalendar, func(selected string) {})
-	selBoxCalendar.SetSelected(r.GetText("r_cal_gregorian"))
+	rid.SelBoxCalendar = widget.NewSelect(optionsCalendar, func(selected string) {})
+	rid.SelBoxCalendar.SetSelected(r.GetText("r_cal_gregorian"))
 
 	var optionRating []string
 	for _, value := range domain.AllRatings() {
 		optionRating = append(optionRating, r.GetText(value.TextId))
 	}
-	selBoxRating := widget.NewSelect(optionRating, func(selected string) {})
-	selBoxRating.SetSelected(r.GetText("r_rr_unknown"))
+	rid.SelBoxRating = widget.NewSelect(optionRating, func(selected string) {})
+	rid.SelBoxRating.SetSelected(r.GetText("r_rr_unknown"))
 
 	var optionsChartCat []string
 	for _, value := range domain.AllChartCats() {
 		optionsChartCat = append(optionsChartCat, r.GetText(value.TextId))
 	}
-	selBoxChartCat := widget.NewSelect(optionsChartCat, func(selected string) {})
-	selBoxChartCat.SetSelected(r.GetText("r_cc_unknown"))
+	rid.SelBoxChartCat = widget.NewSelect(optionsChartCat, func(selected string) {})
+	rid.SelBoxChartCat.SetSelected(r.GetText("r_cc_unknown"))
 
 	var optionsTimeZone []string
 	// todo use tz database to suggest a timezone
 	for _, value := range domain.AllTimeZones() {
 		optionsTimeZone = append(optionsTimeZone, r.GetText(value.TextId))
 	}
-	selBoxTimeZone := widget.NewSelect(optionsTimeZone, func(selected string) {})
-	selBoxTimeZone.SetSelected(r.GetText("r_tz_ut"))
+	rid.SelBoxTimeZone = widget.NewSelect(optionsTimeZone, func(selected string) {})
+	rid.SelBoxTimeZone.SetSelected(r.GetText("r_tz_ut"))
 
 	optionsCountry := []string{"US", "NL"}
 	// TODO use geonames database to populate list of countreies in radix input
@@ -121,7 +177,50 @@ func RadixInput(r Rosetta, w fyne.Window) {
 		// TODO implement activities for radix input
 		// validate input
 		// show any errors
-		// create RadixInputData
+		// fill RadixInputData
+		rid.ValidData.NameId = rid.EntryNameId.Text
+		rid.ValidData.Description = rid.EntryDescription.Text
+		rid.ValidData.Source = rid.EntrySource.Text
+		ratingId := rid.SelBoxRating.SelectedIndex()
+		rid.ValidData.Rating = domain.Rating(ratingId)
+		chartCatId := rid.SelBoxChartCat.SelectedIndex()
+		rid.ValidData.ChartCat = domain.ChartCat(chartCatId)
+
+		lang := r.GetLanguage()
+		gLongVal := NewGeoLongValidator()
+
+		ok, geoLong := gLongVal.CheckGeoLong(rid.EntryGeoLong.Text, lang)
+		if !ok {
+			// handle error
+		}
+		rid.ValidData.GeoLong = geoLong
+
+		gLatVal := NewGeoLatValidator()
+		ok, geoLat := gLatVal.CheckGeoLat(rid.EntryGeoLat.Text, lang)
+		if !ok {
+			// handle error
+		}
+		rid.ValidData.GeoLat = geoLat
+
+		dateVal := NewDateValidator()
+		dateOk, y, m, d := dateVal.CheckDate(rid.EntryDate.Text, domain.Calendar(rid.SelBoxCalendar.SelectedIndex()))
+		if dateOk {
+			rid.ValidData.Year = y
+			rid.ValidData.Month = m
+			rid.ValidData.Day = d
+		} else {
+			// handle error
+		}
+		timeVal := NewTimeValidator()
+		timeOk, h, m, s := timeVal.CheckTime(rid.EntryTime.Text)
+		if timeOk {
+			rid.ValidData.Hour = h
+			rid.ValidData.Minute = m
+			rid.ValidData.Second = s
+		} else {
+			// handle error
+		}
+
 		// calculate chart by calling DataVault.DefineFullChart(inputData)
 	})
 	btnCalc.Importance = widget.HighImportance
@@ -139,15 +238,15 @@ func RadixInput(r Rosetta, w fyne.Window) {
 	// build formcontainer
 	formContainer := container.New(layout.NewFormLayout(),
 		lblName,
-		entryName,
+		rid.EntryNameId,
 		lblDescription,
-		entryDescription,
+		rid.EntryDescription,
 		lblSource,
-		entrySource,
+		rid.EntrySource,
 		lblCatChart,
-		selBoxChartCat,
+		rid.SelBoxChartCat,
 		lblRating,
-		selBoxRating,
+		rid.SelBoxRating,
 		txtSectionLocation,
 		widget.NewLabel(""),
 		lblCountry,
@@ -155,19 +254,19 @@ func RadixInput(r Rosetta, w fyne.Window) {
 		lblLocation,
 		entryLocation,
 		lblGeoLong,
-		entryGeoLong,
+		rid.EntryGeoLong,
 		lblGeoLat,
-		entryGeoLat,
+		rid.EntryGeoLat,
 		txtSectionDateTime,
 		widget.NewLabel(""),
 		lblDate,
-		entryDate,
+		rid.EntryDate,
 		lblCalendar,
-		selBoxCalendar,
+		rid.SelBoxCalendar,
 		lblTime,
-		entryTime,
+		rid.EntryTime,
 		lblTimeZone,
-		selBoxTimeZone,
+		rid.SelBoxTimeZone,
 		lblGeoLongLmt,
 		entryGeoLongLmt,
 		lblDst,

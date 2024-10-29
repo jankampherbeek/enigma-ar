@@ -135,6 +135,26 @@ Clone the repository from GitHub: https://github.com/jankampherbeek/enigma-ar .
 
 The application icon is downloaded from https://www.svgrepo.com/svg/530151/space and slightly edited. The icon is in png format.
 
+## i18N
+
+Enigma uses the i18N solution that was introduced in Fyne 2.5. The supported languages are English, French, German and Dutch. The language files are in JSON format and reside in the folder *locals.*
+
+All item sin the language files use a prefix, as follows:
+
+- **g_**  for general items.l
+- **m_** for menu items
+- **r_** for references (typically values for selects)
+  - **r_as_** references aspects
+  - **r_ay_** references ayanamshas
+  - **r_cp_** references celestial points
+  - **r_cs_** references coordinate systems
+  - **r_hs_** references houses
+  - **r_op_** references observer positions
+  - **r_sg**_ references signs
+  - **r_tz_** references timezones
+- **v_** views
+  - **v_view_name** for specific views
+
 
 
 ## Astronomical aspects
