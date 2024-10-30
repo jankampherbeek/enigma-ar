@@ -18,9 +18,9 @@ type ReferenceText struct {
 type CoordinateSystem int
 
 const (
-	Ecliptical CoordinateSystem = iota
-	Equatorial
-	Horizontal
+	CoordEcliptical CoordinateSystem = iota
+	CoordEquatorial
+	CoordHorizontal
 )
 
 // ObserverPosition defines the central position for the calculations.
@@ -187,5 +187,218 @@ func AllTimeZones() []TimeZoneData {
 		{"r_tz_azot", -1.0},
 		{"r_tz_lmt", 0.0},
 	}
+}
 
+type HouseSystem int
+
+const (
+	HousesNone = iota
+	HousesPlacidus
+	HousesKoch
+	HousesPorphyri
+	HousesRegiomontanus
+	HousesCampanus
+	HousesAlcabitius
+	HousesTopocentric
+	HousesKrusinski
+	HousesApc
+	HousesMorin
+	HousesWholeSign
+	HousesEqualAsc
+	HousesEqualMc
+	HousesEqualAries
+	HousesVehlow
+	HousesAxial
+	HousesHorizon
+	HousesCarter
+	HousesGauquelin
+	HousesSunShine
+	HousesSunShineTreindl
+	HousesPullenSd
+	HousesPullenSr
+	HousesSripati
+)
+
+type HouseSystemData struct {
+	TextId           string
+	SeSupported      bool
+	Code             rune
+	Number           int
+	CounterClockWise bool
+	Quadrant         bool
+}
+
+func AllHouseSystems() []HouseSystemData {
+	return []HouseSystemData{
+		{"r_hs_none", false, 'W', 0, false, false},
+		{"r_hs_placidus", true, 'P', 12, true, true},
+		{"r_hs_koch", true, 'K', 12, true, true},
+		{"r_hs_porphyri", true, 'O', 12, true, true},
+		{"r_hs_regiomontanus", true, 'R', 12, true, true},
+		{"r_hs_campanus", true, 'C', 12, true, true},
+		{"r_hs_alcabitius", true, 'B', 12, true, true},
+		{"r_hs_topocentric", true, 'T', 12, true, true},
+		{"r_hs_krusinski", true, 'U', 12, true, true},
+		{"r_hs_apc", true, 'Y', 12, true, true},
+		{"r_hs_morin", true, 'M', 12, true, false},
+		{"r_hs_wholesign", true, 'W', 12, true, true},
+		{"r_hs_equalasc", true, 'A', 12, true, false},
+		{"r_hs_equalmc", true, 'D', 12, true, false},
+		{"r_hs_equalaries", true, 'N', 12, true, false},
+		{"r_hs_vehlow", true, 'V', 12, true, false},
+		{"r_hs_axial", true, 'X', 12, true, false},
+		{"r_hs_horizon", true, 'H', 12, true, false},
+		{"r_hs_carter", true, 'F', 12, true, false},
+		{"r_hs_gauquelin", true, 'G', 36, true, false},
+		{"r_hs_sunshine", true, 'i', 12, true, false},
+		{"r_hs_sunshine_treindl", true, 'I', 12, true, false},
+		{"r_hs_pullen_sd", true, 'L', 12, true, true},
+		{"r_hs_pullen_sr", true, 'Q', 12, true, true},
+		{"r_hs_sripati", true, 'S', 12, true, false},
+	}
+}
+
+type CalculationCat int
+
+const (
+	CalcSe = iota
+	CalcElements
+	CalcFormula
+	CalcMundane
+	CalcLots
+	CalcZodiacFixed
+)
+
+type PointCats int
+
+const (
+	PointCatCommon = iota
+	PointCatAngle
+	PointCatCusp
+	PointCatZodiac
+	PointCatLot
+	PointCatFixStar
+)
+
+type ChartPoint int
+
+const (
+	Sun = iota
+	Moon
+	Mercury
+	Venus
+	Earth
+	Mars
+	Jupiter
+	Saturn
+	Uranus
+	Neptune
+	Pluto
+	MeanNode
+	TrueNode
+	Chiron
+	PersephoneRam
+	HermesRam
+	DemeterRam
+	CupidoUra
+	HadesUra
+	ZeusUra
+	KronosUra
+	ApollonUra
+	AdmetosUra
+	VulcanusUra
+	PoseidonUra
+	Eris
+	Pholus
+	Ceres
+	Pallas
+	Juno
+	Vesta
+	Isis
+	Nessus
+	Huya
+	Varuna
+	Ixion
+	Quaoar
+	Haumea
+	Orcus
+	Makemake
+	Sedna
+	Hygieia
+	Astraea
+	ApogeeMean
+	ApogeeCorrected
+	ApogeeInterpolated
+	ApogeeDuval
+	PersephoneCarteret
+	VulcanusCarteret
+	Ascendant
+	Mc
+	EastPoint
+	Vertex
+)
+
+type ChartPointData struct {
+	TextId         string
+	CalcId         int
+	CalculationCat CalculationCat
+	PointCat       PointCats
+}
+
+func AllChartPoints() []ChartPointData {
+	return []ChartPointData{
+		{"r_cp_sun", 0, CalcSe, PointCatCommon},
+		{"r_cp_moon", 1, CalcSe, PointCatCommon},
+		{"r_cp_mercury", 2, CalcSe, PointCatCommon},
+		{"r_cp_venus", 3, CalcSe, PointCatCommon},
+		{"r_cp_earth", 4, CalcSe, PointCatCommon},
+		{"r_cp_mars", 5, CalcSe, PointCatCommon},
+		{"r_cp_jupiter", 5, CalcSe, PointCatCommon},
+		{"r_cp_saturn", 7, CalcSe, PointCatCommon},
+		{"r_cp_uranus", 8, CalcSe, PointCatCommon},
+		{"r_cp_neptune", 9, CalcSe, PointCatCommon},
+		{"r_cp_pluto", 10, CalcSe, PointCatCommon},
+		{"r_cp_node_mean", 11, CalcSe, PointCatCommon},
+		{"r_cp_node_true", 12, CalcSe, PointCatCommon},
+		{"r_cp_chiron", 13, CalcSe, PointCatCommon},
+		{"r_cp_persephone_ram", 14, CalcElements, PointCatCommon},
+		{"r_cp_hermes_ram", 15, CalcElements, PointCatCommon},
+		{"r_cp_demeter_ram", 16, CalcElements, PointCatCommon},
+		{"r_cp_cupido_ura", 17, CalcSe, PointCatCommon},
+		{"r_cp_hades_ura", 18, CalcSe, PointCatCommon},
+		{"r_cp_zeus_ura", 19, CalcSe, PointCatCommon},
+		{"r_cp_kronos_ura", 20, CalcSe, PointCatCommon},
+		{"r_cp_apollon_ura", 21, CalcSe, PointCatCommon},
+		{"r_cp_admetos_ura", 22, CalcSe, PointCatCommon},
+		{"r_cp_vulcanus_ura", 23, CalcSe, PointCatCommon},
+		{"r_cp_poseidon_ura", 24, CalcSe, PointCatCommon},
+		{"r_cp_eris", 25, CalcSe, PointCatCommon},
+		{"r_cp_pholus", 26, CalcSe, PointCatCommon},
+		{"r_cp_ceres", 27, CalcSe, PointCatCommon},
+		{"r_cp_pallas", 28, CalcSe, PointCatCommon},
+		{"r_cp_juno", 29, CalcSe, PointCatCommon},
+		{"r_cp_vesta", 30, CalcSe, PointCatCommon},
+		{"r_cp_isis", 31, CalcSe, PointCatCommon},
+		{"r_cp_nessus", 32, CalcSe, PointCatCommon},
+		{"r_cp_huya", 33, CalcSe, PointCatCommon},
+		{"r_cp_varuna", 34, CalcSe, PointCatCommon},
+		{"r_cp_ixion", 35, CalcSe, PointCatCommon},
+		{"r_cp_quaoar", 36, CalcSe, PointCatCommon},
+		{"r_cp_haumea", 37, CalcSe, PointCatCommon},
+		{"r_cp_orcus", 38, CalcSe, PointCatCommon},
+		{"r_cp_makemake", 39, CalcSe, PointCatCommon},
+		{"r_cp_sedna", 40, CalcSe, PointCatCommon},
+		{"r_cp_hygieia", 41, CalcSe, PointCatCommon},
+		{"r_cp_astraea", 42, CalcSe, PointCatCommon},
+		{"r_cp_apogee_mean", 43, CalcSe, PointCatCommon},
+		{"r_cp_apogee_corrected", 44, CalcSe, PointCatCommon},
+		{"r_cp_apogee_interpolated", 45, CalcSe, PointCatCommon},
+		{"r_cp_apogee_duval", 46, CalcFormula, PointCatCommon},
+		{"r_cp_persephone_carteret", 47, CalcFormula, PointCatCommon},
+		{"r_cp_vulcanus_carteret", 48, CalcFormula, PointCatCommon},
+		{"r_cp_ascendant", 1001, CalcMundane, PointCatAngle},
+		{"r_cp_mc", 1002, CalcMundane, PointCatAngle},
+		{"r_cp_eastpoint", 1003, CalcMundane, PointCatAngle},
+		{"r_cp_vertex", 1004, CalcMundane, PointCatAngle},
+	}
 }

@@ -47,15 +47,19 @@ func NewPointPosCalculation() PointPosCalculator {
 // CalcPointPos calculates fully defined positions for one or more celestial points
 func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
 	positions := make([]domain.PointPosResult, 0)
-	eclFlags := SeFlags(domain.Ecliptical, request.ObsPos, request.Tropical)
-	equFlags := SeFlags(domain.Equatorial, request.ObsPos, request.Tropical)
+	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Tropical)
+	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Tropical)
+
+	var allPoints = domain.AllChartPoints()
+
 	for i := 0; i < len(request.Points); i++ {
-		var point = request.Points[i]
-		posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(request.JdUt, point, eclFlags)
+		reqPoint := request.Points[i]
+		index := allPoints[reqPoint].CalcId
+		posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(request.JdUt, index, eclFlags)
 		if errEcl != nil {
 			return positions, errEcl
 		}
-		posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(request.JdUt, point, equFlags)
+		posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(request.JdUt, index, equFlags)
 		if errEqu != nil {
 			return positions, errEqu
 		}
@@ -65,7 +69,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		horFlags := domain.SeflgEquatorial
 		posHor := calc.seHorPosCalc.SeCalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
 		positions = append(positions, domain.PointPosResult{
-			Point:     point,
+			Point:     reqPoint,
 			LonPos:    posEcl[0],
 			LonSpeed:  posEcl[3],
 			LatPos:    posEcl[1],
@@ -93,7 +97,11 @@ func NewPointRangeCalculation() PointRangeCalculator {
 }
 
 func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
-	point := request.Point
+
+	reqPoint := request.Point
+	allPoints := domain.AllChartPoints()
+	index := allPoints[reqPoint].CalcId
+
 	flags := SeFlags(request.Coord, request.ObsPos, request.Ayanamsha == 0)
 	// TODO handle topocentric
 	// TODO handle sidereal
@@ -114,7 +122,7 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 	}
 	// TODO handle RADV/Distance
 	for i := request.JdStart; i <= request.JdEnd; i += request.Interval {
-		sePos, err := prc.sePointCalc.SeCalcPointPos(i, point, flags)
+		sePos, err := prc.sePointCalc.SeCalcPointPos(i, index, flags)
 		if err != nil {
 			return rangePositions, err
 		}
@@ -139,11 +147,15 @@ func NewHousePosCalculation() HousePosCalculator {
 
 func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]domain.HousePosResult, []domain.HousePosResult, error) {
 
-	var cuspPos = make([]domain.HousePosResult, 0)
-	var mcAscPos = make([]domain.HousePosResult, 0)
+	allHouseSystems := domain.AllHouseSystems()
+	currentSystem := allHouseSystems[request.HouseSys]
+	hSysId := currentSystem.Code
+
+	var cuspPos = make([]domain.HousePosResult, 37)
+	var mcAscPos = make([]domain.HousePosResult, 10)
 	eclFlags := domain.SeflgSwieph + domain.SeflgSpeed
 	//	equFlags := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgEquatorial
-	cuspsEcl, otherPointsEcl, errEcl := hpc.seHouseCalc.SeCalcHousePos(request.HouseSys, request.JdUt, request.GeoLong, request.GeoLat, eclFlags)
+	cuspsEcl, otherPointsEcl, errEcl := hpc.seHouseCalc.SeCalcHousePos(hSysId, request.JdUt, request.GeoLong, request.GeoLat, eclFlags)
 	if errEcl != nil {
 		return cuspPos, mcAscPos, errEcl
 	}

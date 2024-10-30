@@ -12,7 +12,7 @@ import domain "enigma-ar/domain"
 // SeFlags calculates the total of all flags for the SE.
 func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {
 	flags := domain.SeflgSwieph + domain.SeflgSpeed // always use SE + speed
-	if coord == domain.Equatorial {
+	if coord == domain.CoordEquatorial {
 		flags += domain.SeflgEquatorial
 	}
 	if obsPos == domain.ObsPosTopocentric {
@@ -21,7 +21,7 @@ func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, trop
 	if obsPos == domain.ObsPosHeliocentric {
 		flags += domain.SeflgHelioc
 	}
-	if coord == domain.Ecliptical && !tropical {
+	if coord == domain.CoordEcliptical && !tropical {
 		flags += domain.SeflgSidereal
 	}
 	return flags

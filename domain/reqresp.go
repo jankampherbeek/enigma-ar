@@ -18,7 +18,7 @@ type DateTime struct {
 
 // PointPositionsRequest Request for the calculation of all positions for one or more points
 type PointPositionsRequest struct {
-	Points   []int
+	Points   []ChartPoint
 	JdUt     float64
 	GeoLong  float64
 	GeoLat   float64
@@ -29,7 +29,7 @@ type PointPositionsRequest struct {
 
 // PointPosResult Calculated positions for a single point
 type PointPosResult struct {
-	Point     int
+	Point     ChartPoint
 	LonPos    float64
 	LonSpeed  float64
 	LatPos    float64
@@ -51,7 +51,7 @@ type PointPosResult struct {
 // Position indicates that the position is used (true) or the speed (false).
 // If the Ayanamsha is zero, a tropical zodiac is used, otherwise a sidereal zodiac with the given ayanamsha.
 type PointRangeRequest struct {
-	Point     int
+	Point     ChartPoint
 	JdStart   float64
 	JdEnd     float64
 	Interval  float64
@@ -70,7 +70,7 @@ type PointRangeResult struct {
 
 // HousePosRequest for the calculation of cusps and other mundane poiints.
 type HousePosRequest struct {
-	HouseSys rune
+	HouseSys HouseSystem
 	JdUt     float64
 	GeoLong  float64
 	GeoLat   float64
@@ -87,8 +87,8 @@ type HousePosResult struct {
 
 // FullChartRequest for the calculation of a complete chart with positions of points and mundane positions.
 type FullChartRequest struct {
-	Points    []int
-	HouseSys  rune
+	Points    []ChartPoint
+	HouseSys  HouseSystem
 	Ayanamsha int
 	CoordSys  CoordinateSystem
 	ObsPos    ObserverPosition
