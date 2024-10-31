@@ -9,6 +9,7 @@ package calc
 
 import (
 	domain "enigma-ar/domain"
+	"enigma-ar/domain/references"
 	"enigma-ar/internal/calc/conversion"
 	"enigma-ar/internal/se"
 )
@@ -47,10 +48,10 @@ func NewPointPosCalculation() PointPosCalculator {
 // CalcPointPos calculates fully defined positions for one or more celestial points
 func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
 	positions := make([]domain.PointPosResult, 0)
-	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Tropical)
-	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Tropical)
+	eclFlags := SeFlags(references.CoordEcliptical, request.ObsPos, request.Tropical)
+	equFlags := SeFlags(references.CoordEquatorial, request.ObsPos, request.Tropical)
 
-	var allPoints = domain.AllChartPoints()
+	var allPoints = references.AllChartPoints()
 
 	for i := 0; i < len(request.Points); i++ {
 		reqPoint := request.Points[i]
@@ -99,7 +100,7 @@ func NewPointRangeCalculation() PointRangeCalculator {
 func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest) ([]domain.PointRangeResult, error) {
 
 	reqPoint := request.Point
-	allPoints := domain.AllChartPoints()
+	allPoints := references.AllChartPoints()
 	index := allPoints[reqPoint].CalcId
 
 	flags := SeFlags(request.Coord, request.ObsPos, request.Ayanamsha == 0)
@@ -147,7 +148,7 @@ func NewHousePosCalculation() HousePosCalculator {
 
 func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]domain.HousePosResult, []domain.HousePosResult, error) {
 
-	allHouseSystems := domain.AllHouseSystems()
+	allHouseSystems := references.AllHouseSystems()
 	currentSystem := allHouseSystems[request.HouseSys]
 	hSysId := currentSystem.Code
 

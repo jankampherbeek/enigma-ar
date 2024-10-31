@@ -7,21 +7,24 @@
 
 package calc
 
-import domain "enigma-ar/domain"
+import (
+	domain "enigma-ar/domain"
+	"enigma-ar/domain/references"
+)
 
 // SeFlags calculates the total of all flags for the SE.
-func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {
+func SeFlags(coord references.CoordinateSystem, obsPos references.ObserverPosition, tropical bool) int {
 	flags := domain.SeflgSwieph + domain.SeflgSpeed // always use SE + speed
-	if coord == domain.CoordEquatorial {
+	if coord == references.CoordEquatorial {
 		flags += domain.SeflgEquatorial
 	}
-	if obsPos == domain.ObsPosTopocentric {
+	if obsPos == references.ObsPosTopocentric {
 		flags += domain.SeflgTopoc
 	}
-	if obsPos == domain.ObsPosHeliocentric {
+	if obsPos == references.ObsPosHeliocentric {
 		flags += domain.SeflgHelioc
 	}
-	if coord == domain.CoordEcliptical && !tropical {
+	if coord == references.CoordEcliptical && !tropical {
 		flags += domain.SeflgSidereal
 	}
 	return flags

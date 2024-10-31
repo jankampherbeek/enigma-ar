@@ -9,6 +9,7 @@ package api
 
 import (
 	"enigma-ar/domain"
+	"enigma-ar/domain/references"
 	"enigma-ar/internal/calc"
 )
 
@@ -18,7 +19,7 @@ type JulDayServer interface {
 }
 
 type RevJulDayServer interface {
-	RevJulDay(jd float64, cal domain.Calendar) (int, int, int, float64)
+	RevJulDay(jd float64, cal references.Calendar) (int, int, int, float64)
 }
 
 type JulDayService struct {
@@ -50,6 +51,6 @@ func NewRevJulDayService() *RevJulDayService {
 }
 
 // RevJulDay returns date and time for a given jd. The returnvalues are year, month, day and ut.
-func (rjds RevJulDayService) RevJulDay(jd float64, cal domain.Calendar) (int, int, int, float64) {
-	return rjds.revJdCalc.CalcRevJd(jd, cal == domain.CalGregorian)
+func (rjds RevJulDayService) RevJulDay(jd float64, cal references.Calendar) (int, int, int, float64) {
+	return rjds.revJdCalc.CalcRevJd(jd, cal == references.CalGregorian)
 }

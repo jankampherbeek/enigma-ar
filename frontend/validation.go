@@ -10,12 +10,13 @@ package frontend
 import (
 	"enigma-ar/api"
 	"enigma-ar/domain"
+	"enigma-ar/domain/references"
 	"strconv"
 	"strings"
 )
 
 type DateValidator interface {
-	CheckDate(date string, cal domain.Calendar) (bool, int, int, int)
+	CheckDate(date string, cal references.Calendar) (bool, int, int, int)
 }
 
 type TimeValidator interface {
@@ -38,7 +39,7 @@ func NewDateValidator() DateValidator {
 	return DateValidation{}
 }
 
-func (v DateValidation) CheckDate(date string, cal domain.Calendar) (bool, int, int, int) {
+func (v DateValidation) CheckDate(date string, cal references.Calendar) (bool, int, int, int) {
 	var dateValid bool
 	var year, month, day int
 	jdApi := api.NewJulDayService()
@@ -50,10 +51,10 @@ func (v DateValidation) CheckDate(date string, cal domain.Calendar) (bool, int, 
 		day = items[2]
 		var ut float64
 		greg := true
-		if cal != domain.CalGregorian {
+		if cal != references.CalGregorian {
 			greg = false
 		}
-		if cal == domain.CalJulianBCE {
+		if cal == references.CalJulianBCE {
 			year--
 		}
 		jdReq := &domain.DateTime{Year: year, Month: month, Day: day, Ut: ut, Greg: greg}

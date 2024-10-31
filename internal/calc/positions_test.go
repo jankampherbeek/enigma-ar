@@ -9,6 +9,7 @@ package calc
 
 import (
 	domain2 "enigma-ar/domain"
+	"enigma-ar/domain/references"
 	"fmt"
 	"math"
 	"testing"
@@ -89,7 +90,7 @@ func TestCalcPointRange(t *testing.T) {
 		Coord:     domain2.Ecliptical,
 		MainValue: true,
 		Position:  true,
-		ObsPos:    domain2.ObsPosGeocentric,
+		ObsPos:    references.ObsPosGeocentric,
 		Ayanamsha: 0,
 	}
 	result, err := prc.CalcPointRange(request)

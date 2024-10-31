@@ -7,6 +7,8 @@
 
 package domain
 
+import "enigma-ar/domain/references"
+
 // DateTime Representation of a date and time in UT
 type DateTime struct {
 	Year  int
@@ -18,18 +20,18 @@ type DateTime struct {
 
 // PointPositionsRequest Request for the calculation of all positions for one or more points
 type PointPositionsRequest struct {
-	Points   []ChartPoint
+	Points   []references.ChartPoint
 	JdUt     float64
 	GeoLong  float64
 	GeoLat   float64
-	Coord    CoordinateSystem
-	ObsPos   ObserverPosition
+	Coord    references.CoordinateSystem
+	ObsPos   references.ObserverPosition
 	Tropical bool
 }
 
 // PointPosResult Calculated positions for a single point
 type PointPosResult struct {
-	Point     ChartPoint
+	Point     references.ChartPoint
 	LonPos    float64
 	LonSpeed  float64
 	LatPos    float64
@@ -51,14 +53,14 @@ type PointPosResult struct {
 // Position indicates that the position is used (true) or the speed (false).
 // If the Ayanamsha is zero, a tropical zodiac is used, otherwise a sidereal zodiac with the given ayanamsha.
 type PointRangeRequest struct {
-	Point     ChartPoint
+	Point     references.ChartPoint
 	JdStart   float64
 	JdEnd     float64
 	Interval  float64
-	Coord     CoordinateSystem
+	Coord     references.CoordinateSystem
 	MainValue bool
 	Position  bool
-	ObsPos    ObserverPosition
+	ObsPos    references.ObserverPosition
 	Ayanamsha int
 }
 
@@ -70,7 +72,7 @@ type PointRangeResult struct {
 
 // HousePosRequest for the calculation of cusps and other mundane poiints.
 type HousePosRequest struct {
-	HouseSys HouseSystem
+	HouseSys references.HouseSystem
 	JdUt     float64
 	GeoLong  float64
 	GeoLat   float64
@@ -87,12 +89,12 @@ type HousePosResult struct {
 
 // FullChartRequest for the calculation of a complete chart with positions of points and mundane positions.
 type FullChartRequest struct {
-	Points    []ChartPoint
-	HouseSys  HouseSystem
+	Points    []references.ChartPoint
+	HouseSys  references.HouseSystem
 	Ayanamsha int
-	CoordSys  CoordinateSystem
-	ObsPos    ObserverPosition
-	ProjType  ProjectionType
+	CoordSys  references.CoordinateSystem
+	ObsPos    references.ObserverPosition
+	ProjType  references.ProjectionType
 	Jd        float64
 	GeoLong   float64
 	GeoLat    float64

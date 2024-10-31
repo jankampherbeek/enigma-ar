@@ -10,6 +10,7 @@ package frontend
 import (
 	"enigma-ar/api"
 	"enigma-ar/domain"
+	"enigma-ar/domain/references"
 	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
@@ -27,8 +28,8 @@ type ValidRadixInputData struct {
 	NameId      string
 	Description string
 	Source      string
-	ChartCat    domain.ChartCat
-	Rating      domain.Rating
+	ChartCat    references.ChartCat
+	Rating      references.Rating
 	Country     string
 	Location    string
 	GeoLong     float64
@@ -37,11 +38,11 @@ type ValidRadixInputData struct {
 	Month       int
 	Day         int
 	Ut          float64
-	Calendar    domain.Calendar
+	Calendar    references.Calendar
 	Hour        int
 	Minute      int
 	Second      int
-	TimeZone    domain.TimeZone
+	TimeZone    references.TimeZone
 	GeoLongLmt  float64 // zero if not applicable
 	Dst         bool
 }
@@ -135,21 +136,21 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 
 	// define input elements: selects
 	var optionsCalendar []string
-	for _, value := range domain.AllCalendars() {
+	for _, value := range references.AllCalendars() {
 		optionsCalendar = append(optionsCalendar, r.GetText(value.TextId))
 	}
 	rid.SelBoxCalendar = widget.NewSelect(optionsCalendar, func(selected string) {})
 	rid.SelBoxCalendar.SetSelected(r.GetText("r_cal_gregorian"))
 
 	var optionRating []string
-	for _, value := range domain.AllRatings() {
+	for _, value := range references.AllRatings() {
 		optionRating = append(optionRating, r.GetText(value.TextId))
 	}
 	rid.SelBoxRating = widget.NewSelect(optionRating, func(selected string) {})
 	rid.SelBoxRating.SetSelected(r.GetText("r_rr_unknown"))
 
 	var optionsChartCat []string
-	for _, value := range domain.AllChartCats() {
+	for _, value := range references.AllChartCats() {
 		optionsChartCat = append(optionsChartCat, r.GetText(value.TextId))
 	}
 	rid.SelBoxChartCat = widget.NewSelect(optionsChartCat, func(selected string) {})
@@ -157,7 +158,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 
 	var optionsTimeZone []string
 	// todo use tz database to suggest a timezone
-	for _, value := range domain.AllTimeZones() {
+	for _, value := range references.AllTimeZones() {
 		optionsTimeZone = append(optionsTimeZone, r.GetText(value.TextId))
 	}
 	rid.SelBoxTimeZone = widget.NewSelect(optionsTimeZone, func(selected string) {})
@@ -199,9 +200,9 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 		}
 
 		ratingId := rid.SelBoxRating.SelectedIndex()
-		rid.ValidData.Rating = domain.Rating(ratingId)
+		rid.ValidData.Rating = references.Rating(ratingId)
 		chartCatId := rid.SelBoxChartCat.SelectedIndex()
-		rid.ValidData.ChartCat = domain.ChartCat(chartCatId)
+		rid.ValidData.ChartCat = references.ChartCat(chartCatId)
 
 		lang := r.GetLanguage()
 		gLongVal := NewGeoLongValidator()
@@ -220,7 +221,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 		rid.ValidData.GeoLat = geoLat
 
 		dateVal := NewDateValidator()
-		dateOk, y, m, d := dateVal.CheckDate(rid.EntryDate.Text, domain.Calendar(rid.SelBoxCalendar.SelectedIndex()))
+		dateOk, y, m, d := dateVal.CheckDate(rid.EntryDate.Text, references.Calendar(rid.SelBoxCalendar.SelectedIndex()))
 		if dateOk {
 			rid.ValidData.Year = y
 			rid.ValidData.Month = m
@@ -260,19 +261,19 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 		jdServer := api.NewJulDayService()
 		jd := jdServer.JulDay(&dt)
 
-		var points []domain.ChartPoint
-		points = make([]domain.ChartPoint, 3)
-		points[0] = domain.Sun
-		points[1] = domain.Moon
-		points[2] = domain.Mercury
+		var points []references.ChartPoint
+		points = make([]references.ChartPoint, 3)
+		points[0] = references.Sun
+		points[1] = references.Moon
+		points[2] = references.Mercury
 
 		fcRequest := domain.FullChartRequest{
 			Points:    points, // todo create points in domain
-			HouseSys:  domain.HousesPlacidus,
+			HouseSys:  references.HousesPlacidus,
 			Ayanamsha: 0, // todo create ayanamshas in domain
-			CoordSys:  domain.CoordEcliptical,
-			ObsPos:    domain.ObsPosGeocentric,
-			ProjType:  domain.ProjType2D,
+			CoordSys:  references.CoordEcliptical,
+			ObsPos:    references.ObsPosGeocentric,
+			ProjType:  references.ProjType2D,
 			Jd:        jd,
 			GeoLong:   rid.ValidData.GeoLong,
 			GeoLat:    rid.ValidData.GeoLat,
