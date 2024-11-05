@@ -9,12 +9,11 @@ package calc
 
 import (
 	"enigma-ar/domain"
-	"enigma-ar/domain/references"
 	"testing"
 )
 
 func TestSeFlagsEcliptical(t *testing.T) {
-	result := SeFlags(domain.Ecliptical, references.ObsPosGeocentric, true)
+	result := SeFlags(domain.CoordEcliptical, domain.ObsPosGeocentric, true)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed
 	if result != expected {
 		t.Errorf("SeFlags() for ecliptical = %v, want %v", result, expected)
@@ -22,7 +21,7 @@ func TestSeFlagsEcliptical(t *testing.T) {
 }
 
 func TestSeFlagsEquatorial(t *testing.T) {
-	result := SeFlags(domain.Equatorial, references.ObsPosGeocentric, true)
+	result := SeFlags(domain.CoordEquatorial, domain.ObsPosGeocentric, true)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgEquatorial
 	if result != expected {
 		t.Errorf("SeFlags() for equatorial = %v, want %v", result, expected)
@@ -30,7 +29,7 @@ func TestSeFlagsEquatorial(t *testing.T) {
 }
 
 func TestSeFlagsTopcentric(t *testing.T) {
-	result := SeFlags(domain.Ecliptical, references.ObsPosTopocentric, true)
+	result := SeFlags(domain.CoordEcliptical, domain.ObsPosTopocentric, true)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgTopoc
 	if result != expected {
 		t.Errorf("SeFlags() for topocentric = %v, want %v", result, expected)
@@ -38,7 +37,7 @@ func TestSeFlagsTopcentric(t *testing.T) {
 }
 
 func TestSeFlagsHeliocentric(t *testing.T) {
-	result := SeFlags(domain.Ecliptical, references.ObsPosHeliocentric, true)
+	result := SeFlags(domain.CoordEcliptical, domain.ObsPosHeliocentric, true)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgHelioc
 	if result != expected {
 		t.Errorf("SeFlags() for heliocentric = %v, want %v", result, expected)
@@ -46,7 +45,7 @@ func TestSeFlagsHeliocentric(t *testing.T) {
 }
 
 func TestSeFlagsSidereal(t *testing.T) {
-	result := SeFlags(domain.Ecliptical, references.ObsPosGeocentric, false)
+	result := SeFlags(domain.CoordEcliptical, domain.ObsPosGeocentric, false)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgSidereal
 	if result != expected {
 		t.Errorf("SeFlags() for sidereal = %v, want %v", result, expected)
@@ -54,7 +53,7 @@ func TestSeFlagsSidereal(t *testing.T) {
 }
 
 func TestSeFlagsTopocEquatCombined(t *testing.T) {
-	result := SeFlags(domain.Equatorial, references.ObsPosTopocentric, true)
+	result := SeFlags(domain.CoordEquatorial, domain.ObsPosTopocentric, true)
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgEquatorial + domain.SeflgTopoc
 	if result != expected {
 		t.Errorf("SeFlags() for equatorial/topocentric combined = %v, want %v", result, expected)

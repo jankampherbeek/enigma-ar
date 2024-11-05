@@ -39,6 +39,23 @@ func MakeUI(app fyne.App) {
 	guiMgr.Register("cycles", NewCyclesView(guiMgr))
 	guiMgr.Register("manual", NewManualView(guiMgr))
 
+	// begin debug
+	/*	lblChicken := widget.NewLabel("Chicken")
+		lblEgg := widget.NewLabel("Egg")
+		entryChicken := widget.NewEntry()
+		entryChicken.PlaceHolder = "What about the chicken?"
+		entryEgg := widget.NewEntry()
+		entryEgg.PlaceHolder = ".... and the egg?"
+		formContainer := container.New(layout.NewFormLayout(),
+			lblChicken,
+			entryChicken,
+			lblEgg,
+			entryEgg,
+		)
+		mainWindow.SetContent(formContainer)*/
+
+	// end debug
+
 	mainWindow.SetContent(homeView)
 
 	mainWindow.ShowAndRun()

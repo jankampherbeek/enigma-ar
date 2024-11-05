@@ -5,7 +5,7 @@
  *  Please check the file copyright.txt in the root of the source for further details.
  */
 
-package references
+package domain
 
 type ReferenceText struct {
 	Key    int

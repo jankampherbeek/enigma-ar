@@ -69,8 +69,8 @@ func createButtons() *fyne.Container {
 
 func NewHomeView(gm *GuiMgr) fyne.CanvasObject {
 	toolBar := gm.createToolBar()
-	circle := NewCircle()
-	label := widget.NewLabel("dummy text")
+	circle := NewCircle()                  // todo replace circle with real chart, probably in svg format
+	label := widget.NewLabel("dummy text") // todo replace label with content, based on menu selection
 	buttons := createButtons()
 	circleContainer := container.NewStack(circle)
 	mainPart := container.NewHSplit(

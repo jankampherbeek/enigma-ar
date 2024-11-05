@@ -8,7 +8,7 @@
 package frontend
 
 import (
-	"enigma-ar/domain/references"
+	"enigma-ar/domain"
 	"math"
 	"testing"
 )
@@ -18,7 +18,7 @@ import (
 func TestCheckDateHappyFlow(t *testing.T) {
 	validator := NewDateValidator()
 	dateText := "1953/1/29"
-	cal := references.Calendar(references.CalGregorian)
+	cal := domain.Calendar(domain.CalGregorian)
 	ok, resultYear, resultMonth, resultDay := validator.CheckDate(dateText, cal)
 	expYear := 1953
 	expMonth := 1
@@ -34,7 +34,7 @@ func TestCheckDateHappyFlow(t *testing.T) {
 func TestCheckDateLeapDay(t *testing.T) {
 	validator := NewDateValidator()
 	dateText := "2004/2/29"
-	cal := references.Calendar(references.CalGregorian)
+	cal := domain.Calendar(domain.CalGregorian)
 	ok, resultYear, resultMonth, resultDay := validator.CheckDate(dateText, cal)
 	expYear := 2004
 	expMonth := 2
@@ -50,7 +50,7 @@ func TestCheckDateLeapDay(t *testing.T) {
 func TestCheckDateError(t *testing.T) {
 	validator := NewDateValidator()
 	dateText := "dummy"
-	cal := references.Calendar(references.CalGregorian)
+	cal := domain.Calendar(domain.CalGregorian)
 	ok, _, _, _ := validator.CheckDate(dateText, cal)
 	if ok == true {
 		t.Errorf("Date check with error as input failed. Expected ok=%t, actual=%t", false, ok)
@@ -60,7 +60,7 @@ func TestCheckDateError(t *testing.T) {
 func TestCheckDateNonLeapYear(t *testing.T) {
 	validator := NewDateValidator()
 	dateText := "2022/2/29"
-	cal := references.Calendar(references.CalGregorian)
+	cal := domain.Calendar(domain.CalGregorian)
 	ok, _, _, _ := validator.CheckDate(dateText, cal)
 	if ok == true {
 		t.Errorf("Date check with non-leapyear failed. Expected ok=%t, actual=%t", false, ok)
@@ -70,7 +70,7 @@ func TestCheckDateNonLeapYear(t *testing.T) {
 func TestCheckDateJulianYear(t *testing.T) {
 	validator := NewDateValidator()
 	dateText := "1423/11/13"
-	cal := references.Calendar(references.CalJulianCE)
+	cal := domain.Calendar(domain.CalJulianCE)
 	ok, resultYear, resultMonth, resultDay := validator.CheckDate(dateText, cal)
 	expYear := 1423
 	expMonth := 11

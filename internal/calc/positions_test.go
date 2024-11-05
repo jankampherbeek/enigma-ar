@@ -8,8 +8,7 @@
 package calc
 
 import (
-	domain2 "enigma-ar/domain"
-	"enigma-ar/domain/references"
+	domain "enigma-ar/domain"
 	"fmt"
 	"math"
 	"testing"
@@ -82,15 +81,15 @@ func TestCalcPointRange(t *testing.T) {
 	fcr := FakeSePointPosCalcForRange{}
 	prc := PointRangeCalculation{}
 	prc.sePointCalc = fcr
-	request := domain2.PointRangeRequest{
+	request := domain.PointRangeRequest{
 		Point:     2,
 		JdStart:   2_400_000.0,
 		JdEnd:     2_400_004.0,
 		Interval:  2.0,
-		Coord:     domain2.Ecliptical,
+		Coord:     domain.CoordEcliptical,
 		MainValue: true,
 		Position:  true,
-		ObsPos:    references.ObsPosGeocentric,
+		ObsPos:    domain.ObsPosGeocentric,
 		Ayanamsha: 0,
 	}
 	result, err := prc.CalcPointRange(request)

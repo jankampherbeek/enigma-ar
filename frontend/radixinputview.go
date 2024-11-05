@@ -10,8 +10,8 @@ package frontend
 import (
 	"enigma-ar/api"
 	"enigma-ar/domain"
-	"enigma-ar/domain/references"
 	"fmt"
+
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -28,8 +28,8 @@ type ValidRadixInputData struct {
 	NameId      string
 	Description string
 	Source      string
-	ChartCat    references.ChartCat
-	Rating      references.Rating
+	ChartCat    domain.ChartCat
+	Rating      domain.Rating
 	Country     string
 	Location    string
 	GeoLong     float64
@@ -38,11 +38,11 @@ type ValidRadixInputData struct {
 	Month       int
 	Day         int
 	Ut          float64
-	Calendar    references.Calendar
+	Calendar    domain.Calendar
 	Hour        int
 	Minute      int
 	Second      int
-	TimeZone    references.TimeZone
+	TimeZone    domain.TimeZone
 	GeoLongLmt  float64 // zero if not applicable
 	Dst         bool
 }
@@ -51,6 +51,7 @@ type RadixInputData struct {
 	EntryNameId      *widget.Entry
 	EntryDescription *widget.Entry
 	EntrySource      *widget.Entry
+	EntryLocation    *widget.Entry
 	EntryGeoLong     *widget.Entry
 	EntryGeoLat      *widget.Entry
 	EntryDate        *widget.Entry
@@ -121,7 +122,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 	rid.EntryNameId = widget.NewEntry()
 	rid.EntryDescription = widget.NewEntry()
 	rid.EntrySource = widget.NewEntry()
-	entryLocation := widget.NewEntry()
+	rid.EntryLocation = widget.NewEntry()
 	// todo change entry for location into select, based on the country (radix input)
 	rid.EntryGeoLong = widget.NewEntry()
 	rid.EntryGeoLong.PlaceHolder = r.GetText("v_input_radix_geolong_placeholder")
@@ -136,21 +137,21 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 
 	// define input elements: selects
 	var optionsCalendar []string
-	for _, value := range references.AllCalendars() {
+	for _, value := range domain.AllCalendars() {
 		optionsCalendar = append(optionsCalendar, r.GetText(value.TextId))
 	}
 	rid.SelBoxCalendar = widget.NewSelect(optionsCalendar, func(selected string) {})
 	rid.SelBoxCalendar.SetSelected(r.GetText("r_cal_gregorian"))
 
 	var optionRating []string
-	for _, value := range references.AllRatings() {
+	for _, value := range domain.AllRatings() {
 		optionRating = append(optionRating, r.GetText(value.TextId))
 	}
 	rid.SelBoxRating = widget.NewSelect(optionRating, func(selected string) {})
 	rid.SelBoxRating.SetSelected(r.GetText("r_rr_unknown"))
 
 	var optionsChartCat []string
-	for _, value := range references.AllChartCats() {
+	for _, value := range domain.AllChartCats() {
 		optionsChartCat = append(optionsChartCat, r.GetText(value.TextId))
 	}
 	rid.SelBoxChartCat = widget.NewSelect(optionsChartCat, func(selected string) {})
@@ -158,7 +159,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 
 	var optionsTimeZone []string
 	// todo use tz database to suggest a timezone
-	for _, value := range references.AllTimeZones() {
+	for _, value := range domain.AllTimeZones() {
 		optionsTimeZone = append(optionsTimeZone, r.GetText(value.TextId))
 	}
 	rid.SelBoxTimeZone = widget.NewSelect(optionsTimeZone, func(selected string) {})
@@ -170,7 +171,6 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 
 	// define the checkbox for DST
 	checkDst := widget.NewCheck("", func(b bool) {
-
 	})
 
 	// define buttons
@@ -179,111 +179,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 	txtHelp := r.GetText("g_btn_help")
 
 	btnCalc := widget.NewButton(txtCalc, func() {
-		// TODO implement activities for radix input
-		// validate input
-		// show any errors
-		// fill RadixInputData
-		if len(rid.EntryNameId.Text) > 0 {
-			rid.ValidData.NameId = rid.EntryNameId.Text
-		} else {
-			// handle error
-		}
-		if len(rid.EntryDescription.Text) > 0 {
-			rid.ValidData.Description = rid.EntryDescription.Text
-		} else {
-			rid.ValidData.Description = r.GetText("") // todo key for 'No description'
-		}
-		if len(rid.EntrySource.Text) > 0 {
-			rid.ValidData.Source = rid.EntrySource.Text
-		} else {
-			rid.ValidData.Source = r.GetText("") // todo key for 'No source'
-		}
-
-		ratingId := rid.SelBoxRating.SelectedIndex()
-		rid.ValidData.Rating = references.Rating(ratingId)
-		chartCatId := rid.SelBoxChartCat.SelectedIndex()
-		rid.ValidData.ChartCat = references.ChartCat(chartCatId)
-
-		lang := r.GetLanguage()
-		gLongVal := NewGeoLongValidator()
-
-		ok, geoLong := gLongVal.CheckGeoLong(rid.EntryGeoLong.Text, lang)
-		if !ok {
-			// handle error
-		}
-		rid.ValidData.GeoLong = geoLong
-
-		gLatVal := NewGeoLatValidator()
-		ok, geoLat := gLatVal.CheckGeoLat(rid.EntryGeoLat.Text, lang)
-		if !ok {
-			// handle error
-		}
-		rid.ValidData.GeoLat = geoLat
-
-		dateVal := NewDateValidator()
-		dateOk, y, m, d := dateVal.CheckDate(rid.EntryDate.Text, references.Calendar(rid.SelBoxCalendar.SelectedIndex()))
-		if dateOk {
-			rid.ValidData.Year = y
-			rid.ValidData.Month = m
-			rid.ValidData.Day = d
-		} else {
-			// handle error
-		}
-		timeVal := NewTimeValidator()
-		timeOk, h, m, s := timeVal.CheckTime(rid.EntryTime.Text)
-		if timeOk {
-			rid.ValidData.Hour = h
-			rid.ValidData.Minute = m
-			rid.ValidData.Second = s
-		} else {
-			// handle error
-		}
-
-		var geoLongLmt = 0.0
-		if len(rid.EntryGeoLongLmt.Text) > 0 {
-			ok, gLLmt := gLongVal.CheckGeoLong(rid.EntryGeoLongLmt.Text, lang)
-			if !ok {
-				// handle error
-			} else {
-				geoLongLmt = gLLmt
-			}
-		}
-		rid.ValidData.GeoLongLmt = geoLongLmt
-
-		// todo define UT
-		dt := domain.DateTime{
-			Year:  rid.ValidData.Year,
-			Month: rid.ValidData.Month,
-			Day:   rid.ValidData.Day,
-			Ut:    0.0,
-			Greg:  true,
-		}
-		jdServer := api.NewJulDayService()
-		jd := jdServer.JulDay(&dt)
-
-		var points []references.ChartPoint
-		points = make([]references.ChartPoint, 3)
-		points[0] = references.Sun
-		points[1] = references.Moon
-		points[2] = references.Mercury
-
-		fcRequest := domain.FullChartRequest{
-			Points:    points, // todo create points in domain
-			HouseSys:  references.HousesPlacidus,
-			Ayanamsha: 0, // todo create ayanamshas in domain
-			CoordSys:  references.CoordEcliptical,
-			ObsPos:    references.ObsPosGeocentric,
-			ProjType:  references.ProjType2D,
-			Jd:        jd,
-			GeoLong:   rid.ValidData.GeoLong,
-			GeoLat:    rid.ValidData.GeoLat,
-		}
-		fcServer := api.NewFullChartServer()
-		fcResponse, err := fcServer.DefineFullChart(fcRequest)
-		if err == nil {
-			fmt.Println(fcResponse)
-		}
-
+		rid.processInput(r)
 	})
 	btnCalc.Importance = widget.HighImportance
 
@@ -314,7 +210,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 		lblCountry,
 		selBoxCountry,
 		lblLocation,
-		entryLocation,
+		rid.EntryLocation,
 		lblGeoLong,
 		rid.EntryGeoLong,
 		lblGeoLat,
@@ -330,7 +226,7 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 		lblTimeZone,
 		rid.SelBoxTimeZone,
 		lblGeoLongLmt,
-		//rid.EntryGeoLongLmt,
+		rid.EntryGeoLongLmt,
 		lblGeoLongLmt,
 		lblDst,
 		checkDst,
@@ -347,5 +243,113 @@ func (rid RadixInputData) RadixInputView(r Rosetta, w fyne.Window) {
 	popupInput = widget.NewModalPopUp(viewContent, w.Canvas())
 	popupInput.Resize(fyne.NewSize(500, 800))
 	popupInput.Show()
+
+}
+
+func (rid RadixInputData) processInput(r Rosetta) {
+	// TODO implement activities for radix input
+	// validate input
+	// show any errors
+	// fill RadixInputData
+	if len(rid.EntryNameId.Text) > 0 {
+		rid.ValidData.NameId = rid.EntryNameId.Text
+	} else {
+		// handle error
+	}
+	if len(rid.EntryDescription.Text) > 0 {
+		rid.ValidData.Description = rid.EntryDescription.Text
+	} else {
+		rid.ValidData.Description = r.GetText("") // todo key for 'No description'
+	}
+	if len(rid.EntrySource.Text) > 0 {
+		rid.ValidData.Source = rid.EntrySource.Text
+	} else {
+		rid.ValidData.Source = r.GetText("") // todo key for 'No source'
+	}
+
+	ratingId := rid.SelBoxRating.SelectedIndex()
+	rid.ValidData.Rating = domain.Rating(ratingId)
+	chartCatId := rid.SelBoxChartCat.SelectedIndex()
+	rid.ValidData.ChartCat = domain.ChartCat(chartCatId)
+
+	lang := r.GetLanguage()
+	gLongVal := NewGeoLongValidator()
+
+	ok, geoLong := gLongVal.CheckGeoLong(rid.EntryGeoLong.Text, lang)
+	if !ok {
+		// handle error
+	}
+	rid.ValidData.GeoLong = geoLong
+
+	gLatVal := NewGeoLatValidator()
+	ok, geoLat := gLatVal.CheckGeoLat(rid.EntryGeoLat.Text, lang)
+	if !ok {
+		// handle error
+	}
+	rid.ValidData.GeoLat = geoLat
+
+	dateVal := NewDateValidator()
+	dateOk, y, m, d := dateVal.CheckDate(rid.EntryDate.Text, domain.Calendar(rid.SelBoxCalendar.SelectedIndex()))
+	if dateOk {
+		rid.ValidData.Year = y
+		rid.ValidData.Month = m
+		rid.ValidData.Day = d
+	} else {
+		// handle error
+	}
+	timeVal := NewTimeValidator()
+	timeOk, h, m, s := timeVal.CheckTime(rid.EntryTime.Text)
+	if timeOk {
+		rid.ValidData.Hour = h
+		rid.ValidData.Minute = m
+		rid.ValidData.Second = s
+	} else {
+		// handle error
+	}
+
+	var geoLongLmt = 0.0
+	if len(rid.EntryGeoLongLmt.Text) > 0 {
+		ok, gLLmt := gLongVal.CheckGeoLong(rid.EntryGeoLongLmt.Text, lang)
+		if !ok {
+			// handle error
+		} else {
+			geoLongLmt = gLLmt
+		}
+	}
+	rid.ValidData.GeoLongLmt = geoLongLmt
+
+	// todo define UT
+	dt := domain.DateTime{
+		Year:  rid.ValidData.Year,
+		Month: rid.ValidData.Month,
+		Day:   rid.ValidData.Day,
+		Ut:    0.0,
+		Greg:  true,
+	}
+	jdServer := api.NewJulDayService()
+	jd := jdServer.JulDay(&dt)
+
+	var points []domain.ChartPoint
+	points = make([]domain.ChartPoint, 3)
+	points[0] = domain.Sun
+	points[1] = domain.Moon
+	points[2] = domain.Mercury
+
+	fcRequest := domain.FullChartRequest{
+		Points:    points,
+		HouseSys:  domain.HousesPlacidus,
+		Ayanamsha: domain.AyanNone,
+		CoordSys:  domain.CoordEcliptical,
+		ObsPos:    domain.ObsPosGeocentric,
+		ProjType:  domain.ProjType2D,
+		Jd:        jd,
+		GeoLong:   rid.ValidData.GeoLong,
+		GeoLat:    rid.ValidData.GeoLat,
+	}
+	fcServer := api.NewFullChartServer()
+	fcResponse, err := fcServer.DefineFullChart(fcRequest)
+	if err == nil {
+		fmt.Println(fcResponse)
+	}
 
 }
