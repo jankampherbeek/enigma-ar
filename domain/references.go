@@ -7,24 +7,24 @@
 
 package domain
 
-type ReferenceText struct {
-	Key    int
-	TextId string
-}
-
 // References for calculations
 
 // CoordinateSystem defines the set of coordinates that are used.
 type CoordinateSystem int
 
 const (
-	CoordEcliptical = iota
+	CoordEcliptical CoordinateSystem = iota
 	CoordEquatorial
 	CoordHorizontal
 )
 
-func AllCoordinateSystems() []ReferenceText {
-	return []ReferenceText{
+type CoordinateSystemText struct {
+	Key    CoordinateSystem
+	TextId string
+}
+
+func AllCoordinateSystems() []CoordinateSystemText {
+	return []CoordinateSystemText{
 		{CoordEcliptical, "r_cs_ecliptical"},
 		{CoordEquatorial, "r_cs_equatorial"},
 		{CoordHorizontal, "r_cs_horizontal"},
@@ -40,8 +40,13 @@ const (
 	ObsPosHeliocentric
 )
 
-func AllObserverPositions() []ReferenceText {
-	return []ReferenceText{
+type ObserverPosText struct {
+	Key    ObserverPosition
+	TextId string
+}
+
+func AllObserverPositions() []ObserverPosText {
+	return []ObserverPosText{
 		{ObsPosGeocentric, "r_op_geocentric"},
 		{ObsPosTopocentric, "r_op_topocentric"},
 		{ObsPosHeliocentric, "r_op_heliocentric"},
@@ -52,12 +57,17 @@ func AllObserverPositions() []ReferenceText {
 type ProjectionType int
 
 const (
-	ProjType2D = iota
+	ProjType2D ProjectionType = iota
 	ProjTypeOblique
 )
 
-func AllProjectionTypes() []ReferenceText {
-	return []ReferenceText{
+type ProjectionTypeText struct {
+	Key    ProjectionType
+	TextId string
+}
+
+func AllProjectionTypes() []ProjectionTypeText {
+	return []ProjectionTypeText{
 		{ProjType2D, "r_pt_2d"},
 		{ProjTypeOblique, "r_pt_oblique"},
 	}
@@ -66,7 +76,7 @@ func AllProjectionTypes() []ReferenceText {
 type Rating int
 
 const (
-	RatingUnknown = iota
+	RatingUnknown Rating = iota
 	RatingAA
 	RatingA
 	RatingB
@@ -76,8 +86,13 @@ const (
 	RatingXX
 )
 
-func AllRatings() []ReferenceText {
-	return []ReferenceText{
+type RatingText struct {
+	Key    Rating
+	TextId string
+}
+
+func AllRatings() []RatingText {
+	return []RatingText{
 		{RatingUnknown, "r_rr_unknown"},
 		{RatingAA, "r_rr_aa"},
 		{RatingA, "r_rr_a"},
@@ -92,7 +107,7 @@ func AllRatings() []ReferenceText {
 type ChartCat int
 
 const (
-	CatUnknown = iota
+	CatUnknown ChartCat = iota
 	CatFemale
 	CatMale
 	CatEvent
@@ -101,8 +116,13 @@ const (
 	CatOther
 )
 
-func AllChartCats() []ReferenceText {
-	return []ReferenceText{
+type ChartCatText struct {
+	Key    ChartCat
+	TextId string
+}
+
+func AllChartCats() []ChartCatText {
+	return []ChartCatText{
 		{CatUnknown, "r_cc_unknown"},
 		{CatFemale, "r_cc_female"},
 		{CatMale, "r_cc_male"},
@@ -116,14 +136,19 @@ func AllChartCats() []ReferenceText {
 type Calendar int
 
 const (
-	CalGregorian = iota
+	CalGregorian Calendar = iota
 	CalJulianCE
 	CalJulianBCE
 	CalAstronomical
 )
 
-func AllCalendars() []ReferenceText {
-	return []ReferenceText{
+type CalendarText struct {
+	Key    Calendar
+	TextId string
+}
+
+func AllCalendars() []CalendarText {
+	return []CalendarText{
 		{CalGregorian, "r_cal_gregorian"},
 		{CalJulianCE, "r_cal_julian_ce"},
 		{CalJulianBCE, "r_cal_julian_bce"},
@@ -134,7 +159,7 @@ func AllCalendars() []ReferenceText {
 type CalculationCat int
 
 const (
-	CalcSe = iota
+	CalcSe CalculationCat = iota
 	CalcElements
 	CalcFormula
 	CalcMundane
@@ -142,10 +167,10 @@ const (
 	CalcZodiacFixed
 )
 
-type PointCats int
+type PointCat int
 
 const (
-	PointCatCommon = iota
+	PointCatCommon PointCat = iota
 	PointCatAngle
 	PointCatCusp
 	PointCatZodiac

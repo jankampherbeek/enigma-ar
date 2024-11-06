@@ -19,9 +19,9 @@ import (
 	"image/color"
 )
 
-type RadixInput interface {
-	RadixInputView(r Rosetta, w fyne.Window)
-}
+//type RadixInput interface {
+//	RadixInputView(r Rosetta, w fyne.Window)
+//}
 
 type ValidRadixInputData struct {
 	NameId      string
@@ -46,6 +46,7 @@ type ValidRadixInputData struct {
 	Dst         bool
 }
 
+// RadixInputView handles the input of data for a new horoscope calculation.
 func RadixInputView(r Rosetta, w fyne.Window) {
 	ValidData := ValidRadixInputData{}
 	var popupInput *widget.PopUp
