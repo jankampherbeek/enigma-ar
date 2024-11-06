@@ -70,10 +70,11 @@ func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 }
 
 func createMenuCharts(r *Rosetta, w fyne.Window) *fyne.Menu {
-	radixInputView := NewRadixInputView()
+	//radixInputView := NewRadixInputView()
 	newChartItem := fyne.NewMenuItem(r.GetText("m_charts_new"), func() {
-		radixInputView.RadixInputView(*r, w)
+		RadixInputView(*r, w)
 	})
+
 	searchChartItem := fyne.NewMenuItem(r.GetText("m_charts_search"), func() {
 		fmt.Println("Search chart clicked.")
 	})
