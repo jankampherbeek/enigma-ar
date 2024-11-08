@@ -8,27 +8,46 @@
 package frontend
 
 import (
+	"enigma-ar/domain"
 	"fyne.io/fyne/v2"
 	"golang.org/x/text/language"
 	"log"
+	"sync"
 )
 
 type GuiMgr struct {
 	App     fyne.App
 	Log     *log.Logger
 	Rosetta *Rosetta
+	DvRadix *DataVaultRadix
 	window  fyne.Window
 	views   map[string]fyne.CanvasObject
 }
 
+var (
+	gmInstance *GuiMgr
+	gmOnce     sync.Once
+)
+
 func NewGuiMgr(app fyne.App, window fyne.Window) *GuiMgr {
 
-	return &GuiMgr{
-		App:     app,
-		window:  window,
-		Rosetta: NewRosetta(app),
-		views:   make(map[string]fyne.CanvasObject),
+	gmOnce.Do(func() {
+		gmInstance = &GuiMgr{
+			App:     app,
+			window:  window,
+			Rosetta: NewRosetta(app),
+			DvRadix: GetDataVaultRadix(),
+			views:   make(map[string]fyne.CanvasObject),
+		}
+	})
+	return gmInstance
+}
+
+func GetGuiMgr() *GuiMgr {
+	if gmInstance == nil {
+		panic("Gui manager not initialized")
 	}
+	return gmInstance
 }
 
 func (gm *GuiMgr) Register(name string, view fyne.CanvasObject) {
@@ -50,6 +69,44 @@ func (gm *GuiMgr) Refresh(name string) {
 
 func (gm *GuiMgr) SaveLanguage(lang language.Tag) {
 	gm.App.Preferences().SetString("language", lang.String())
+}
+
+type DataVaultRadix struct {
+	Request   domain.PointPositionsRequest
+	Response  domain.FullChartResponse
+	completed bool
+}
+
+var (
+	dvrInstance *DataVaultRadix
+	dvrOnce     sync.Once
+)
+
+func GetDataVaultRadix() *DataVaultRadix {
+
+	dvrOnce.Do(func() {
+		dvrInstance = &DataVaultRadix{
+			Request: domain.PointPositionsRequest{
+				Points:   nil,
+				JdUt:     0,
+				GeoLong:  0,
+				GeoLat:   0,
+				Coord:    0,
+				ObsPos:   0,
+				Tropical: false,
+			},
+			Response: domain.FullChartResponse{
+				Points:    nil,
+				Mc:        domain.HousePosResult{},
+				Asc:       domain.HousePosResult{},
+				Vertex:    domain.HousePosResult{},
+				EastPoint: domain.HousePosResult{},
+				Cusps:     nil,
+			},
+			completed: false,
+		}
+	})
+	return dvrInstance
 }
 
 /*

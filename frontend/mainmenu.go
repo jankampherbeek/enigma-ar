@@ -15,17 +15,18 @@ import (
 
 // CreateMenu defines the global menu for the main window.
 func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
-	r := gm.Rosetta
+	r := GetRosetta()
+	dvRadix := gm.DvRadix
 	s := NewSettings()
 
 	menuGeneral := createMenuGeneral(r, s, *gm)
-	menuCharts := createMenuCharts(r, gm.window)
+	menuCharts := createMenuCharts(r, dvRadix)
 	menuAnalysis := createMenuAnalysis(r)
 	menuProgressive := createMenuProgressive(r)
 	menuResearchData := createMenuResearchData(r)
 	menuResearchProject := createMenuResearchProject(r)
 	menuCycles := createMenuCycles(r)
-	menuCalc := createMenuCalc(r, gm.window)
+	menuCalc := createMenuCalc(r)
 	menuHelp := createMenuHelp(r)
 	mainMenu := fyne.NewMainMenu(menuGeneral, menuCharts, menuAnalysis, menuProgressive, menuResearchData, menuResearchProject, menuCycles, menuCalc, menuHelp)
 	return mainMenu
@@ -69,10 +70,10 @@ func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_language"), languageItem, settingsItem, configItem)
 }
 
-func createMenuCharts(r *Rosetta, w fyne.Window) *fyne.Menu {
+func createMenuCharts(r *Rosetta, dvRadix *DataVaultRadix) *fyne.Menu {
 	//radixInputView := NewRadixInputView()
 	newChartItem := fyne.NewMenuItem(r.GetText("m_charts_new"), func() {
-		RadixInputView(*r, w)
+		handleNewChart(dvRadix)
 	})
 
 	searchChartItem := fyne.NewMenuItem(r.GetText("m_charts_search"), func() {
@@ -178,9 +179,9 @@ func createMenuCycles(r *Rosetta) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_cycles"), newCycleMenuItem, searchCycleMenuItem, deleteCycleMenuItem)
 }
 
-func createMenuCalc(r *Rosetta, w fyne.Window) *fyne.Menu {
+func createMenuCalc(r *Rosetta) *fyne.Menu {
 	calcJdNrMenuItem := fyne.NewMenuItem(r.GetText("m_calc_jd"), func() {
-		CalcJdView(*r, w)
+		CalcJdView()
 	})
 	calcDateMenuItem := fyne.NewMenuItem(r.GetText("m_calc_datetime"), func() {
 		fmt.Println("Date/time from Julian day number clicked.")
@@ -203,4 +204,12 @@ func createMenuHelp(r *Rosetta) *fyne.Menu {
 		fmt.Println("Whats New clicked.")
 	})
 	return fyne.NewMenu(r.GetText("m_help"), aboutMenuItem, manualMenuItem, whatsNewItem)
+}
+
+func handleNewChart(dvRadix *DataVaultRadix) {
+	RadixInputView()
+	fmt.Println("In handleNewChart(Menu) dvRadix.completed: ")
+	fmt.Println(dvRadix.completed)
+	fmt.Println(dvRadix.Response)
+
 }

@@ -30,8 +30,8 @@ type Rosetta struct {
 }
 
 var (
-	instance *Rosetta
-	once     sync.Once
+	rInstance *Rosetta
+	rOnce     sync.Once
 )
 
 // NewRosetta initializes the Rosetta singleton.
@@ -43,15 +43,22 @@ func NewRosetta(a fyne.App) *Rosetta {
 	rLangCat := loadTranslations()
 	rPrinter := message.NewPrinter(rLang, message.Catalog(rLangCat))
 
-	once.Do(func() {
-		instance = &Rosetta{
+	rOnce.Do(func() {
+		rInstance = &Rosetta{
 			persApi:     api.NewPersistencyService(),
 			currentLang: rLang,
 			langCat:     rLangCat,
 			printer:     rPrinter,
 		}
 	})
-	return instance
+	return rInstance
+}
+
+func GetRosetta() *Rosetta {
+	if rInstance == nil {
+		panic("rosetta not initialized")
+	}
+	return rInstance
 }
 
 // SetLanguage sets the preferred language.

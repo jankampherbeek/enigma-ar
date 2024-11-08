@@ -11,7 +11,6 @@ import (
 	"enigma-ar/api"
 	"enigma-ar/domain"
 	"fmt"
-	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/layout"
 	"fyne.io/fyne/v2/widget"
@@ -23,7 +22,10 @@ const dateSeparator = "/"
 const timeSeparator = ":"
 const gregorian = "G"
 
-func CalcJdView(r Rosetta, w fyne.Window) {
+func CalcJdView() {
+	r := GetRosetta()
+	gm := GetGuiMgr()
+	w := gm.window
 
 	var jdPopUp *widget.PopUp
 	title := widget.NewLabel(r.GetText("v_calc_jd_title"))

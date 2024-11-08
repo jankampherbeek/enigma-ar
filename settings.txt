@@ -1,2 +1,3 @@
+lang=nl
 workFolder=/enigma-ra
 darkMode=false
