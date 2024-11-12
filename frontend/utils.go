@@ -14,7 +14,7 @@ import (
 	"fyne.io/fyne/v2/widget"
 )
 
-func (gm *GuiMgr) createToolBar() *widget.Toolbar {
+func (gm *GuiMgr) CreateToolBar() *widget.Toolbar {
 	toolBar := widget.NewToolbar(
 		widget.NewToolbarSpacer(),
 		widget.NewToolbarAction(theme.HomeIcon(), func() {

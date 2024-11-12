@@ -71,6 +71,7 @@ func (gm *GuiMgr) SaveLanguage(lang language.Tag) {
 	gm.App.Preferences().SetString("language", lang.String())
 }
 
+// TODO change to support multiple charts
 type DataVaultRadix struct {
 	Request   domain.PointPositionsRequest
 	Response  domain.FullChartResponse
@@ -107,6 +108,10 @@ func GetDataVaultRadix() *DataVaultRadix {
 		}
 	})
 	return dvrInstance
+}
+
+func (dvr *DataVaultRadix) AddCalculatedChart(response domain.FullChartResponse) {
+	dvr.Response = response
 }
 
 /*

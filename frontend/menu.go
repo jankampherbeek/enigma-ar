@@ -10,35 +10,72 @@ package frontend
 import (
 	"fmt"
 	"fyne.io/fyne/v2"
-	"fyne.io/fyne/v2/dialog"
 )
 
-// CreateMenu defines the global menu for the main window.
-func CreateMenu(gm *GuiMgr) *fyne.MainMenu {
+type modus int
+
+const (
+	ModusChart modus = iota
+	ModusResearch
+	ModusCycles
+	ModusCalculators
+)
+
+// CreateChartsMenu defines the menu for the charts window.
+func CreateChartsMenu(gm *GuiMgr) *fyne.MainMenu {
 	r := GetRosetta()
-	dvRadix := gm.DvRadix
+	//	dvRadix := gm.DvRadix
 	s := NewSettings()
 
 	menuGeneral := createMenuGeneral(r, s, *gm)
-	menuCharts := createMenuCharts(r, dvRadix)
+	menuCharts := createMenuCharts(r)
 	menuAnalysis := createMenuAnalysis(r)
 	menuProgressive := createMenuProgressive(r)
-	menuResearchData := createMenuResearchData(r)
-	menuResearchProject := createMenuResearchProject(r)
-	menuCycles := createMenuCycles(r)
-	menuCalc := createMenuCalc(r)
+
+	//	menuCycles := createMenuCycles(r)
+
+	menuModus := createMenuModus(ModusChart, r)
 	menuHelp := createMenuHelp(r)
-	mainMenu := fyne.NewMainMenu(menuGeneral, menuCharts, menuAnalysis, menuProgressive, menuResearchData, menuResearchProject, menuCycles, menuCalc, menuHelp)
+	//	mainMenu := fyne.NewMainMenu(menuGeneral, menuCharts, menuAnalysis, menuProgressive, menuResearchData, menuResearchProject, menuCycles, menuCalc, menuHelp)
+	mainMenu := fyne.NewMainMenu(menuGeneral, menuCharts, menuAnalysis, menuProgressive, menuModus, menuHelp)
 	return mainMenu
 }
 
-func handleLangChange(r *Rosetta, s Settings, gm GuiMgr, lang string) {
-	w := gm.window
-	r.SetLanguage(lang)
-	s.DefineLanguage(lang)
-	dialog.NewInformation(r.GetText("v_main_language_changed_title"), r.GetText("v_main_language_changed"), w).Show()
-	gm.window.Content().Refresh() // TODO try to refresh menu after changing language. Also change rbitems.
+// CreateCyclesMenu defines the menu for the cycles window.
+func CreateCyclesMenu(gm *GuiMgr) *fyne.MainMenu {
+	r := GetRosetta()
+	s := NewSettings()
+	menuGeneral := createMenuGeneral(r, s, *gm)
+	menuCycles := createMenuCycles(r)
+	menuModus := createMenuModus(ModusCycles, r)
+	menuHelp := createMenuHelp(r)
+	cyclesMenu := fyne.NewMainMenu(menuGeneral, menuCycles, menuModus, menuHelp)
+	return cyclesMenu
+}
 
+// CreateResearchMenu defines the menu for the research window.
+func CreateResearchMenu(gm *GuiMgr) *fyne.MainMenu {
+	r := GetRosetta()
+	s := NewSettings()
+	menuGeneral := createMenuGeneral(r, s, *gm)
+	menuResearchData := createMenuResearchData(r)
+	menuResearchProject := createMenuResearchProject(r)
+	menuModus := createMenuModus(ModusResearch, r)
+	menuHelp := createMenuHelp(r)
+	cyclesMenu := fyne.NewMainMenu(menuGeneral, menuResearchData, menuResearchProject, menuModus, menuHelp)
+	return cyclesMenu
+}
+
+// CreateCalculatorsMenu defines the menu for the calculators window.
+func CreateCalculatorsMenu(gm *GuiMgr) *fyne.MainMenu {
+	r := GetRosetta()
+	s := NewSettings()
+	menuGeneral := createMenuGeneral(r, s, *gm)
+	menuCalc := createMenuCalc(r)
+	menuModus := createMenuModus(ModusCalculators, r)
+	menuHelp := createMenuHelp(r)
+	cyclesMenu := fyne.NewMainMenu(menuGeneral, menuCalc, menuModus, menuHelp)
+	return cyclesMenu
 }
 
 func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
@@ -70,10 +107,10 @@ func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_language"), languageItem, settingsItem, configItem)
 }
 
-func createMenuCharts(r *Rosetta, dvRadix *DataVaultRadix) *fyne.Menu {
+func createMenuCharts(r *Rosetta) *fyne.Menu {
 	//radixInputView := NewRadixInputView()
 	newChartItem := fyne.NewMenuItem(r.GetText("m_charts_new"), func() {
-		handleNewChart(dvRadix)
+		changeState(calcNewChart)
 	})
 
 	searchChartItem := fyne.NewMenuItem(r.GetText("m_charts_search"), func() {
@@ -140,6 +177,31 @@ func createMenuProgressive(r *Rosetta) *fyne.Menu {
 	return fyne.NewMenu(r.GetText("m_progressive"), newProgEventItem, searchProgEventItem, primDirMenuItem, secDirMenuItem, symDirMenuItem, transitMenuItem, oobCalMenuItem)
 }
 
+func createMenuModus(m modus, r *Rosetta) *fyne.Menu {
+	chartsModusItem := fyne.NewMenuItem("Charts modus", func() {
+		fmt.Println("Charts Modus clicked")
+	})
+	cyclesModusItem := fyne.NewMenuItem("Cycles modus", func() {
+		fmt.Println("Cyclus Modus clicked")
+	})
+	researchModusItem := fyne.NewMenuItem("Research modus", func() {
+		fmt.Println("Research Modus clicked")
+	})
+	calculatorsModusItem := fyne.NewMenuItem("Calculators modus", func() {
+		fmt.Println("Calculators Modus clicked")
+	})
+	if m == ModusChart {
+		return fyne.NewMenu("Other modus", cyclesModusItem, researchModusItem, calculatorsModusItem)
+	}
+	if m == ModusCycles {
+		return fyne.NewMenu("Other modus", chartsModusItem, researchModusItem, calculatorsModusItem)
+	}
+	if m == ModusResearch {
+		return fyne.NewMenu("Other modus", chartsModusItem, cyclesModusItem, calculatorsModusItem)
+	}
+	return fyne.NewMenu("Other modus", chartsModusItem, cyclesModusItem, researchModusItem)
+}
+
 func createMenuResearchData(r *Rosetta) *fyne.Menu {
 	availableResearchDataItem := fyne.NewMenuItem(r.GetText("m_res_data_available"), func() {
 		fmt.Println("Available research data clicked.")
@@ -204,12 +266,4 @@ func createMenuHelp(r *Rosetta) *fyne.Menu {
 		fmt.Println("Whats New clicked.")
 	})
 	return fyne.NewMenu(r.GetText("m_help"), aboutMenuItem, manualMenuItem, whatsNewItem)
-}
-
-func handleNewChart(dvRadix *DataVaultRadix) {
-	RadixInputView()
-	fmt.Println("In handleNewChart(Menu) dvRadix.completed: ")
-	fmt.Println(dvRadix.completed)
-	fmt.Println(dvRadix.Response)
-
 }

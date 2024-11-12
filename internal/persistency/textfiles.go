@@ -40,7 +40,7 @@ func ReadTextLines(path string) ([]string, error) {
 }
 
 // TODO create a test for WriteTextLines that accesses a specific test file.
-// WriteTextLines writes text lins to a file and overwrites the existing lines.
+// WriteTextLines writes text lines to a file and overwrites the existing lines.
 func WriteTextLines(path string, lines []string) error {
 	file, err := os.Create(path)
 	if err != nil {

@@ -47,15 +47,15 @@ type ValidRadixInputData struct {
 }
 
 // RadixInputView handles the input of data for a new horoscope calculation.
-func RadixInputView() {
-	sm := GetSmInstance()
+func RadixInputView() fyne.Container {
+	//sm := GetSmInstance()
 	r := GetRosetta()
 	gm := GetGuiMgr()
 	w := gm.window
 	dvRadix := GetDataVaultRadix()
 	dvRadix.completed = false
 	ValidData := ValidRadixInputData{}
-	var popupInput *widget.PopUp
+	//var popupInput *widget.PopUp
 
 	// Texts
 	// Title
@@ -263,10 +263,12 @@ func RadixInputView() {
 		fcServer := api.NewFullChartServer()
 		fcResponse, err := fcServer.DefineFullChart(fcRequest)
 		if err == nil {
-			dvRadix.Response = fcResponse
+			//dvRadix.Response = fcResponse
+			dvRadix.AddCalculatedChart(fcResponse)
 			dvRadix.completed = true
 			fmt.Println("In closure: dvRadix.completed: ")
 			fmt.Println(dvRadix.completed)
+			fmt.Println(fcResponse)
 		} else {
 			dvRadix.completed = false
 		}
@@ -317,14 +319,15 @@ func RadixInputView() {
 
 	btnCalc := widget.NewButton(txtCalc, func() {
 		processInput()
-		sm.NewChartState(NewChartCompleted)
-		popupInput.Hide()
+		changeState(chartCalcCompleted)
+		//	sm.NewChartState(NewChartCompleted)
+		//	popupInput.Hide()
 
 	})
 	btnCalc.Importance = widget.HighImportance
 
 	btnClose := widget.NewButton(txtClose, func() {
-		popupInput.Hide()
+		//popupInput.Hide()
 	})
 
 	btnHelp := widget.NewButton(txtHelp, func() {
@@ -339,7 +342,9 @@ func RadixInputView() {
 		buttonBar,
 	)
 
-	popupInput = widget.NewModalPopUp(viewContent, w.Canvas())
-	popupInput.Resize(fyne.NewSize(500, 800))
-	popupInput.Show()
+	return *viewContent
+
+	//popupInput = widget.NewModalPopUp(viewContent, w.Canvas())
+	//popupInput.Resize(fyne.NewSize(500, 800))
+	//popupInput.Show()
 }

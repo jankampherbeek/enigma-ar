@@ -29,14 +29,15 @@ func MakeUI(app fyne.App) {
 	guiMgr.Rosetta.SetLanguage(settings.GetLanguage())
 	mainWindow.Resize(fyne.NewSize(1200, 900))
 	mainWindow.SetMaster()
-	mainWindow.SetMainMenu(CreateMenu(guiMgr))
+	mainWindow.SetMainMenu(CreateChartsMenu(guiMgr))
 
-	homeView := NewHomeView(guiMgr)
+	homeView := NewChartsView(guiMgr)
 	guiMgr.Register("home", homeView)
 	guiMgr.Register("charts", NewChartsView(guiMgr))
 	guiMgr.Register("config", NewConfigView(guiMgr))
 	guiMgr.Register("counts", NewCountsView(guiMgr))
 	guiMgr.Register("cycles", NewCyclesView(guiMgr))
+	guiMgr.Register("calculators", NewCalculatorsView(guiMgr))
 	guiMgr.Register("manual", NewManualView(guiMgr))
 
 	// begin debug
