@@ -8,6 +8,7 @@
 package api
 
 import (
+	"enigma-ar/domain"
 	"enigma-ar/internal/persistency"
 )
 
@@ -31,4 +32,8 @@ func (ps PersistencyService) ReadLines(path string) ([]string, error) {
 // WriteLines creates a new file and writes the lines to that file.
 func (ps PersistencyService) WriteLines(path string, lines []string) error {
 	return persistency.WriteTextLines(path, lines)
+}
+
+func WriteChart(pcData domain.PersistableChart, pdlData domain.PersistableDateLocation) (int, int, error) {
+	return persistency.SaveChartData(pcData, pdlData)
 }

@@ -73,8 +73,9 @@ func (gm *GuiMgr) SaveLanguage(lang language.Tag) {
 
 // TODO change to support multiple charts
 type DataVaultRadix struct {
-	Request   domain.PointPositionsRequest
+	Request   domain.FullChartRequest
 	Response  domain.FullChartResponse
+	Meta      domain.FullChartMeta
 	completed bool
 }
 
@@ -87,14 +88,16 @@ func GetDataVaultRadix() *DataVaultRadix {
 
 	dvrOnce.Do(func() {
 		dvrInstance = &DataVaultRadix{
-			Request: domain.PointPositionsRequest{
-				Points:   nil,
-				JdUt:     0,
-				GeoLong:  0,
-				GeoLat:   0,
-				Coord:    0,
-				ObsPos:   0,
-				Tropical: false,
+			Request: domain.FullChartRequest{
+				Points:    nil,
+				HouseSys:  0,
+				Ayanamsha: 0,
+				CoordSys:  0,
+				ObsPos:    0,
+				ProjType:  0,
+				Jd:        0,
+				GeoLong:   0,
+				GeoLat:    0,
 			},
 			Response: domain.FullChartResponse{
 				Points:    nil,
@@ -110,8 +113,12 @@ func GetDataVaultRadix() *DataVaultRadix {
 	return dvrInstance
 }
 
-func (dvr *DataVaultRadix) AddCalculatedChart(response domain.FullChartResponse) {
+// TODO add request and meta
+func (dvr *DataVaultRadix) AddCalculatedChart(request domain.FullChartRequest, response domain.FullChartResponse,
+	meta domain.FullChartMeta) {
+	dvr.Request = request
 	dvr.Response = response
+	dvr.Meta = meta
 }
 
 /*

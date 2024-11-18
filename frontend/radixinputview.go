@@ -19,10 +19,6 @@ import (
 	"image/color"
 )
 
-//type RadixInput interface {
-//	RadixInputView(r Rosetta, w fyne.Window)
-//}
-
 type ValidRadixInputData struct {
 	NameId      string
 	Description string
@@ -231,8 +227,9 @@ func RadixInputView() fyne.Container {
 			}
 		}
 		ValidData.GeoLongLmt = geoLongLmt
+		timeZoneId := selBoxTimeZone.SelectedIndex()
+		ValidData.TimeZone = domain.TimeZone(timeZoneId)
 
-		// todo define UT
 		dt := domain.DateTime{
 			Year:  ValidData.Year,
 			Month: ValidData.Month,
@@ -241,8 +238,16 @@ func RadixInputView() fyne.Container {
 			Greg:  true,
 		}
 		jdServer := api.NewJulDayService()
-		jd := jdServer.JulDay(&dt)
-
+		var jd = jdServer.JulDay(&dt)
+		var ut float64
+		ut = float64(ValidData.Hour) + float64(ValidData.Minute)/60.0 + float64(ValidData.Second)/3600.0
+		if ValidData.Dst == true {
+			ut += 1.0
+		}
+		allTZ := domain.AllTimeZones()
+		zoneCorr := allTZ[ValidData.TimeZone].Offset
+		ut -= zoneCorr
+		jd += ut / 24.0
 		var points []domain.ChartPoint
 		points = make([]domain.ChartPoint, 3)
 		points[0] = domain.Sun
@@ -263,8 +268,23 @@ func RadixInputView() fyne.Container {
 		fcServer := api.NewFullChartServer()
 		fcResponse, err := fcServer.DefineFullChart(fcRequest)
 		if err == nil {
-			//dvRadix.Response = fcResponse
-			dvRadix.AddCalculatedChart(fcResponse)
+			fcMeta := domain.FullChartMeta{
+				Name:         ValidData.NameId,
+				Description:  ValidData.Description,
+				Category:     ValidData.ChartCat,
+				Rating:       ValidData.Rating,
+				Source:       ValidData.Source,
+				LocationName: entryLocation.Text,
+				GeoLat:       entryGeoLat.Text,
+				GeoLong:      entryGeoLong.Text,
+				Date:         entryDate.Text,
+				Calendar:     ValidData.Calendar,
+				Time:         entryTime.Text,
+				TimeZone:     ValidData.TimeZone,
+				Dst:          ValidData.Dst,
+				GeoLongLmt:   entryGeoLongLmt.Text,
+			}
+			dvRadix.AddCalculatedChart(fcRequest, fcResponse, fcMeta)
 			dvRadix.completed = true
 			fmt.Println("In closure: dvRadix.completed: ")
 			fmt.Println(dvRadix.completed)
@@ -341,10 +361,6 @@ func RadixInputView() fyne.Container {
 		formContainer,
 		buttonBar,
 	)
-
 	return *viewContent
 
-	//popupInput = widget.NewModalPopUp(viewContent, w.Canvas())
-	//popupInput.Resize(fyne.NewSize(500, 800))
-	//popupInput.Show()
 }

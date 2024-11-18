@@ -52,12 +52,14 @@ func handleNewChart() {
 }
 
 func handleChartCompleted() {
+	persistCurrentChart()
 	gm := GetGuiMgr()
 	tempContainer := container.NewVBox(
 		widget.NewLabel("Tijdelijk label: de container is veranderd"),
 	)
 	gm.Register("charts", UpdateChartsView(tempContainer))
 	gm.Show("charts")
+
 }
 
 func handleLangChange(r *Rosetta, s Settings, gm GuiMgr, lang string) {

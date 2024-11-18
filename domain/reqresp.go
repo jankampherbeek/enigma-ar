@@ -98,7 +98,7 @@ type FullChartRequest struct {
 	GeoLat    float64
 }
 
-// FullChartResult contains the calculated positions for a complete chart. Use housecusps from index 1, zero is an empty placeholder.
+// FullChartResponse contains the calculated positions for a complete chart. Use housecusps from index 1, zero is an empty placeholder.
 type FullChartResponse struct {
 	Points    []PointPosResult
 	Mc        HousePosResult
@@ -106,4 +106,42 @@ type FullChartResponse struct {
 	Vertex    HousePosResult
 	EastPoint HousePosResult
 	Cusps     []HousePosResult
+}
+
+// FullChartMeta contains data that is not used by the backend but will be shown in the UI.
+type FullChartMeta struct {
+	Name         string
+	Description  string
+	Category     ChartCat
+	Rating       Rating
+	Source       string
+	LocationName string
+	GeoLat       string
+	GeoLong      string
+	Date         string
+	Calendar     Calendar
+	Time         string
+	TimeZone     TimeZone
+	Dst          bool
+	GeoLongLmt   string
+}
+
+type PersistableChart = struct {
+	Id          int
+	Name        string
+	Description string
+	Category    string
+}
+
+type PersistableDateLocation = struct {
+	Id           int
+	ChartId      int
+	Source       string
+	NameLocation string
+	Rating       string
+	GeoLong      float64
+	GeoLat       float64
+	DateText     string
+	TimeText     string
+	Jd           float64
 }
