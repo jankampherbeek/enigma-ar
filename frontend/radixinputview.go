@@ -55,10 +55,10 @@ func RadixInputView() fyne.Container {
 
 	// Texts
 	// Title
-	txtTitle := canvas.NewText(r.GetText("v_input_radix_title"), color.Gray16{})
-	txtTitle.TextSize = 24
-	txtTitle.TextStyle = fyne.TextStyle{Bold: true}
-	txtTitle.Alignment = fyne.TextAlignCenter
+	generalTitle := canvas.NewText("Configuration - general", color.Gray16{})
+	generalTitle.TextSize = 24
+	generalTitle.TextStyle = fyne.TextStyle{Bold: true}
+	generalTitle.Alignment = fyne.TextAlignCenter
 
 	// Subtitle location
 	txtSectionLocation := canvas.NewText("Location", color.Gray16{})
@@ -357,7 +357,7 @@ func RadixInputView() fyne.Container {
 	buttonBar := container.NewHBox(layout.NewSpacer(), btnClose, btnHelp, btnCalc)
 
 	viewContent := container.NewVBox(
-		txtTitle,
+		generalTitle,
 		formContainer,
 		buttonBar,
 	)

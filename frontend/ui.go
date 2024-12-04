@@ -21,7 +21,6 @@ func (gm *GuiMgr) createChartsMain() *fyne.Container {
 }
 
 func MakeUI(app fyne.App) {
-
 	mainWindow := app.NewWindow("Enigma 1.0")
 	guiMgr := NewGuiMgr(app, mainWindow)
 	settings := NewSettings()

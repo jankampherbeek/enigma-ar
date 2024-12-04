@@ -102,9 +102,10 @@ func createMenuGeneral(r *Rosetta, s Settings, gm GuiMgr) *fyne.Menu {
 		fmt.Println("DefinedSettings clicked.")
 	})
 	configItem := fyne.NewMenuItem(r.GetText("m_general_config"), func() {
-		fmt.Println("Configuration clicked.")
+		changeState(editConfig)
 	})
-	return fyne.NewMenu(r.GetText("m_language"), languageItem, settingsItem, configItem)
+
+	return fyne.NewMenu(r.GetText("m_general"), languageItem, settingsItem, configItem)
 }
 
 func createMenuCharts(r *Rosetta) *fyne.Menu {

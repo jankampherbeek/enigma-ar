@@ -177,3 +177,27 @@ const (
 	PointCatLot
 	PointCatFixStar
 )
+
+type WheelType int
+
+const (
+	WheelTypeSignsEqual WheelType = iota
+	WheelTypeHousesEqual
+	WheelTypePlanetsOutside
+	WheelTypeSimpleCircle
+)
+
+type WheelTypeText struct {
+	Key    WheelType
+	TextId string
+}
+
+func AllWheelTypes() []WheelTypeText {
+	return []WheelTypeText{
+		{WheelTypeSignsEqual, "r_wh_signs_equal"},
+		{WheelTypeHousesEqual, "r_wh_houses_equal"},
+		{WheelTypePlanetsOutside, "r_wh_planets_outside"},
+		{WheelTypeSimpleCircle, "r_wh_simple_circle"},
+	}
+
+}

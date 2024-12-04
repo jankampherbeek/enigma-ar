@@ -8,6 +8,7 @@
 package frontend
 
 import (
+	"fmt"
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/canvas"
 	"fyne.io/fyne/v2/container"
@@ -72,9 +73,12 @@ func NewChartsView(gm *GuiMgr) fyne.CanvasObject {
 	circle := NewCircle() // todo replace circle with real chart, probably in svg format
 	buttons := createButtons()
 	circleContainer := container.NewStack(circle)
+	ariesGlyph := '\uE000'
+	taurusGlyph := '\uE001'
+	tempLabel := fmt.Sprintf("Temporary label for right part %c %c", ariesGlyph, taurusGlyph)
 	mainPart := container.NewHSplit(
 		circleContainer,
-		widget.NewLabel("Temporary label for right part"),
+		widget.NewLabel(tempLabel),
 	)
 	content := container.NewBorder(toolBar, buttons, nil, nil, mainPart)
 

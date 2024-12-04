@@ -19,6 +19,7 @@ type state int
 const (
 	chartCalcCompleted state = iota
 	calcNewChart
+	editConfig
 )
 
 func changeState(s state) {
@@ -27,6 +28,8 @@ func changeState(s state) {
 		handleChartCompleted()
 	case calcNewChart:
 		handleNewChart()
+	case editConfig:
+		handleNewconfig()
 	}
 }
 
@@ -59,6 +62,12 @@ func handleChartCompleted() {
 	)
 	gm.Register("charts", UpdateChartsView(tempContainer))
 	gm.Show("charts")
+
+}
+
+func handleNewconfig() {
+	gm := GetGuiMgr()
+	gm.Show("config")
 
 }
 

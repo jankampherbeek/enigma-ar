@@ -8,6 +8,10 @@
 package se
 
 /*
+#cgo android CFLAGS: -D_FILE_OFFSET_BITS=64 -D__ANDROID_API__=24 -DANDROID
+#cgo android LDFLAGS: -lm -llog
+#include <stdio.h>
+#include "swe_android.h"
 #include "swephexp.h"
 */
 import "C"
