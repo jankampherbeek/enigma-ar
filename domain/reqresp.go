@@ -145,3 +145,10 @@ type PersistableDateLocation = struct {
 	TimeText     string
 	Jd           float64
 }
+
+// SinglePosition contains a single value for a specific coordinate, and the id for the Chartpoint.
+// It's main use is to support calculations like midpoints, harmonics etc.
+type SinglePosition = struct {
+	Id       ChartPoint
+	Position float64
+}
