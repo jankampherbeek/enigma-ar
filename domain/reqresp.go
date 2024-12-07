@@ -152,3 +152,12 @@ type SinglePosition = struct {
 	Id       ChartPoint
 	Position float64
 }
+
+// MatchedParallel contains two single positions that form a (contra)parallel, an orb and an indication for
+// parallel (true) or contraparallel (false).
+type MatchedParallel = struct {
+	Pos1     SinglePosition
+	Pos2     SinglePosition
+	Orb      float64
+	Parallel bool
+}
