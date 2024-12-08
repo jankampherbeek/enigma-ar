@@ -98,7 +98,7 @@ func TestCalcParallelsOrbTooLarge(t *testing.T) {
 	}
 }
 
-func TestCalcParallelsINsufficientData(t *testing.T) {
+func TestCalcParallelsInsufficientData(t *testing.T) {
 	var positions = []domain.SinglePosition{
 		{Id: 1, Position: 12.0},
 	}

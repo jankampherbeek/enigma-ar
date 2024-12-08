@@ -153,6 +153,14 @@ type SinglePosition = struct {
 	Position float64
 }
 
+// DoublePosition contains two values for a chartPoioint, and the id for that chartpoint.
+// It supports combinations like longitude/declination, ra/declination and azimuth/altitude.
+type DoublePosition = struct {
+	Id        ChartPoint
+	Position1 float64
+	Position2 float64
+}
+
 // MatchedParallel contains two single positions that form a (contra)parallel, an orb and an indication for
 // parallel (true) or contraparallel (false).
 type MatchedParallel = struct {
