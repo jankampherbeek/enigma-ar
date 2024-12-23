@@ -13,7 +13,7 @@ import (
 	"testing"
 )
 
-func TestCalcMidpointsHappyFlow(t *testing.T) {
+func TestCalcDeclMidpointsHappyFlow(t *testing.T) {
 
 	var positions = []domain.SinglePosition{
 		{Id: 1, Position: 12.0},
@@ -64,7 +64,7 @@ func TestCalcMidpointsHappyFlow(t *testing.T) {
 	}
 
 	dmCalc := DeclMidpointsCalculation{}
-	result, err := dmCalc.CalcMidpoints(positions, orb)
+	result, err := dmCalc.CalcDeclMidpoints(positions, orb)
 
 	if err != nil {
 		t.Fatalf("declination midpoints calculation failed, returned unexpected error %v", err)
@@ -118,12 +118,12 @@ func TestCalcMidpointsOrbTooLarge(t *testing.T) {
 	}
 	orb := 12.0
 	dmCalc := NewDeclMidpointsCalculation()
-	result, err := dmCalc.CalcMidpoints(positions, orb)
+	result, err := dmCalc.CalcDeclMidpoints(positions, orb)
 	if err == nil {
-		t.Errorf("CalcMidpoints should have returned an error for an orb that is too large")
+		t.Errorf("CalcDeclMidpoints should have returned an error for an orb that is too large")
 	}
 	if len(result) > 0 {
-		t.Errorf("CalcMidpoints should have returned an empty result for an orb that is too large")
+		t.Errorf("CalcDeclMidpoints should have returned an empty result for an orb that is too large")
 	}
 }
 
@@ -137,19 +137,19 @@ func TestCalcMidpointsOrbTooSmall(t *testing.T) {
 	}
 	orb := 0.0
 	dmCalc := NewDeclMidpointsCalculation()
-	result, err := dmCalc.CalcMidpoints(positions, orb)
+	result, err := dmCalc.CalcDeclMidpoints(positions, orb)
 	if err == nil {
-		t.Errorf("CalcMidpoints should have returned an error for an orb that is too small")
+		t.Errorf("CalcDeclMidpoints should have returned an error for an orb that is too small")
 	}
 	if len(result) > 0 {
-		t.Errorf("CalcMidpoints should have returned an empty result for an orb that is too small")
+		t.Errorf("CalcDeclMidpoints should have returned an empty result for an orb that is too small")
 	}
 }
 
 func TestCalcMidpointsEmptyInput(t *testing.T) {
 	var positions []domain.SinglePosition
 	dmCalc := NewDeclMidpointsCalculation()
-	result, err := dmCalc.CalcMidpoints(positions, 2.0)
+	result, err := dmCalc.CalcDeclMidpoints(positions, 2.0)
 
 	if err == nil {
 		t.Error("Expected error for empty input, got nil")
@@ -169,12 +169,12 @@ func TestCalcMidpointsPositionTooLarge(t *testing.T) {
 	}
 	orb := 0.5
 	dmCalc := NewDeclMidpointsCalculation()
-	result, err := dmCalc.CalcMidpoints(positions, orb)
+	result, err := dmCalc.CalcDeclMidpoints(positions, orb)
 	if err == nil {
-		t.Errorf("CalcMidpoints should have returned an error for a position that is too large")
+		t.Errorf("CalcDeclMidpoints should have returned an error for a position that is too large")
 	}
 	if len(result) > 0 {
-		t.Errorf("CalcMidpoints should have returned an empty result for a position that is too large, was %d", len(result))
+		t.Errorf("CalcDeclMidpoints should have returned an empty result for a position that is too large, was %d", len(result))
 	}
 }
 
@@ -188,11 +188,11 @@ func TestCalcMidpointsPositionTooSmall(t *testing.T) {
 	}
 	orb := 0.9
 	dmCalc := NewDeclMidpointsCalculation()
-	result, err := dmCalc.CalcMidpoints(positions, orb)
+	result, err := dmCalc.CalcDeclMidpoints(positions, orb)
 	if err == nil {
-		t.Errorf("CalcMidpoints should have returned an error for a position that is too small")
+		t.Errorf("CalcDeclMidpoints should have returned an error for a position that is too small")
 	}
 	if len(result) > 0 {
-		t.Errorf("CalcMidpoints should have returned an empty result for a position that is too small, was %d", len(result))
+		t.Errorf("CalcDeclMidpoints should have returned an empty result for a position that is too small, was %d", len(result))
 	}
 }

@@ -149,7 +149,7 @@ All item sin the language files use a prefix, as follows:
   - **r_cp_** references celestial points
   - **r_cs_** references coordinate systems
   - **r_hs_** references houses
-  - **r_op_** references observer positions
+  - **r_op_** references observer points
   - **r_sg**_ references signs
   - **r_tz_** references timezones
 - **v_** views
@@ -174,9 +174,9 @@ Enigma implements a dedicated calculation of this oblique longitude.
 
 ### Black Lights Astrology: hypothetical planets
 
-Black Lights Astrology is a system based on the astrology of Dom Neroman, Jean Carteret, and George Bode. Jean Carteret introduced two hypothetical planets: Persephone and Vulcanus. There are no orbital elements known, only a short ephemeris with yearly positions. You can find this ephemeris in: *De Nieuwe Planeten* by George Bode (Dutch, Amsterdam, 1981). The ephemeris shows a fully linear orbit for both hypothetical planets. Bode also mentions that an insecurity of 3 degrees should be taken into account. These bodies obviously do not adhere to the laws of Kepler and do not show retrogradation. That could be explained by considering them as non-material points.
+Black Lights Astrology is a system based on the astrology of Dom Neroman, Jean Carteret, and George Bode. Jean Carteret introduced two hypothetical planets: Persephone and Vulcanus. There are no orbital elements known, only a short ephemeris with yearly points. You can find this ephemeris in: *De Nieuwe Planeten* by George Bode (Dutch, Amsterdam, 1981). The ephemeris shows a fully linear orbit for both hypothetical planets. Bode also mentions that an insecurity of 3 degrees should be taken into account. These bodies obviously do not adhere to the laws of Kepler and do not show retrogradation. That could be explained by considering them as non-material points.
 
-The calculation is based on the positions at Jan. 1, 1900 0:00 . For Persephone, that is 2°00' Scorpio, for Vulcanus 15°42' Aries.
+The calculation is based on the points at Jan. 1, 1900 0:00 . For Persephone, that is 2°00' Scorpio, for Vulcanus 15°42' Aries.
 
 The yearly speed for Persephone is exactly 1°00', for Vulcanus 0°33'. For the calculations. The ephemeris uses a calendar year, Enigma uses the mean length of a year instead.
 
@@ -184,7 +184,7 @@ The yearly speed for Persephone is exactly 1°00', for Vulcanus 0°33'. For the 
 
 The lunar Apogee, also called *Black Moon*, is an important point in Black Lights Astrology. Due to the extremely irregular orbit of the moon, the calculation is not straightforward. Several solutions for the calculation of a corrected position have been suggested. For an in depth discussion I highly recommend *Lilith und Priapus - die "Schalen" des Menschen* by Dieter Koch and Bernhard Rindgen (German, Frankfurt a.M., 2000) .
 
-The most popular calculation in Black Lights Astrology is the one as described by Max Duval and calculated by Jean-Marc Font, for which an ephemeris is available: *Tables do Noeud Lunaire, de Lilith et du Soleil Noir* (French, Paris, 1988). Unfortunately, Duval refused to publish the astronomical theory and the formulas that he used. However, in 2021 Cees Jansen published an article *Over het Apogeum van de Maan en de Gecorrigeerde Zwarte Maan* (Dutch, in NVWOA Nieuwsbrief vol. 26, no. 5, may 2021. https://www.nvwoa.nl/nb/2021nb26-5.pdf ) in which he presented a formula that almost exactly replicates the positions as calculated by Duval and Font. In this formula, he uses the distance between Moon and the uncorrected lunar apogee to calculate a correction factor that is algebraically added to the uncorrected position. 
+The most popular calculation in Black Lights Astrology is the one as described by Max Duval and calculated by Jean-Marc Font, for which an ephemeris is available: *Tables do Noeud Lunaire, de Lilith et du Soleil Noir* (French, Paris, 1988). Unfortunately, Duval refused to publish the astronomical theory and the formulas that he used. However, in 2021 Cees Jansen published an article *Over het Apogeum van de Maan en de Gecorrigeerde Zwarte Maan* (Dutch, in NVWOA Nieuwsbrief vol. 26, no. 5, may 2021. https://www.nvwoa.nl/nb/2021nb26-5.pdf ) in which he presented a formula that almost exactly replicates the points as calculated by Duval and Font. In this formula, he uses the distance between Moon and the uncorrected lunar apogee to calculate a correction factor that is algebraically added to the uncorrected position. 
 
 The formula is: 
 $$
