@@ -43,7 +43,7 @@ type AspectData struct {
 func AllAspects() []AspectData {
 	return []AspectData{
 		{Conjunction, "r_as_conjunction", 0.0},
-		{Opposition, "r_as_opposition", 18.0},
+		{Opposition, "r_as_opposition", 180.0},
 		{Trine, "r_as_trine", 120.0},
 		{Square, "r_as_square", 90.0},
 		{Septile, "r_as_septile", 51.42857143},

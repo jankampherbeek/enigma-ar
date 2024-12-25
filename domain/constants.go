@@ -7,7 +7,15 @@
 
 package domain
 
-// Constants that can be use globally
+// Constants that can be used globally
+
+// Min and max values
+const (
+	MinLongitude   = 0.0
+	MaxLongitude   = 360.0
+	MinDeclination = -180.0
+	MaxDeclination = 180.0
+)
 
 // Celestial points as used by the SE.
 // _RAM = School of Ram, _URA = Uranian.

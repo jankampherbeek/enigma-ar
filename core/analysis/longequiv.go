@@ -16,12 +16,8 @@ import (
 )
 
 const (
-	MinLongitude   = 0.0
-	MaxLongitude   = 360.0
-	MinDeclination = -180.0
-	MaxDeclination = 180.0
-	MinObliquity   = 22.0
-	MaxObliquity   = 25.0
+	MinObliquity = 22.0
+	MaxObliquity = 25.0
 )
 
 // LongEquivCalculator calculates longitude equivalents.
@@ -57,11 +53,11 @@ func (lec LongEquivCalculation) CalcEquivalents(positions []domain.DoublePositio
 		radixDeclination := longDeclPos.Position2
 		declination := radixDeclination
 		longitude := longDeclPos.Position1
-		if declination < MinDeclination || declination > MaxDeclination {
-			return emptyResult, fmt.Errorf("found declination that is out of range, value was %f and should be between %f and %f", declination, MinDeclination, MaxDeclination)
+		if declination < domain.MinDeclination || declination > domain.MaxDeclination {
+			return emptyResult, fmt.Errorf("found declination that is out of range, value was %f and should be between %f and %f", declination, domain.MinDeclination, domain.MaxDeclination)
 		}
-		if longitude < MinLongitude || longitude > MaxLongitude {
-			return emptyResult, fmt.Errorf("found longitude that is out of range, value was %f and should be between %f and %f", longitude, MinLongitude, MaxLongitude)
+		if longitude < domain.MinLongitude || longitude > domain.MaxLongitude {
+			return emptyResult, fmt.Errorf("found longitude that is out of range, value was %f and should be between %f and %f", longitude, domain.MinLongitude, domain.MaxLongitude)
 		}
 
 		if math.Abs(radixDeclination) > obliquity { // OOB

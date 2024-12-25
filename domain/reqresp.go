@@ -169,3 +169,12 @@ type MatchedParallel = struct {
 	Orb      float64
 	Parallel bool
 }
+
+// ActualAspect contains info about an actually formed aspect
+type ActualAspect = struct {
+	Pos1         SinglePosition
+	Pos2         SinglePosition
+	ActualAspect Aspect
+	ActualOrb    float64
+	Exactness    int
+}
