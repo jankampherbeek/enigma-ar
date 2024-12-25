@@ -326,7 +326,7 @@ func TestCalcAspectsNoConfigAspects(t *testing.T) {
 
 	var cfgAspects = []domain.ConfigAspect{}
 
-	aspCalc := AspectsCalculation{}
+	aspCalc := NewAspectsCalculation()
 	result, err := aspCalc.CalcAspects(points, aspects, cfgPoints, cfgAspects, baseOrb)
 
 	if err == nil {
@@ -376,7 +376,7 @@ func TestCalcAspectsMissingConfigPoint(t *testing.T) {
 		{ActualAspect: 5, OrbFactor: 60, Glyph: '\uE700'},  // sextile
 	}
 
-	aspCalc := AspectsCalculation{}
+	aspCalc := NewAspectsCalculation()
 	result, err := aspCalc.CalcAspects(points, aspects, cfgPoints, cfgAspects, baseOrb)
 
 	if err == nil {
@@ -477,7 +477,7 @@ func TestCalcAspectsPositionTooLarge(t *testing.T) {
 		{ActualAspect: 5, OrbFactor: 60, Glyph: '\uE700'},  // sextile
 	}
 
-	aspCalc := AspectsCalculation{}
+	aspCalc := NewAspectsCalculation()
 	result, err := aspCalc.CalcAspects(points, aspects, cfgPoints, cfgAspects, baseOrb)
 
 	if err == nil {
@@ -528,7 +528,7 @@ func TestCalcAspectsPositionTooSmall(t *testing.T) {
 		{ActualAspect: 5, OrbFactor: 60, Glyph: '\uE700'},  // sextile
 	}
 
-	aspCalc := AspectsCalculation{}
+	aspCalc := NewAspectsCalculation()
 	result, err := aspCalc.CalcAspects(points, aspects, cfgPoints, cfgAspects, baseOrb)
 
 	if err == nil {
