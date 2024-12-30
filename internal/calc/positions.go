@@ -10,7 +10,7 @@ package calc
 import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/calc/conversion"
-	internal "enigma-ar/internal/calc/mathextra"
+	"enigma-ar/internal/calc/mathextra"
 	"enigma-ar/internal/se"
 	"fmt"
 	"math"
@@ -228,9 +228,9 @@ func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags
 	if err != nil {
 		return Zero, fmt.Errorf("error in calculation %v", err)
 	}
-	sin2Diff := math.Sin(internal.DegToRad(2 * diff))
-	factor2 := math.Sin(internal.DegToRad(2 * (diff - 11.726*sin2Diff)))
-	sin6Diff := math.Sin(internal.DegToRad(6 * diff))
+	sin2Diff := math.Sin(mathextra.DegToRad(2 * diff))
+	factor2 := math.Sin(mathextra.DegToRad(2 * (diff - 11.726*sin2Diff)))
+	sin6Diff := math.Sin(mathextra.DegToRad(6 * diff))
 	factor3 := (8.8 / 60.0) * sin6Diff
 	corrFactor := factor1*factor2 + factor3
 	valueInRange, err := valueToRange(longApogeeMean.LonPos+corrFactor, 0.0, 360.0)
@@ -282,7 +282,7 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 			return rangePositions, err
 		}
 		calcValue := sePos[resultIndex]
-		rangePositions = append(rangePositions, domain.PointRangeResult{Jd: i, Value: calcValue}) // TODO improve appending
+		rangePositions = append(rangePositions, domain.PointRangeResult{Jd: i, Value: calcValue})
 	}
 	return rangePositions, nil
 }
