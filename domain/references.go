@@ -53,7 +53,7 @@ func AllObserverPositions() []ObserverPosText {
 	}
 }
 
-// Projectiontype, standard 2D, oblique is for oblique longitude as used in the School of Ram.
+// ProjectionType , standard 2D, oblique is for oblique longitude as used in the School of Ram.
 type ProjectionType int
 
 const (

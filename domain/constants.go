@@ -11,14 +11,36 @@ package domain
 
 // Min and max values
 const (
-	MinLongitude   = 0.0
-	MaxLongitude   = 360.0
-	MinDeclination = -180.0
-	MaxDeclination = 180.0
+	// TODO check min and max values for JD
+	MinJdGeneral     = -2946707.5 // -12999/08/02
+	MaxJdGeneral     = 7865293.5  // 16799/12/30
+	MinJdChiron      = 1967598.5  // 0675/01/01
+	MaxJdChiron      = 3419437.5  // 4650/01/01
+	MinJdPholus      = 641716.5   // -2958/01/01
+	MaxJdPholus      = 4390615.5  // 7308/12/30
+	MinJdCeresVesta  = -2946707.5 // -12999/08/02
+	MaxJdCeresVesta  = 5224242.5  // 9591/05/23
+	MinJdMinorPoints = 626157.5   // -3000/03/18  Nessus, Huya, Ixion, ORcus, Varuna, MakeMake, Haumea, Quaoar, Eris, Sedna
+	MaxJdMinorPoints = 5224242.5  // 9591/05/23
+	MinLongitude     = 0.0
+	MaxLongitude     = 360.0
+	MinDeclination   = -180.0
+	MaxDeclination   = 180.0
+	MinGeoLong       = 0.0
+	MaxGeoLong       = 360.0
+	MinGeoLat        = -180.0
+	MaxGeoLat        = 180.0
 )
 
-// Celestial points as used by the SE.
-// _RAM = School of Ram, _URA = Uranian.
+// Astronomical constants
+const (
+	// Length of tropical year measured in tropical days. According to: NASA 365 days, 5 hours, 48 minutes, and 46 seconds,
+	// https://www.grc.nasa.gov/www/k-12/Numbers/Math/Mathematical_Thinking/calendar_calculations.htm
+	TropicalYearInDays = 365.242199074
+)
+
+// Celestial points as used by the SE or other types of calculation..
+// // _RAM = School of Ram, _URA = Uranian.
 const (
 	SeAdmetosUra    = 45
 	SeApollonUra    = 44

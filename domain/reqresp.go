@@ -18,13 +18,16 @@ type DateTime struct {
 
 // PointPositionsRequest Request for the calculation of all positions for one or more points
 type PointPositionsRequest struct {
-	Points   []ChartPoint
-	JdUt     float64
-	GeoLong  float64
-	GeoLat   float64
-	Coord    CoordinateSystem
-	ObsPos   ObserverPosition
-	Tropical bool
+	Points    []ChartPoint
+	JdUt      float64
+	GeoLong   float64
+	GeoLat    float64
+	Armc      float64
+	Obliquity float64
+	Coord     CoordinateSystem
+	ObsPos    ObserverPosition
+	ProjType  ProjectionType
+	Tropical  bool
 }
 
 // PointPosResult Calculated positions for a single point
@@ -153,7 +156,7 @@ type SinglePosition = struct {
 	Position float64
 }
 
-// DoublePosition contains two values for a chartPoioint, and the id for that chartpoint.
+// DoublePosition contains two values for a chartPoiint, and the id for that chartpoint.
 // It supports combinations like longitude/declination, ra/declination and azimuth/altitude.
 type DoublePosition = struct {
 	Id        ChartPoint

@@ -5,15 +5,18 @@
  *  Please check the file copyright.txt in the root of the source for further details.
  */
 
-package conversions
+package conversion
 
-import "math"
+import (
+	"enigma-ar/internal/calc/mathextra"
+	"math"
+)
 
 // DeclinationToLongitude converts declination to longitude
 func DeclinationToLongitude(obliquity, declination float64) float64 {
-	sinDeclRad := math.Sin(DegToRad(declination))
-	sinOblRad := math.Sin(DegToRad(obliquity))
-	result := RadToDeg(math.Asin(sinDeclRad / sinOblRad))
+	sinDeclRad := math.Sin(mathextra.DegToRad(declination))
+	sinOblRad := math.Sin(mathextra.DegToRad(obliquity))
+	result := mathextra.RadToDeg(math.Asin(sinDeclRad / sinOblRad))
 	if result > 360.0 {
 		result -= 360.0
 	}

@@ -9,6 +9,7 @@ package calc
 
 import (
 	"enigma-ar/domain"
+	"math"
 	"testing"
 )
 
@@ -57,5 +58,71 @@ func TestSeFlagsTopocEquatCombined(t *testing.T) {
 	expected := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgEquatorial + domain.SeflgTopoc
 	if result != expected {
 		t.Errorf("SeFlags() for equatorial/topocentric combined = %v, want %v", result, expected)
+	}
+}
+
+func TestValueToRangeHappyFlow(t *testing.T) {
+	testValue := 400.0
+	lowerLimit := 0.0
+	upperLimit := 360.0
+	expected := 40.0
+	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	if err != nil {
+		t.Errorf("ValueToRange() returned unexpected error %v", err)
+	}
+	if math.Abs(result-expected) > 1e-8 {
+		t.Errorf("ValueToRange() returned %v, want %v", result, expected)
+	}
+}
+
+func TestValueToRangeLowerLimit(t *testing.T) {
+	testValue := 0.0
+	lowerLimit := 0.0
+	upperLimit := 360.0
+	expected := 0.0
+	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	if err != nil {
+		t.Errorf("ValueToRange() returned unexpected error %v", err)
+	}
+	if math.Abs(result-expected) > 1e-8 {
+		t.Errorf("ValueToRange() returned %v, want %v", result, expected)
+	}
+}
+
+func TestValueToRangeUpperLimit(t *testing.T) {
+	testValue := 360.0
+	lowerLimit := 0.0
+	upperLimit := 360.0
+	expected := 0.0
+	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	if err != nil {
+		t.Errorf("ValueToRange() returned unexpected error %v", err)
+	}
+	if math.Abs(result-expected) > 1e-8 {
+		t.Errorf("ValueToRange() returned %v, want %v", result, expected)
+	}
+}
+
+func TestValueToRangeNegativeValue(t *testing.T) {
+	testValue := -100.0
+	lowerLimit := 0.0
+	upperLimit := 360.0
+	expected := 260.0
+	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	if err != nil {
+		t.Errorf("ValueToRange() returned unexpected error %v", err)
+	}
+	if math.Abs(result-expected) > 1e-8 {
+		t.Errorf("ValueToRange() returned %v, want %v", result, expected)
+	}
+}
+
+func TestValueToRangeUpperLowerWrongSequence(t *testing.T) {
+	testValue := 360.0
+	lowerLimit := 180.0
+	upperLimit := 90.0
+	_, err := valueToRange(testValue, lowerLimit, upperLimit)
+	if err == nil {
+		t.Error("ValueToRange() expected errorr for wrong sequence upper and lower did not occur")
 	}
 }

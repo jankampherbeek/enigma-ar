@@ -10,7 +10,19 @@ package calc
 import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/calc/conversion"
+	internal "enigma-ar/internal/calc/mathextra"
 	"enigma-ar/internal/se"
+	"fmt"
+	"math"
+)
+
+const (
+	Zero                      = 0.0
+	JD1900                    = 2415020.5 // Julian day for 1900/1/1 0:00:00 UT
+	StartPointPersephoneCart  = 212.0
+	StartPointVulcanusCart    = 15.7
+	YearlySpeedPersephoneCart = 1.0
+	YearlySpeedVulcanusCart   = 0.55
 )
 
 // PointPosCalculator calculates a fully defined set of positions and speeds, in ecliptical, equatorial and horizontal coordinates.
@@ -45,46 +57,189 @@ func NewPointPosCalculation() PointPosCalculator {
 }
 
 // CalcPointPos calculates fully defined positions for one or more celestial points
+// PRE MinJdGeneral () <= request.JdUt <= MaxJdGeneral ()
+// PRE MinGeoLong <= request.GeoLong < MaxGeoLong
+// PRE MinGeoLat <= request.GeoLat < MaxGeoLat
+// POST : if no error occurred returns positions for the given points, otherwise returns empty slice and error
 func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
+	emptyPositions := make([]domain.PointPosResult, 0)
+	jdUt := request.JdUt
+	geoLong := request.GeoLong
+	geoLat := request.GeoLat
+	if jdUt < domain.MinJdGeneral || jdUt > domain.MaxJdGeneral {
+		return emptyPositions, fmt.Errorf("JdUt %f is out of range", jdUt)
+	}
+	if geoLong < domain.MinGeoLong || geoLong > domain.MaxGeoLong {
+		return emptyPositions, fmt.Errorf("GeoLong %f is out of range", geoLong)
+	}
+	if geoLat < domain.MinGeoLat || geoLat > domain.MaxGeoLat {
+		return emptyPositions, fmt.Errorf("GeoLat %f is out of range", geoLat)
+	}
 	positions := make([]domain.PointPosResult, 0)
 	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Tropical)
 	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Tropical)
 
 	var allPoints = domain.AllChartPoints()
+	var calcCat domain.CalculationCat
 
 	for i := 0; i < len(request.Points); i++ {
-		reqPoint := request.Points[i]
-		index := allPoints[reqPoint].CalcId
-		posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(request.JdUt, index, eclFlags)
-		if errEcl != nil {
-			return positions, errEcl
+		point := request.Points[i]
+		calcId := allPoints[point].CalcId
+		calcCat = domain.AllChartPoints()[point].CalcCat
+		switch calcCat {
+		case domain.CalcSe:
+			position, err := calc.calcPointPosViaSe(calcId, point, jdUt, eclFlags, equFlags, geoLong, geoLat)
+			if err != nil {
+				return emptyPositions, fmt.Errorf("calc point positions failed for %v", point)
+			}
+			positions = append(positions, position)
+		case domain.CalcElements:
+			// handle elements
+		case domain.CalcFormula:
+			position, err := calc.calcPointPosViaFormula(calcId, point, jdUt, eclFlags, equFlags)
+			if err != nil {
+				return emptyPositions, fmt.Errorf("calc point positions failed for %v", point)
+			}
+			positions = append(positions, position)
+		case domain.CalcMundane:
+			// handle mundane
+		case domain.CalcZodiacFixed:
+			// handle zodiac fixed
+		case domain.CalcLots:
+			// handle calc lots
 		}
-		posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(request.JdUt, index, equFlags)
-		if errEqu != nil {
-			return positions, errEqu
+	}
+	ayanOffset := 0.0
+	// TODO correct ayanoffset based on selection of Ayanamsha
+
+	if request.ProjType == domain.ProjTypeOblique { // handle oblique longitude
+		olc := NewObliqueLongCalculation()
+		newPositions, err := olc.calcObliqueLongitudes(positions, request.Armc, request.Obliquity, geoLat, ayanOffset)
+		if err != nil {
+			return emptyPositions, fmt.Errorf("calc oblique positions failed")
 		}
-		height := 0.0
-		pointRa := posEqu[0]
-		pointDecl := posEqu[1]
-		horFlags := domain.SeflgEquatorial
-		posHor := calc.seHorPosCalc.SeCalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, pointRa, pointDecl, horFlags)
-		positions = append(positions, domain.PointPosResult{
-			Point:     reqPoint,
-			LonPos:    posEcl[0],
-			LonSpeed:  posEcl[3],
-			LatPos:    posEcl[1],
-			LatSpeed:  posEcl[4],
-			RaPos:     posEqu[0],
-			RaSpeed:   posEqu[3],
-			DeclPos:   posEqu[1],
-			DeclSpeed: posEqu[4],
-			RadvPos:   posEcl[2],
-			RadvSpeed: posEcl[5],
-			AzimPos:   posHor[0],
-			AltitPos:  posHor[2],
-		})
+		positions = newPositions
 	}
 	return positions, nil
+}
+
+func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartPoint, jdUt float64,
+	eclFlags, equFlags int, geoLong, geoLat float64) (domain.PointPosResult, error) {
+
+	var position domain.PointPosResult
+	posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(jdUt, index, eclFlags)
+	if errEcl != nil {
+		return position, errEcl
+	}
+	posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(jdUt, index, equFlags)
+	if errEqu != nil {
+		return position, errEqu
+	}
+	height := 0.0
+	pointRa := posEqu[0]
+	pointDecl := posEqu[1]
+	horFlags := domain.SeflgEquatorial
+	posHor := calc.seHorPosCalc.SeCalcHorPos(jdUt, geoLong, geoLat, height, pointRa, pointDecl, horFlags)
+	position = domain.PointPosResult{
+		Point:     point,
+		LonPos:    posEcl[0],
+		LonSpeed:  posEcl[3],
+		LatPos:    posEcl[1],
+		LatSpeed:  posEcl[4],
+		RaPos:     posEqu[0],
+		RaSpeed:   posEqu[3],
+		DeclPos:   posEqu[1],
+		DeclSpeed: posEqu[4],
+		RadvPos:   posEcl[2],
+		RadvSpeed: posEcl[5],
+		AzimPos:   posHor[0],
+		AltitPos:  posHor[2],
+	}
+	fmt.Printf("point %v lonPos %f\n", point, posEcl[0])
+
+	return position, nil
+}
+
+func (calc PointPosCalculation) calcPointPosViaFormula(index int, point domain.ChartPoint, jdUt float64,
+	eclFlags, equFlags int) (domain.PointPosResult, error) {
+
+	var emptyPosition domain.PointPosResult
+	var position domain.PointPosResult
+	var eclLong, eclSpeed float64
+	switch point {
+	case domain.PersephoneCarteret:
+		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointPersephoneCart, YearlySpeedPersephoneCart)
+		eclSpeed = YearlySpeedPersephoneCart / domain.TropicalYearInDays
+	case domain.VulcanusCarteret:
+		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointVulcanusCart, YearlySpeedVulcanusCart)
+		eclSpeed = YearlySpeedVulcanusCart / domain.TropicalYearInDays
+	case domain.ApogeeDuval:
+		result, err := calc.calcApogeeDuval(jdUt, eclFlags, equFlags)
+		if err != nil {
+			return emptyPosition, fmt.Errorf("error in calcPointPosViaFormula %v", err)
+		}
+		resultBefore, err := calc.calcApogeeDuval(jdUt-0.5, eclFlags, equFlags)
+		if err != nil {
+			return emptyPosition, fmt.Errorf("error in calcPointPosViaFormula %v", err)
+		}
+		resultAfter, err := calc.calcApogeeDuval(jdUt+0.5, eclFlags, equFlags)
+		if err != nil {
+			return emptyPosition, fmt.Errorf("error in calcPointPosViaFormula %v", err)
+		}
+		eclLong = result
+		eclSpeed = resultAfter - resultBefore
+	default:
+		return emptyPosition, fmt.Errorf("calcPointPosViaFOrmula encountered unknown point %v", point)
+	}
+	position = domain.PointPosResult{
+		Point:     point,
+		LonPos:    eclLong,
+		LonSpeed:  eclSpeed,
+		LatPos:    Zero,
+		LatSpeed:  Zero,
+		RaPos:     Zero,
+		RaSpeed:   Zero,
+		DeclPos:   Zero,
+		DeclSpeed: Zero,
+		RadvPos:   Zero,
+		RadvSpeed: Zero,
+		AzimPos:   Zero,
+		AltitPos:  Zero,
+	}
+	return position, nil
+}
+
+func (calc PointPosCalculation) calcCarteretHypPlanet(jdUt, startPoint, yearlySpeed float64) float64 {
+	return startPoint + ((jdUt - JD1900) * (yearlySpeed / domain.TropicalYearInDays))
+}
+
+func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags int) (float64, error) {
+	flagsEcl := 2 + 256 // use SE + speed
+	factor1 := 12.37
+	geoLat := 0.0
+	geoLong := 0.0
+	indexSun := domain.AllChartPoints()[domain.SeSun].CalcId
+	indexApogeeMean := domain.AllChartPoints()[domain.ApogeeMean].CalcId
+	longSun, err := calc.calcPointPosViaSe(indexSun, domain.SeSun, jdUt, flagsEcl, equFlags, geoLong, geoLat)
+	longApogeeMean, err := calc.calcPointPosViaSe(indexApogeeMean, domain.ApogeeMean, jdUt, flagsEcl, equFlags, geoLong, geoLat)
+	fmt.Printf("indexApogeeMean %d, flagsEcl %d, jdUt %f\n", indexApogeeMean, flagsEcl, jdUt)
+
+	diff, err := valueToRange(longSun.LonPos-longApogeeMean.LonPos, -180.0, 180.0)
+	if err != nil {
+		return Zero, fmt.Errorf("error in calculation %v", err)
+	}
+	sin2Diff := math.Sin(internal.DegToRad(2 * diff))
+	factor2 := math.Sin(internal.DegToRad(2 * (diff - 11.726*sin2Diff)))
+	sin6Diff := math.Sin(internal.DegToRad(6 * diff))
+	factor3 := (8.8 / 60.0) * sin6Diff
+	corrFactor := factor1*factor2 + factor3
+	valueInRange, err := valueToRange(longApogeeMean.LonPos+corrFactor, 0.0, 360.0)
+	if err != nil {
+		return Zero, fmt.Errorf("error in calculation %v", err)
+	}
+	//fmt.Printf("longSun: %f, longApogeeMean: %f, corrFactor: %f, valueInRange: %f\n", longSun.LonPos, longApogeeMean.LonPos, corrFactor, valueInRange)
+
+	return valueInRange, nil
 }
 
 type PointRangeCalculation struct {

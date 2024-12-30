@@ -9,7 +9,7 @@ package analysis
 
 import (
 	"enigma-ar/domain"
-	"enigma-ar/internal/conversions"
+	"enigma-ar/internal/calc/conversion"
 	"errors"
 	"fmt"
 	"math"
@@ -69,7 +69,7 @@ func (lec LongEquivCalculation) CalcEquivalents(positions []domain.DoublePositio
 			}
 		}
 
-		candidate1 := conversions.DeclinationToLongitude(obliquity, declination)
+		candidate1 := conversion.DeclinationToLongitude(obliquity, declination)
 		if candidate1 < 0.0 {
 			candidate1 += 360.0
 		}
