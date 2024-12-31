@@ -218,9 +218,9 @@ func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags
 	factor1 := 12.37
 	geoLat := 0.0
 	geoLong := 0.0
-	indexSun := domain.AllChartPoints()[domain.SeSun].CalcId
+	indexSun := domain.AllChartPoints()[domain.Sun].CalcId
 	indexApogeeMean := domain.AllChartPoints()[domain.ApogeeMean].CalcId
-	longSun, err := calc.calcPointPosViaSe(indexSun, domain.SeSun, jdUt, flagsEcl, equFlags, geoLong, geoLat)
+	longSun, err := calc.calcPointPosViaSe(indexSun, domain.Sun, jdUt, flagsEcl, equFlags, geoLong, geoLat)
 	longApogeeMean, err := calc.calcPointPosViaSe(indexApogeeMean, domain.ApogeeMean, jdUt, flagsEcl, equFlags, geoLong, geoLat)
 	fmt.Printf("indexApogeeMean %d, flagsEcl %d, jdUt %f\n", indexApogeeMean, flagsEcl, jdUt)
 

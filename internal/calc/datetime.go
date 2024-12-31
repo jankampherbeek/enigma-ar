@@ -46,7 +46,7 @@ func NewRevJulDayCalculation() RevJulDayCalculator {
 	return RevJulDayCalculation{srjc}
 }
 
-// Calculates date and trme for a jd nr. Returns year, month, day and ut.
+// CalcRevJd Calculates date and trme for a jd nr. Returns year, month, day and ut.
 func (rjdc RevJulDayCalculation) CalcRevJd(jd float64, greg bool) (int, int, int, float64) {
 	var gregFlag = 1
 	if !greg {
