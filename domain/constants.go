@@ -36,59 +36,8 @@ const (
 const (
 	// Length of tropical year measured in tropical days. According to: NASA 365 days, 5 hours, 48 minutes, and 46 seconds,
 	// https://www.grc.nasa.gov/www/k-12/Numbers/Math/Mathematical_Thinking/calendar_calculations.htm
-	TropicalYearInDays = 365.242199074
-)
 
-// Celestial points as used by the SE or other types of calculation..
-// // // _RAM = School of Ram, _URA = Uranian.
-const (
-	//	SeAdmetosUra    = 45
-	//	SeApollonUra    = 44
-	//	SeAstraea       = 10005
-	//	SeCeres         = 17
-	//	SeChiron        = 15
-	//	SeCupidoUra     = 40
-	SeDemeterRam = 51
-	SeEarth      = 14
-	SeEclNut     = -1 // Obliquity/nutation
-	//	SeEris          = 1009001
-	//	SeHadesUra      = 41
-	//	SeHaumea        = 146108
-	SeHermesRam = 50
-	//	SeHuya          = 48628
-	//	SeHygieia       = 10010
-	//	SeIntpApog      = 21
-	//	SeIsis          = 48
-	//	SeIxion         = 38978
-	//	SeJuno          = 19
-	//	SeJupiter       = 5
-	//	SeKronosUra     = 43
-	//	SeMakemake      = 146472
-	//	SeMars          = 4
-	//	SeMeanApogee    = 12
-	//	SeMeanNode      = 10
-	SeMercury = 2
-	//	SeMoon          = 1
-	//	SeNeptune       = 8
-	//	SeNessus        = 17066
-	//	SeOrcus         = 100482
-	//	SeOscuApog      = 13
-	//	SePallas        = 18
-	SePersephoneRam = 49
-	//	SePholus        = 16
-	//	SePluto         = 9
-	//	SePoseidonUra   = 47
-	//	SeQuaoar        = 60000
-	//	SeSaturn        = 6
-	//	SeSedna         = 100377
-	//	SeSun           = 0
-	//	SeTrueNode      = 11
-	//	SeUranus        = 7
-	//	SeVaruna        = 30000
-	//	SeVenus         = 3
-	//	SeVesta         = 20
-	//	SeVulcanusUra   = 46
-	//	SeZeusUra       = 42
+	TropicalYearInDays = 365.242199074
 )
 
 // SE flags

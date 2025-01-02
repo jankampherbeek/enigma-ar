@@ -25,7 +25,7 @@ Please read the User Manual for information about the functionality of Enigma Re
 
 Enigma is Open Source. You can use it following the terms of the GNU General Public License (GPL). The GPL allows you to use, change and redistribute this software only if your own software is also open source. It does not have to be free, but the full source code should be publicly available. For more information, see the file *gpl-3.0.txt* in the source's root.
 
-Enigma uses libraries from the Swiss Ephemeris (SE). For the SE, additional conditions are in place. These conditions prohibit the use of the software unless it is open source and also free. If you want to charge money for a program using software from the SE, you need to buy a professional license from the SE. For more information, see the file *se_license.htm* in the source's root.
+Enigma uses libraries `from` the Swiss Ephemeris (SE). For the SE, additional conditions are in place. These conditions prohibit the use of the software unless it is open source and also free. If you want to charge money for a program using software from the SE, you need to buy a professional license from the SE. For more information, see the file *se_license.htm* in the source's root.
 
 To use software from Enigma in your program, that program has to be open source. If you include the libraries from the SE, it also has to be free. Buying a license from the SE does not change the condition from the GPL that the software should remain open source. If you want to create software that is not open source you can use the libraries from the SE but you will need to buy a professional license, and you cannot use any code from Enigma.
 
@@ -38,6 +38,36 @@ To use software from Enigma in your program, that program has to be open source.
 
 #### IDE
 I develop Enigma with _JetBrains GoLand_. This IDE is not free, but you can try to apply for a free open source license. I am happy JetBrains accepted Enigma for such a free license :-) 
+
+##### Installing on Windows
+
+
+
+##### Installing on MacOs
+
+Make sure to install:
+
+- **XCode**, you can download it from https://developers/apple/com
+- **XCode Command Line Tools**. In the terminal run: `xcode-select --install` and follow the instructions. This includes clang which is required for the support of cgo.
+- **Go**, via https://go.dev of via Homebrew: `brew install go`
+- **JetBrains GoLand** via https://jetbrains.com or via HomeBrew : brew install --cask goland
+  - Alternatively, you could use **Visual Studio Code**.
+
+
+
+##### Installing on Linux
+
+Install:
+
+**Install Go**
+
+**JetBrains GoLand (see above) or Visual Studio Code**
+
+There is no need for a c compiler as this is already available on Linux.
+
+You might encounter a few problems, depending on your environment. I used ChatGPT to analyze these errors.
+
+
 
 
 #### Dependency injection

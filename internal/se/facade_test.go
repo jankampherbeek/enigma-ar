@@ -43,7 +43,7 @@ func TestPointPositions(t *testing.T) {
 	ephePath := "..\\..\\sedata" // path is relative from current package
 	SetEphePath(ephePath)
 	julDay := 2_470_000.0 // 2050/7/12 12:00
-	body := domain.SeMercury
+	body := domain.AllChartPoints()[domain.Mercury].CalcId
 	flags := domain.SeflgSwieph + domain.SeflgSpeed
 	// TODO check all 6 values
 	expected := []float64{132.309351305555, 1.309320472222, 1.106102572, 1.572654666667}

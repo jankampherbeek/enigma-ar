@@ -130,7 +130,7 @@ func (ec SeEpsilonCalculation) SeCalcEpsilon(jdUt float64, trueEps bool) (float6
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
-	cBody := C.int(domain.SeEclNut)
+	cBody := C.int(domain.EclNut)
 	cFlags := C.int(domain.SeflgSwieph)
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
 	err := C.GoString(&cSerr[0])
@@ -149,7 +149,7 @@ func NewSeHorPosCalculation() SeHorPosCalculator {
 	return SeHorPosCalculation{}
 }
 
-// CalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
+// SeCalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
 func (hpc SeHorPosCalculation) SeCalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
 	var cHorCoord [3]C.double
 	cJdUt := C.double(jdUt)

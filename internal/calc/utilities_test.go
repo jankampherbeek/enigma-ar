@@ -66,7 +66,7 @@ func TestValueToRangeHappyFlow(t *testing.T) {
 	lowerLimit := 0.0
 	upperLimit := 360.0
 	expected := 40.0
-	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	result, err := ValueToRange(testValue, lowerLimit, upperLimit)
 	if err != nil {
 		t.Errorf("ValueToRange() returned unexpected error %v", err)
 	}
@@ -80,7 +80,7 @@ func TestValueToRangeLowerLimit(t *testing.T) {
 	lowerLimit := 0.0
 	upperLimit := 360.0
 	expected := 0.0
-	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	result, err := ValueToRange(testValue, lowerLimit, upperLimit)
 	if err != nil {
 		t.Errorf("ValueToRange() returned unexpected error %v", err)
 	}
@@ -94,7 +94,7 @@ func TestValueToRangeUpperLimit(t *testing.T) {
 	lowerLimit := 0.0
 	upperLimit := 360.0
 	expected := 0.0
-	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	result, err := ValueToRange(testValue, lowerLimit, upperLimit)
 	if err != nil {
 		t.Errorf("ValueToRange() returned unexpected error %v", err)
 	}
@@ -108,7 +108,7 @@ func TestValueToRangeNegativeValue(t *testing.T) {
 	lowerLimit := 0.0
 	upperLimit := 360.0
 	expected := 260.0
-	result, err := valueToRange(testValue, lowerLimit, upperLimit)
+	result, err := ValueToRange(testValue, lowerLimit, upperLimit)
 	if err != nil {
 		t.Errorf("ValueToRange() returned unexpected error %v", err)
 	}
@@ -121,7 +121,7 @@ func TestValueToRangeUpperLowerWrongSequence(t *testing.T) {
 	testValue := 360.0
 	lowerLimit := 180.0
 	upperLimit := 90.0
-	_, err := valueToRange(testValue, lowerLimit, upperLimit)
+	_, err := ValueToRange(testValue, lowerLimit, upperLimit)
 	if err == nil {
 		t.Error("ValueToRange() expected errorr for wrong sequence upper and lower did not occur")
 	}

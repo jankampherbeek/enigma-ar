@@ -67,6 +67,7 @@ const (
 	Mc
 	EastPoint
 	Vertex
+	EclNut
 )
 
 type ChartPointData struct {
@@ -116,24 +117,25 @@ func AllChartPoints() []ChartPointData {
 		{PersephoneRam, "r_cp_persephone_ram", 2000, CalcElements, PointCatCommon, '\uE608', []rune{}},
 		{HermesRam, "r_cp_hermes_ram", 2001, CalcElements, PointCatCommon, '\uE609', []rune{}},
 		{DemeterRam, "r_cp_demeter_ram", 2002, CalcElements, PointCatCommon, '\uE610', []rune{}},
-		{Eris, "r_cp_eris", 2003, CalcSe, PointCatCommon, '\uE507', []rune{'\uE451', '\uE452', '\uE453', '\uE454', '\uE455', '\uE456'}},
-		{Nessus, "r_cp_nessus", 2004, CalcSe, PointCatCommon, '\uE401', []rune{}},
-		{Huya, "r_cp_huya", 2005, CalcSe, PointCatCommon, '\uE417', []rune{}},
-		{Varuna, "r_cp_varuna", 2006, CalcSe, PointCatCommon, '\uE403', []rune{}},
-		{Ixion, "r_cp_ixion", 2007, CalcSe, PointCatCommon, '\uE404', []rune{}},
-		{Quaoar, "r_cp_quaoar", 2008, CalcSe, PointCatCommon, '\uE405', []rune{}},
-		{Haumea, "r_cp_haumea", 2009, CalcSe, PointCatCommon, '\uE406', []rune{}},
-		{Orcus, "r_cp_orcus", 2010, CalcSe, PointCatCommon, '\uE409', []rune{}},
-		{Makemake, "r_cp_makemake", 2011, CalcSe, PointCatCommon, '\uE410', []rune{}},
-		{Sedna, "r_cp_sedna", 2012, CalcSe, PointCatCommon, '\uE408', []rune{}},
-		{Hygieia, "r_cp_hygieia", 2013, CalcSe, PointCatCommon, '\uE415', []rune{'\uE457'}},
-		{Astraea, "r_cp_astraea", 2014, CalcSe, PointCatCommon, '\uE416', []rune{}},
+		{Eris, "r_cp_eris", 1009001, CalcSe, PointCatCommon, '\uE507', []rune{'\uE451', '\uE452', '\uE453', '\uE454', '\uE455', '\uE456'}},
+		{Nessus, "r_cp_nessus", 17066, CalcSe, PointCatCommon, '\uE401', []rune{}},
+		{Huya, "r_cp_huya", 48628, CalcSe, PointCatCommon, '\uE417', []rune{}},
+		{Varuna, "r_cp_varuna", 30000, CalcSe, PointCatCommon, '\uE403', []rune{}},
+		{Ixion, "r_cp_ixion", 38978, CalcSe, PointCatCommon, '\uE404', []rune{}},
+		{Quaoar, "r_cp_quaoar", 60000, CalcSe, PointCatCommon, '\uE405', []rune{}},
+		{Haumea, "r_cp_haumea", 146108, CalcSe, PointCatCommon, '\uE406', []rune{}},
+		{Orcus, "r_cp_orcus", 100482, CalcSe, PointCatCommon, '\uE409', []rune{}},
+		{Makemake, "r_cp_makemake", 146472, CalcSe, PointCatCommon, '\uE410', []rune{}},
+		{Sedna, "r_cp_sedna", 100377, CalcSe, PointCatCommon, '\uE408', []rune{}},
+		{Hygieia, "r_cp_hygieia", 10010, CalcSe, PointCatCommon, '\uE415', []rune{'\uE457'}},
+		{Astraea, "r_cp_astraea", 10005, CalcSe, PointCatCommon, '\uE416', []rune{}},
 		{ApogeeDuval, "r_cp_apogee_duval", 2015, CalcFormula, PointCatCommon, '\uE530', []rune{}},
-		{PersephoneCarteret, "r_cp_persephone_carteret", 2016, CalcFormula, PointCatCommon, '\uE612', []rune{}},
-		{VulcanusCarteret, "r_cp_vulcanus_carteret", 2017, CalcFormula, PointCatCommon, '\uE613', []rune{}},
+		{PersephoneCarteret, "r_cp_persephone_carteret", 2003, CalcFormula, PointCatCommon, '\uE612', []rune{}},
+		{VulcanusCarteret, "r_cp_vulcanus_carteret", 2004, CalcFormula, PointCatCommon, '\uE613', []rune{}},
 		{Ascendant, "r_cp_ascendant", 1001, CalcMundane, PointCatAngle, '\uE600', []rune{'\uE550'}},
 		{Mc, "r_cp_mc", 1002, CalcMundane, PointCatAngle, '\uE501', []rune{'\uE551'}},
 		{EastPoint, "r_cp_eastpoint", 1003, CalcMundane, PointCatAngle, '\uE502', []rune{}},
 		{Vertex, "r_cp_vertex", 1004, CalcMundane, PointCatAngle, '\uE503', []rune{}},
+		{EclNut, "", -1, CalcSe, PointCatCommon, '\\', []rune{}}, // TODO create RB entry for obliquity
 	} // TODO add node south, both mean and true
 }

@@ -30,9 +30,9 @@ func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, trop
 	return flags
 }
 
-// valueToRange converts a value to a limited range, using the difference between the max and the min value as steps to
+// ValueToRange converts a value to a limited range, using the difference between the max and the min value as steps to
 // increase/decrease the size of the tested value. lowerLImit is inclusive, upperLimit is exclusive
-func valueToRange(testValue, lowerLimit, upperLimit float64) (float64, error) {
+func ValueToRange(testValue, lowerLimit, upperLimit float64) (float64, error) {
 	if upperLimit < lowerLimit {
 		return 0, fmt.Errorf("upper limit  %f cannot be less than lower limit %f", upperLimit, lowerLimit)
 	}

@@ -49,7 +49,7 @@ func (c PointsElementsCalculation) Calculate(planetId int, jdUt float64, observe
 }
 
 func (c PointsElementsCalculation) calcGeoPolarCoord(planetId int, centuryFractionT float64) mathextra.PolarCoordinates {
-	rectAngEarthHelio := c.CalcEclipticHelioPosition(centuryFractionT, c.defineOrbitDefinition(domain.SeEarth))
+	rectAngEarthHelio := c.CalcEclipticHelioPosition(centuryFractionT, c.defineOrbitDefinition(domain.AllChartPoints()[domain.Earth].CalcId))
 	rectAngPlanetHelio := c.CalcEclipticHelioPosition(centuryFractionT, c.defineOrbitDefinition(planetId))
 	rectAngPlanetGeo := mathextra.RectAngCoordinates{
 		XCoord: rectAngPlanetHelio.XCoord - rectAngEarthHelio.XCoord,
@@ -88,18 +88,18 @@ func (c PointsElementsCalculation) defineOrbitDefinition(planetId int) OrbitDefi
 	inclination = []float64{0, 0, 0}
 
 	switch planetId {
-	case domain.SeEarth:
+	case domain.AllChartPoints()[domain.Earth].CalcId:
 		meanAnomaly = []float64{358.47584, 35999.0498, -.00015}
 		eccentricAnomaly = []float64{.016751, -.41e-4, 0}
 		semiMajorAxis = 1.00000013
 		argumentPerihelion = []float64{101.22083, 1.71918, .00045}
-	case domain.SePersephoneRam:
+	case domain.AllChartPoints()[domain.PersephoneRam].CalcId:
 		meanAnomaly = []float64{295.0, 60, 0}
 		semiMajorAxis = 71.137866
-	case domain.SeHermesRam:
+	case domain.AllChartPoints()[domain.HermesRam].CalcId:
 		meanAnomaly = []float64{134.7, 50.0, 0}
 		semiMajorAxis = 80.331954
-	case domain.SeDemeterRam:
+	case domain.AllChartPoints()[domain.DemeterRam].CalcId:
 		meanAnomaly = []float64{114.6, 40, 0}
 		semiMajorAxis = 93.216975
 		ascNode = []float64{125, 0, 0}

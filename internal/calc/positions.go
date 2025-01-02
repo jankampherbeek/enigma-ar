@@ -224,7 +224,7 @@ func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags
 	longApogeeMean, err := calc.calcPointPosViaSe(indexApogeeMean, domain.ApogeeMean, jdUt, flagsEcl, equFlags, geoLong, geoLat)
 	fmt.Printf("indexApogeeMean %d, flagsEcl %d, jdUt %f\n", indexApogeeMean, flagsEcl, jdUt)
 
-	diff, err := valueToRange(longSun.LonPos-longApogeeMean.LonPos, -180.0, 180.0)
+	diff, err := ValueToRange(longSun.LonPos-longApogeeMean.LonPos, -180.0, 180.0)
 	if err != nil {
 		return Zero, fmt.Errorf("error in calculation %v", err)
 	}
@@ -233,7 +233,7 @@ func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags
 	sin6Diff := math.Sin(mathextra.DegToRad(6 * diff))
 	factor3 := (8.8 / 60.0) * sin6Diff
 	corrFactor := factor1*factor2 + factor3
-	valueInRange, err := valueToRange(longApogeeMean.LonPos+corrFactor, 0.0, 360.0)
+	valueInRange, err := ValueToRange(longApogeeMean.LonPos+corrFactor, 0.0, 360.0)
 	if err != nil {
 		return Zero, fmt.Errorf("error in calculation %v", err)
 	}

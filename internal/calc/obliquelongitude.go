@@ -60,7 +60,7 @@ func (olc ObliqueLongCalculation) oblLongForCelPoint(eclLon, eclLat, ayanamshaOf
 	tanSRad := math.Tan(mathextra.DegToRad(s))
 	qRad := math.Sin(mathextra.DegToRad(latSouthPMinusPlanet)) / math.Sin(mathextra.DegToRad(latSouthPPlusPlanet))
 	v := mathextra.RadToDeg(math.Atan(tanSRad*qRad)) - s
-	absoluteV, err := valueToRange(math.Abs(v), -90.0, 90.0)
+	absoluteV, err := ValueToRange(math.Abs(v), -90.0, 90.0)
 	if err != nil {
 		return 0.0, err
 	}
@@ -80,7 +80,7 @@ func (olc ObliqueLongCalculation) oblLongForCelPoint(eclLon, eclLat, ayanamshaOf
 			correctedV = -absoluteV
 		}
 	}
-	return valueToRange(longPl+correctedV, 0.0, 360.0)
+	return ValueToRange(longPl+correctedV, 0.0, 360.0)
 }
 
 // isRising determines if a celestial point is rising based on longitude differences
@@ -100,7 +100,7 @@ func (olc ObliqueLongCalculation) calculateSouthPoint(armc, obliquity, geoLat fl
 	declSp := -(90.0 - geoLat)
 	arsp := armc
 	if geoLat < 0.0 {
-		arsp, err = valueToRange(armc+180.0, 0.0, 360.0)
+		arsp, err = ValueToRange(armc+180.0, 0.0, 360.0)
 		if err != nil {
 			return 0.0, 0.0, err
 		}
@@ -114,7 +114,7 @@ func (olc ObliqueLongCalculation) calculateSouthPoint(armc, obliquity, geoLat fl
 	sinDecl := math.Sin(mathextra.DegToRad(declSp)) // error
 	cosDecl := math.Cos(mathextra.DegToRad(declSp)) // error
 	longSp := mathextra.RadToDeg(math.Atan2((sinSp*cosEps)+(tanDecl*sinEps), cosArsp))
-	longSp, err = valueToRange(longSp, 0.0, 360.0)
+	longSp, err = ValueToRange(longSp, 0.0, 360.0)
 	latSp := mathextra.RadToDeg(math.Asin((sinDecl * cosEps) - (cosDecl * sinEps * sinSp)))
 	return longSp, latSp, nil
 }
