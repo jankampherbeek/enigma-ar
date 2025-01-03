@@ -22,6 +22,13 @@ type DeclinationMidpointService struct {
 	dmpCalc analysis.DeclMidpointsCalculator
 }
 
+func NewDeclinationMidpointService() *DeclinationMidpointService {
+	dmpCalculator := analysis.NewDeclMidpointsCalculation()
+	return &DeclinationMidpointService{
+		dmpCalc: dmpCalculator,
+	}
+}
+
 const (
 	MinOrbForDMP   = 0.0
 	MaxOrbForDMP   = 10.0
@@ -29,13 +36,6 @@ const (
 	MinDeclForDMP  = -180.0
 	MaxDeclForDMP  = 180.0
 )
-
-func NewDeclinationMidpointService() *DeclinationMidpointService {
-	dmpCalculator := analysis.NewDeclMidpointsCalculation()
-	return &DeclinationMidpointService{
-		dmpCalc: dmpCalculator,
-	}
-}
 
 // DeclinationMidpoints handles the calculation of midpoints in declination
 // PRE length points >= 3
