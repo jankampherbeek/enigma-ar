@@ -37,7 +37,7 @@ func TestCalcMidpointListHappyFlow(t *testing.T) {
 	}
 
 	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcMidpointList(positions)
+	result, err := mpCalc.CalcMidpoints(positions)
 
 	if err != nil {
 		t.Fatalf("midpoints calculation failed, returned unexpected error %v", err)
@@ -73,52 +73,6 @@ func TestCalcMidpointListHappyFlow(t *testing.T) {
 				i, result[i].Point2.Position, expected[i].Point2.Position)
 		}
 
-	}
-}
-
-func TestCalcMidpointListPositionTooLarge(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 2, Position: 12.0},
-		{Id: 3, Position: 400.0},
-		{Id: 5, Position: 220.5},
-	}
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcMidpointList(positions)
-	if err == nil {
-		t.Errorf("CalcMidpointList should have returned an error for a position that is too large")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcMidpointList should have returned an empty result for a position that is too large")
-	}
-}
-
-func TestCalcMidpointListPositionTooSmall(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 2, Position: 12.0},
-		{Id: 3, Position: -4.0},
-		{Id: 5, Position: 220.5},
-	}
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcMidpointList(positions)
-	if err == nil {
-		t.Errorf("CalcMidpointList should have returned an error for a position that is too small")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcMidpointList should have returned an empty result for a position that is too small")
-	}
-}
-
-func TestCalcMidpointListPositionTooFewItems(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 2, Position: 12.0},
-	}
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcMidpointList(positions)
-	if err == nil {
-		t.Errorf("CalcMidpointList should have returned an error for a too few items")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcMidpointList should have returned an empty result for too few items")
 	}
 }
 
@@ -266,97 +220,5 @@ func TestOccupiedMidpointDisc45(t *testing.T) {
 		if math.Abs(result[i].Exactness-expected[i].Exactness) > 1e-8 {
 			t.Errorf("Exactnesses do not match at index %d, got %f, wanted %f", i, result[i].Exactness, expected[i].Exactness)
 		}
-	}
-}
-
-func TestOccupiedMidpointPositionTooLarge(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 1, Position: 100.0},
-		{Id: 2, Position: 50.5},
-		{Id: 4, Position: 200.1},
-		{Id: 7, Position: 525.0},
-		{Id: 8, Position: 255.3},
-	}
-	orb := 1.0
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcOccupiedMidpoints(positions, domain.Dial360, orb)
-	if err == nil {
-		t.Errorf("CalcOccupiedMidpoints should have returned an error for a position that is too large")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcOccupiedMidpoints should have returned an empty result for a position that is too large")
-	}
-}
-
-func TestOccupiedMidpointPositionTooSmall(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 1, Position: 100.0},
-		{Id: 2, Position: 50.5},
-		{Id: 4, Position: 200.1},
-		{Id: 7, Position: -25.0},
-		{Id: 8, Position: 255.3},
-	}
-	orb := 1.0
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcOccupiedMidpoints(positions, domain.Dial360, orb)
-	if err == nil {
-		t.Errorf("CalcOccupiedMidpoints should have returned an error for a position that is too small")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcOccupiedMidpoints should have returned an empty result for a position that is too small")
-	}
-}
-
-func TestOccupiedMidpointTooFewItems(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 1, Position: 100.0},
-		{Id: 2, Position: 50.5},
-	}
-	orb := 1.0
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcOccupiedMidpoints(positions, domain.Dial360, orb)
-	if err == nil {
-		t.Errorf("CalcOccupiedMidpoints should have returned an error for too few items")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcOccupiedMidpoints should have returned an empty result for too few items")
-	}
-}
-
-func TestOccupiedMidpointOrbTooSmall(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 1, Position: 100.0},
-		{Id: 2, Position: 50.5},
-		{Id: 4, Position: 200.1},
-		{Id: 7, Position: 225.0},
-		{Id: 8, Position: 255.3},
-	}
-	orb := -1.0
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcOccupiedMidpoints(positions, domain.Dial360, orb)
-	if err == nil {
-		t.Errorf("CalcOccupiedMidpoints should have returned an error for an orb that is too small")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcOccupiedMidpoints should have returned an empty result for an orb that is too small")
-	}
-}
-
-func TestOccupiedMidpointOrbTooLarge(t *testing.T) {
-	var positions = []domain.SinglePosition{
-		{Id: 1, Position: 100.0},
-		{Id: 2, Position: 50.5},
-		{Id: 4, Position: 200.1},
-		{Id: 7, Position: 225.0},
-		{Id: 8, Position: 255.3},
-	}
-	orb := 12.0
-	mpCalc := MidpointsCalculation{}
-	result, err := mpCalc.CalcOccupiedMidpoints(positions, domain.Dial360, orb)
-	if err == nil {
-		t.Errorf("CalcOccupiedMidpoints should have returned an error for an orb that is too large")
-	}
-	if len(result) > 0 {
-		t.Errorf("CalcOccupiedMidpoints should have returned an empty result for an orb that is too large")
 	}
 }

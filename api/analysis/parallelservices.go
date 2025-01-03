@@ -35,7 +35,7 @@ func NewParallelService() *ParallelService {
 // PRE: 0 < orb < 10
 // PRE: for all values for position in actPositions: 0.0 <= value < 180.0
 // POST: no errors -> returns calculated parallels and contra parallels
-// POST: contains errors -> returns empty slice and error
+// POST: contains errors -> returns nil and error
 func (ps ParallelService) Parallels(actPositions []domain.SinglePosition, orb float64) ([]domain.MatchedParallel, error) {
 
 	const MaxDecl = 180.0

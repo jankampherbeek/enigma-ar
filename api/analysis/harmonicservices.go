@@ -35,7 +35,7 @@ func NewHarmonicService() *HarmonicService {
 // PRE: for all values for position in actPositions: 0.0 <= value < 360.0
 // PRE: length actPostions > 0
 // POST: no errors -> returns calculated harmonics
-// POST: contains errors -> returns empty slice and error
+// POST: contains errors -> returns nil and error
 func (hs HarmonicService) Harmonics(actPositions []domain.SinglePosition, harmonicNr float64) ([]domain.SinglePosition, error) {
 	const (
 		MinHarmonic = 1

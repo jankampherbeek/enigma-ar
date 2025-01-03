@@ -9,22 +9,12 @@ package analysis
 
 import (
 	"enigma-ar/domain"
-	"errors"
 	"math"
-)
-
-const (
-	MinOrbForMP       = 0.0
-	MaxOrbForMP       = 10.0
-	MinItemsForMP     = 2
-	MinItemsForCalcMP = 3
-	MinPosForMP       = 0.0
-	MaxPosForMP       = 360.0
 )
 
 // MidpointsCalculator calculates midpoints in longitude (or in ra)
 type MidpointsCalculator interface {
-	CalcMidpointList(points []domain.SinglePosition) ([]domain.Midpoint, error)
+	CalcMidpoints(points []domain.SinglePosition) ([]domain.Midpoint, error)
 	CalcOccupiedMidpoints(points []domain.SinglePosition, dial domain.MpDial, orb float64) ([]domain.OccupiedMidpoint, error)
 }
 
@@ -34,23 +24,17 @@ func NewMidpointsCalculation() MidpointsCalculator {
 	return MidpointsCalculation{}
 }
 
-// CalcMidpointList calculates midpoints
+// CalcMidpoints calculates midpoints
 // PRE length points >= 2
 // PRE for all positions : 0.0 <= position < 360.0
 // POST no errors -> returns slice of midpoints
 // POST errors: returns empty slice and error
-func (mc MidpointsCalculation) CalcMidpointList(points []domain.SinglePosition) ([]domain.Midpoint, error) {
+func (mc MidpointsCalculation) CalcMidpoints(points []domain.SinglePosition) ([]domain.Midpoint, error) {
 	dialSize := 360.0
-	emptyResults := make([]domain.Midpoint, 0)
 	midpoints := make([]domain.Midpoint, 0)
 	var actualMp float64
-	if len(points) < MinItemsForMP {
-		return emptyResults, errors.New("not enough points")
-	}
+
 	for i := 0; i < len(points); i++ { // first point
-		if points[i].Position < MinPosForMP || points[i].Position >= MaxPosForMP {
-			return emptyResults, errors.New("position must be between 0.0 and <360.0")
-		}
 		for j := i + 1; j < len(points); j++ { // second point
 			actualMp = constructEffectiveMidpoint(points[i], points[j], dialSize)
 			midpoints = append(midpoints, domain.Midpoint{Point1: points[i], Point2: points[j], MidpointPos: actualMp})
@@ -66,20 +50,9 @@ func (mc MidpointsCalculation) CalcMidpointList(points []domain.SinglePosition) 
 // POST no errors -> returns slice of occupied midpoints
 // POST errors: returns empty slice and error
 func (mc MidpointsCalculation) CalcOccupiedMidpoints(points []domain.SinglePosition, dial domain.MpDial, orb float64) ([]domain.OccupiedMidpoint, error) {
-	emptyResults := make([]domain.OccupiedMidpoint, 0)
 	occMidpoints := make([]domain.OccupiedMidpoint, 0)
 	pointsInDial := make([]domain.SinglePosition, 0)
-	if len(points) < MinItemsForCalcMP {
-		return emptyResults, errors.New("not enough points")
-	}
-	if orb <= MinOrbForMP || orb > MaxOrbForMP {
-		return emptyResults, errors.New("orb must be between 0.0 and 10.0")
-	}
-	for i := 0; i < len(points); i++ {
-		if points[i].Position < MinPosForMP || points[i].Position >= MaxPosForMP {
-			return emptyResults, errors.New("positions must be between 0.0 and <360.0")
-		}
-	}
+
 	// reduce all positions to size of dial
 	dialSize := 360.0
 	for i := 0; i < len(domain.AllMpDials()); i++ {

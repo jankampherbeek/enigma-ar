@@ -43,7 +43,7 @@ func NewAspectService() *AspectService {
 // PRE each aspect is represented in cfgAspects
 // PRE for all positions : 0.0 <= position < 360.0
 // POST no errors -> returns slice of occupied midpoints
-// POST errors: returns empty slice and error
+// POST errors: returns nil and error
 func (as AspectService) Aspects(points []domain.SinglePosition,
 	aspects []domain.Aspect,
 	cfgPoints []domain.ConfigPoint,
