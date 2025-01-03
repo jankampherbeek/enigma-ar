@@ -52,8 +52,8 @@ func TestAspectsNotEnoughPoints(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for not enough points")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for not enough points")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for not enough points")
 	}
 }
 
@@ -97,8 +97,8 @@ func TestAspectsNoAspects(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for not enough aspects")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for not enough aspects")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for not enough aspects")
 	}
 }
 
@@ -142,8 +142,8 @@ func TestAspectsNotEnoughConfigPoints(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for not enough config points")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for not enough config points")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for not enough config points")
 	}
 }
 
@@ -186,8 +186,8 @@ func TestAspectsNoConfigAspects(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for not enough configaspects")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for not enough configaspects")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for not enough configaspects")
 	}
 }
 
@@ -236,8 +236,8 @@ func TestAspectsMissingConfigPoint(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for missing configpoints")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for missing configpoints")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for missing configpoints")
 	}
 }
 
@@ -286,8 +286,8 @@ func TestAspectsMissingConfigAspect(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for missing config aspects")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for missing config aspects")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for missing config aspects")
 	}
 }
 
@@ -337,8 +337,8 @@ func TestAspectsPositionTooLarge(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for a position that is too large")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for a position that is too large")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for a position that is too large")
 	}
 }
 
@@ -388,7 +388,7 @@ func TestAspectsPositionTooSmall(t *testing.T) {
 	if err == nil {
 		t.Errorf("Aspectsshould have returned an error for a position that is too small")
 	}
-	if len(result) > 0 {
-		t.Errorf("Aspectsshould have returned an empty result for a position that is too small")
+	if result != nil {
+		t.Errorf("Aspects should have returned nil for a position that is too small")
 	}
 }

@@ -24,8 +24,8 @@ func TestHarmonicsHarmNrTooLarge(t *testing.T) {
 	if err == nil {
 		t.Errorf("Harmonics should have returned an error for a harmoncNr that is too large")
 	}
-	if len(result) > 0 {
-		t.Errorf("Harmonics should have returned an empty result for a harmonicNr that is too large")
+	if result != nil {
+		t.Errorf("Harmonics should have returned nil for a harmonicNr that is too large")
 	}
 }
 
@@ -41,8 +41,8 @@ func TestHarmonicsHarmNrTooSmall(t *testing.T) {
 	if err == nil {
 		t.Errorf("Harmonics should have returned an error for a harmonicNr that is too small")
 	}
-	if len(result) > 0 {
-		t.Errorf("Harmonics should have returned an empty result for a harmonicNr that is too small,  was %d", len(result))
+	if result != nil {
+		t.Errorf("Harmonics should have returned nil for a harmonicNr that is too small")
 	}
 }
 
@@ -53,8 +53,8 @@ func TestHarmonicsEmptyInput(t *testing.T) {
 	if err == nil {
 		t.Error("Expected error for empty input, got nil")
 	}
-	if len(result) != 0 {
-		t.Errorf("Expected empty result, got slice with length %d", len(result))
+	if result != nil {
+		t.Errorf("Expected nil for empty input")
 	}
 }
 
@@ -70,8 +70,8 @@ func TestHarmonicsPositionTooLarge(t *testing.T) {
 	if err == nil {
 		t.Errorf("CalcHarmonics should have returned an error for a position that is too large")
 	}
-	if len(result) > 0 {
-		t.Errorf("CalcHarmonics should have returned an empty result for a position that is too large, was %d", len(result))
+	if result != nil {
+		t.Errorf("Harmonics should have returned nil for a position that is too large")
 	}
 }
 
@@ -87,7 +87,7 @@ func TestHarmonicsPositionTooSmall(t *testing.T) {
 	if err == nil {
 		t.Errorf("Harmonics should have returned an error for a position that is too small")
 	}
-	if len(result) > 0 {
-		t.Errorf("Harmonics should have returned an empty result for a position that is too small")
+	if result != nil {
+		t.Errorf("Harmonics should have returned nil for a position that is too small")
 	}
 }
