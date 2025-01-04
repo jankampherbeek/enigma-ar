@@ -54,6 +54,5 @@ func (hs HarmonicService) Harmonics(actPositions []domain.SinglePosition, harmon
 		}
 	}
 
-	hc := analysis.NewHarmonicsCalculation()
-	return hc.CalcHarmonics(actPositions, harmonicNr)
+	return hs.hrmCalc.CalcHarmonics(actPositions, harmonicNr)
 }

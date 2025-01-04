@@ -55,6 +55,5 @@ func (ps ParallelService) Parallels(actPositions []domain.SinglePosition, orb fl
 			}
 		}
 	}
-	pCalc := analysis.NewParallelsCalculation()
-	return pCalc.CalcParallels(actPositions, orb)
+	return ps.parCalc.CalcParallels(actPositions, orb)
 }

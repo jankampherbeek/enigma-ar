@@ -55,6 +55,5 @@ func (dmps DeclinationMidpointService) DeclinationMidpoints(positions []domain.S
 			return nil, errors.New("declination must be between -180.0 and 180.0 (exclusive)")
 		}
 	}
-	dmpCalc := analysis.NewDeclMidpointsCalculation()
-	return dmpCalc.CalcDeclMidpoints(positions, orb)
+	return dmps.dmpCalc.CalcDeclMidpoints(positions, orb)
 }

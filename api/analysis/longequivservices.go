@@ -61,6 +61,5 @@ func (les LongEquivService) LongEquivs(positions []domain.DoublePosition, obliqu
 			return nil, fmt.Errorf("LongEquivs could not proceed: found longitude that is out of range, value was %f and should be between %f and %f", longitude, domain.MinLongitude, domain.MaxLongitude)
 		}
 	}
-	leCalc := analysis.NewLongEquivCalculation()
-	return leCalc.CalcEquivalents(positions, obliquity)
+	return les.leCalc.CalcEquivalents(positions, obliquity)
 }

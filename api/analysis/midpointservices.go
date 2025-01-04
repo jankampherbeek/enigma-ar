@@ -53,8 +53,7 @@ func (mps MidpointService) Midpoints(points []domain.SinglePosition) ([]domain.M
 			return nil, errors.New("position must be between 0.0 and <360.0")
 		}
 	}
-	mpc := analysis.NewMidpointsCalculation()
-	return mpc.CalcMidpoints(points)
+	return mps.mpCalc.CalcMidpoints(points)
 }
 
 // OccupiedMidpoints handles the calculation of occupied midpoints.
@@ -75,6 +74,5 @@ func (mps MidpointService) OccupiedMidpoints(points []domain.SinglePosition, dia
 			return nil, errors.New("positions must be between 0.0 and <360.0")
 		}
 	}
-	mpc := analysis.NewMidpointsCalculation()
-	return mpc.CalcOccupiedMidpoints(points, dial, orb)
+	return mps.mpCalc.CalcOccupiedMidpoints(points, dial, orb)
 }
