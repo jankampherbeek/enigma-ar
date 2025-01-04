@@ -18,7 +18,7 @@ func TestMidpointPositionTooLarge(t *testing.T) {
 		{Id: 3, Position: 400.0},
 		{Id: 5, Position: 220.5},
 	}
-	mpCalc := MidpointService{}
+	mpCalc := NewMidpointService()
 	result, err := mpCalc.Midpoints(positions)
 	if err == nil {
 		t.Errorf("MidpointList should have returned an error for a position that is too large")
@@ -34,7 +34,7 @@ func TestMidpointPositionTooSmall(t *testing.T) {
 		{Id: 3, Position: -4.0},
 		{Id: 5, Position: 220.5},
 	}
-	mpCalc := MidpointService{}
+	mpCalc := NewMidpointService()
 	result, err := mpCalc.Midpoints(positions)
 	if err == nil {
 		t.Errorf("Midpoints should have returned an error for a position that is too small")
@@ -48,7 +48,7 @@ func TestMidpointTooFewItems(t *testing.T) {
 	var positions = []domain.SinglePosition{
 		{Id: 2, Position: 12.0},
 	}
-	mpCalc := MidpointService{}
+	mpCalc := NewMidpointService()
 	result, err := mpCalc.Midpoints(positions)
 	if err == nil {
 		t.Errorf("Midpoints should have returned an error for too few items")
@@ -67,7 +67,7 @@ func TestOccupiedMidpointPositionTooLarge(t *testing.T) {
 		{Id: 8, Position: 255.3},
 	}
 	orb := 1.0
-	mpCalc := MidpointService{}
+	mpCalc := NewMidpointService()
 	result, err := mpCalc.OccupiedMidpoints(positions, 360.0, orb)
 	if err == nil {
 		t.Errorf("OccupiedMidpoints should have returned an error for a position that is too large")
