@@ -9,6 +9,7 @@ package frontend
 
 import (
 	"enigma-ar/api"
+	apicalc "enigma-ar/api/calc"
 	"enigma-ar/domain"
 	"fmt"
 	"fyne.io/fyne/v2"
@@ -265,8 +266,8 @@ func RadixInputView() fyne.Container {
 			GeoLong:   ValidData.GeoLong,
 			GeoLat:    ValidData.GeoLat,
 		}
-		fcServer := api.NewFullChartServer()
-		fcResponse, err := fcServer.DefineFullChart(fcRequest)
+		fcService := apicalc.NewFullChartService()
+		fcResponse, err := fcService.CalcFullChart(fcRequest)
 		if err == nil {
 			fcMeta := domain.FullChartMeta{
 				Name:         ValidData.NameId,

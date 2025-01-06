@@ -40,11 +40,6 @@ type HousePosCalculator interface {
 	CalcHousePos(request domain.HousePosRequest) ([]domain.HousePosResult, []domain.HousePosResult, error)
 }
 
-// FullChartCalculator calculates a full chart with celestial points and houses.
-type FullChartCalculator interface {
-	CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error)
-}
-
 type PointPosCalculation struct {
 	sePointCalc  se.SePointPosCalculator
 	seHorPosCalc se.SeHorPosCalculator
@@ -62,19 +57,11 @@ func NewPointPosCalculation() PointPosCalculator {
 // PRE MinGeoLat <= request.GeoLat < MaxGeoLat
 // POST : if no error occurred returns positions for the given points, otherwise returns empty slice and error
 func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsRequest) ([]domain.PointPosResult, error) {
-	emptyPositions := make([]domain.PointPosResult, 0)
+
 	jdUt := request.JdUt
 	geoLong := request.GeoLong
 	geoLat := request.GeoLat
-	if jdUt < domain.MinJdGeneral || jdUt > domain.MaxJdGeneral {
-		return emptyPositions, fmt.Errorf("JdUt %f is out of range", jdUt)
-	}
-	if geoLong < domain.MinGeoLong || geoLong > domain.MaxGeoLong {
-		return emptyPositions, fmt.Errorf("GeoLong %f is out of range", geoLong)
-	}
-	if geoLat < domain.MinGeoLat || geoLat > domain.MaxGeoLat {
-		return emptyPositions, fmt.Errorf("GeoLat %f is out of range", geoLat)
-	}
+
 	positions := make([]domain.PointPosResult, 0)
 	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Tropical)
 	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Tropical)
@@ -90,7 +77,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		case domain.CalcSe:
 			position, err := calc.calcPointPosViaSe(calcId, point, jdUt, eclFlags, equFlags, geoLong, geoLat)
 			if err != nil {
-				return emptyPositions, fmt.Errorf("calc point positions failed for %v", point)
+				return nil, fmt.Errorf("calc point positions failed for %v", point)
 			}
 			positions = append(positions, position)
 		case domain.CalcElements:
@@ -98,7 +85,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		case domain.CalcFormula:
 			position, err := calc.calcPointPosViaFormula(calcId, point, jdUt, eclFlags, equFlags)
 			if err != nil {
-				return emptyPositions, fmt.Errorf("calc point positions failed for %v", point)
+				return nil, fmt.Errorf("calc point positions failed for %v", point)
 			}
 			positions = append(positions, position)
 		case domain.CalcMundane:
@@ -116,7 +103,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		olc := NewObliqueLongCalculation()
 		newPositions, err := olc.calcObliqueLongitudes(positions, request.Armc, request.Obliquity, geoLat, ayanOffset)
 		if err != nil {
-			return emptyPositions, fmt.Errorf("calc oblique positions failed")
+			return nil, fmt.Errorf("calc oblique positions failed")
 		}
 		positions = newPositions
 	}
@@ -127,11 +114,13 @@ func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartP
 	eclFlags, equFlags int, geoLong, geoLat float64) (domain.PointPosResult, error) {
 
 	var position domain.PointPosResult
-	posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(jdUt, index, eclFlags)
+	//posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(jdUt, index, eclFlags)
+	posEcl, errEcl := calc.sePointCalc.SeCalcPointPos(jdUt, int(point), eclFlags)
 	if errEcl != nil {
 		return position, errEcl
 	}
-	posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(jdUt, index, equFlags)
+	//posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(jdUt, index, equFlags)
+	posEqu, errEqu := calc.sePointCalc.SeCalcPointPos(jdUt, int(point), equFlags)
 	if errEqu != nil {
 		return position, errEqu
 	}
@@ -353,54 +342,4 @@ func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]d
 		}
 	}
 	return cuspPos, mcAscPos, nil
-}
-
-type FullChartCalculation struct {
-	ppc PointPosCalculator
-	hpc HousePosCalculator
-}
-
-func NewFullChartCalculator() FullChartCalculator {
-	ppc := NewPointPosCalculation()
-	hpc := NewHousePosCalculation()
-	return FullChartCalculation{ppc, hpc}
-}
-
-func (fcc FullChartCalculation) CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error) {
-
-	var response domain.FullChartResponse
-	pointsRequest := domain.PointPositionsRequest{
-		Points:   request.Points,
-		JdUt:     request.Jd,
-		GeoLong:  request.GeoLong,
-		GeoLat:   request.GeoLat,
-		Coord:    request.CoordSys,
-		ObsPos:   request.ObsPos,
-		Tropical: request.Ayanamsha == 0,
-	}
-	pointsResult, pointsErr := fcc.ppc.CalcPointPos(pointsRequest)
-	if pointsErr != nil {
-		return response, pointsErr
-	}
-	houseRequest := domain.HousePosRequest{
-		HouseSys: request.HouseSys,
-		JdUt:     request.Jd,
-		GeoLong:  request.GeoLong,
-		GeoLat:   request.GeoLat,
-	}
-	housesResult, mundaneResult, mundaneErr := fcc.hpc.CalcHousePos(houseRequest)
-	if mundaneErr != nil {
-		return response, mundaneErr
-	}
-	// create response
-	response = domain.FullChartResponse{
-		Points:    pointsResult,
-		Mc:        mundaneResult[1],
-		Asc:       mundaneResult[0],
-		Vertex:    mundaneResult[3],
-		EastPoint: mundaneResult[4],
-		Cusps:     housesResult,
-	}
-
-	return response, nil
 }

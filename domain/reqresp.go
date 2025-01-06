@@ -92,7 +92,7 @@ type HousePosResult struct {
 type FullChartRequest struct {
 	Points    []ChartPoint
 	HouseSys  HouseSystem
-	Ayanamsha int
+	Ayanamsha Ayanamsha
 	CoordSys  CoordinateSystem
 	ObsPos    ObserverPosition
 	ProjType  ProjectionType

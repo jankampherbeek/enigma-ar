@@ -24,12 +24,16 @@ const (
 	MaxJdMinorPoints = 5224242.5  // 9591/05/23
 	MinLongitude     = 0.0
 	MaxLongitude     = 360.0
+	MinArmc          = 0.0
+	MaxArmc          = 360.0
 	MinDeclination   = -180.0
 	MaxDeclination   = 180.0
-	MinGeoLong       = 0.0
-	MaxGeoLong       = 360.0
-	MinGeoLat        = -180.0
-	MaxGeoLat        = 180.0
+	MinObliquity     = 20.0
+	MaxObliquity     = 30.0
+	MinGeoLong       = -180.0
+	MaxGeoLong       = 180.0
+	MinGeoLat        = -90.0
+	MaxGeoLat        = 90.0
 )
 
 // Astronomical constants

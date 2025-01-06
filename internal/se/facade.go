@@ -108,11 +108,11 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	cBody := C.int(body)
 	cFlags := C.int(flags)
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
-	err := C.GoString(&cSerr[0])
 	if result < 0 {
 		var emptyArray [6]float64
-		return emptyArray, fmt.Errorf("SeCalcPointPos error: %v", err)
+		return emptyArray, fmt.Errorf("SeCalcPointPos error: %v", cSerr)
 	}
+
 	pos := make([]float64, 6)
 	for i := 0; i < 6; i++ {
 		pos[i] = float64(cPos[i])

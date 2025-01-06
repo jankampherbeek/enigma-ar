@@ -10,6 +10,7 @@ package se
 import (
 	"enigma-ar/domain"
 	"math"
+	"path/filepath"
 	"testing"
 )
 
@@ -40,7 +41,8 @@ func TestRevJulDay(t *testing.T) {
 }
 
 func TestPointPositions(t *testing.T) {
-	ephePath := "../../sedata" // path is relative from current package
+	sep := string(filepath.Separator)
+	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
 	SetEphePath(ephePath)
 	julDay := 2_470_000.0 // 2050/7/12 12:00
 	body := domain.AllChartPoints()[domain.Mercury].CalcId
