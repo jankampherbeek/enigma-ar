@@ -26,7 +26,9 @@ import (
 // SwephPreparator handles the initialization of the SE
 type SwephPreparator interface {
 	SetEphePath(path string)
+	SetTopo(geoLong, geoLat, altitudeMtrs float64)
 	SetSidereal(ayanamsha domain.Ayanamsha)
+	AyanOffset(jdUt float64) (float64, error)
 }
 
 // SwephJulDayCalculator retrieves the julian day number for ephemeris time from the SE.
@@ -72,10 +74,34 @@ func (sp SwephPreparation) SetEphePath(path string) {
 	C.swe_set_ephe_path(_path)
 }
 
+// SetTopo initializes the SE for topocentric calculations
+func (sp SwephPreparation) SetTopo(geoLong, geoLat, altitudeMtrs float64) {
+	gLongC := C.double(geoLong)
+	gLatC := C.double(geoLat)
+	altitudeC := C.double(altitudeMtrs)
+	C.swe_set_topo(gLongC, gLatC, altitudeC)
+}
+
 // SetSidereal prepares the Se for sidereal calculations and defines the ayanamsha to be used
 func (sp SwephPreparation) SetSidereal(ayanamsha domain.Ayanamsha) {
-	ayan := C.int32(ayanamsha)
+	seIdAyan := domain.AllAyanamshas()[ayanamsha].CalcId
+	ayan := C.int32(seIdAyan)
 	C.swe_set_sid_mode(ayan, 0.0, 0.0)
+}
+
+func (sp SwephPreparation) AyanOffset(jdUt float64) (float64, error) {
+	epheFlag := domain.SeflgSwieph // Enigma always uses this flag
+	cSerr := make([]C.char, C.AS_MAXCH)
+	cAyanValue := C.double(0.0)
+	cJd := C.double(jdUt)
+	cFlag := C.int(epheFlag)
+	C.swe_get_ayanamsa_ex_ut(cJd, cFlag, &cAyanValue, &cSerr[0])
+	errTxt := C.GoString(&cSerr[0])
+	if errTxt != "" {
+		return 0.0, errors.New(errTxt)
+	}
+	result := float64(cAyanValue)
+	return result, nil
 }
 
 type SwephJulDayCalculation struct{}
@@ -84,7 +110,7 @@ func NewSwephJulDayCalculation() SwephJulDayCalculator {
 	return SwephJulDayCalculation{}
 }
 
-// SwephJulDayCalculation accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
+// CalcJd accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
 func (jdc SwephJulDayCalculation) CalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
 	cYear := C.int(year)
 	cMonth := C.int(month)
@@ -117,7 +143,7 @@ func NewSwephPointPosCalculation() SwephPointPosCalculator {
 	return SwephPointPosCalculation{}
 }
 
-// SwephPointPosCalculation accesses the SE to calculate positions for celestial points.
+// CalcPointPos accesses the SE to calculate positions for celestial points.
 // The results that are returned are subsequently: longitude or ra, latitude or declination, distance, speed in long. or ra, speed in lat. or decl, speed in dist.
 func (ppc SwephPointPosCalculation) CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double

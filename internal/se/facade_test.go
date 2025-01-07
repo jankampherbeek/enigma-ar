@@ -16,6 +16,20 @@ import (
 
 const DELTA = 1e-7
 
+func TestAyanOffset(t *testing.T) {
+	jd := 2451544.5 // 2000/1/1
+	expected := 23.853203493056615
+	sp := NewSwephPreparation()
+	sp.SetSidereal(domain.AyanLahiri)
+	result, err := sp.AyanOffset(jd)
+	if err != nil {
+		t.Errorf("Unexpected error in AyanOffset: %v", err)
+	}
+	if math.Abs(result-expected) > DELTA {
+		t.Errorf("Expected value for ayanamsha %f, got %f", expected, result)
+	}
+}
+
 func TestJulDay(t *testing.T) {
 	result := SwephJulDayCalculation{}.CalcJd(2024, 5, 6, 20.5, 1)
 	expected := 2460437.3541666665

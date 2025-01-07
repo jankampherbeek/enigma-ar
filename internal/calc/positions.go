@@ -43,12 +43,14 @@ type HousePosCalculator interface {
 type PointPosCalculation struct {
 	sePointCalc  se.SwephPointPosCalculator
 	seHorPosCalc se.SwephHorPosCalculator
+	sePrep       se.SwephPreparator
 }
 
 func NewPointPosCalculation() PointPosCalculator {
 	ppc := se.NewSwephPointPosCalculation()
 	hpc := se.NewSwephHorPosCalculation()
-	return PointPosCalculation{ppc, hpc}
+	prep := se.NewSwephPreparation()
+	return PointPosCalculation{ppc, hpc, prep}
 }
 
 // CalcPointPos calculates fully defined positions for one or more celestial points
@@ -61,10 +63,22 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 	jdUt := request.JdUt
 	geoLong := request.GeoLong
 	geoLat := request.GeoLat
-
+	altitude := 0.0 // altitude in meters
 	positions := make([]domain.PointPosResult, 0)
 	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Ayanamsha)
 	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Ayanamsha)
+	if request.ObsPos == domain.ObsPosTopocentric {
+		calc.sePrep.SetTopo(geoLong, geoLat, altitude)
+	}
+	var ayanOffset float64
+	var err error
+	if request.Ayanamsha != domain.AyanNone {
+		calc.sePrep.SetSidereal(request.Ayanamsha)
+		ayanOffset, err = calc.sePrep.AyanOffset(request.JdUt)
+		if err != nil {
+			return nil, fmt.Errorf("error when defining offset for ayanamsha: %v", err)
+		}
+	}
 
 	var allPoints = domain.AllChartPoints()
 	var calcCat domain.CalculationCat
@@ -81,9 +95,9 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 			}
 			positions = append(positions, position)
 		case domain.CalcElements:
-			// handle elements
+			// handle elements, use ayanoffset
 		case domain.CalcFormula:
-			position, err := calc.calcPointPosViaFormula(calcId, point, jdUt, eclFlags, equFlags)
+			position, err := calc.calcPointPosViaFormula(calcId, point, jdUt, eclFlags, equFlags, ayanOffset)
 			if err != nil {
 				return nil, fmt.Errorf("calc point positions failed for %v", point)
 			}
@@ -96,9 +110,6 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 			// handle calc lots
 		}
 	}
-	ayanOffset := 0.0
-	// TODO correct ayanoffset based on selection of Ayanamsha
-
 	if request.ProjType == domain.ProjTypeOblique { // handle oblique longitude
 		olc := NewObliqueLongCalculation()
 		newPositions, err := olc.calcObliqueLongitudes(positions, request.Armc, request.Obliquity, geoLat, ayanOffset)
@@ -150,17 +161,17 @@ func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartP
 }
 
 func (calc PointPosCalculation) calcPointPosViaFormula(index int, point domain.ChartPoint, jdUt float64,
-	eclFlags, equFlags int) (domain.PointPosResult, error) {
+	eclFlags, equFlags int, ayanOffset float64) (domain.PointPosResult, error) {
 
 	var emptyPosition domain.PointPosResult
 	var position domain.PointPosResult
 	var eclLong, eclSpeed float64
 	switch point {
 	case domain.PersephoneCarteret:
-		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointPersephoneCart, YearlySpeedPersephoneCart)
+		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointPersephoneCart, YearlySpeedPersephoneCart) + ayanOffset
 		eclSpeed = YearlySpeedPersephoneCart / domain.TropicalYearInDays
 	case domain.VulcanusCarteret:
-		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointVulcanusCart, YearlySpeedVulcanusCart)
+		eclLong = calc.calcCarteretHypPlanet(jdUt, StartPointVulcanusCart, YearlySpeedVulcanusCart) + ayanOffset
 		eclSpeed = YearlySpeedVulcanusCart / domain.TropicalYearInDays
 	case domain.ApogeeDuval:
 		result, err := calc.calcApogeeDuval(jdUt, eclFlags, equFlags)
@@ -175,7 +186,7 @@ func (calc PointPosCalculation) calcPointPosViaFormula(index int, point domain.C
 		if err != nil {
 			return emptyPosition, fmt.Errorf("error in calcPointPosViaFormula %v", err)
 		}
-		eclLong = result
+		eclLong = result + ayanOffset
 		eclSpeed = resultAfter - resultBefore
 	default:
 		return emptyPosition, fmt.Errorf("calcPointPosViaFOrmula encountered unknown point %v", point)
@@ -248,7 +259,6 @@ func (prc PointRangeCalculation) CalcPointRange(request domain.PointRangeRequest
 
 	flags := SeFlags(request.Coord, request.ObsPos, request.Ayanamsha)
 	// TODO handle topocentric
-	// TODO handle sidereal
 	var rangePositions []domain.PointRangeResult
 	var resultIndex int
 	if request.Position {
