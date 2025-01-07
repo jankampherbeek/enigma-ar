@@ -43,7 +43,8 @@ func TestRevJulDay(t *testing.T) {
 func TestPointPositions(t *testing.T) {
 	sep := string(filepath.Separator)
 	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
-	SetEphePath(ephePath)
+	sp := NewSwephPreparation()
+	sp.SetEphePath(ephePath)
 	julDay := 2_470_000.0 // 2050/7/12 12:00
 	body := domain.AllChartPoints()[domain.Mercury].CalcId
 	flags := domain.SeflgSwieph + domain.SeflgSpeed
