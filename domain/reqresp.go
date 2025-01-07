@@ -27,7 +27,7 @@ type PointPositionsRequest struct {
 	Coord     CoordinateSystem
 	ObsPos    ObserverPosition
 	ProjType  ProjectionType
-	Tropical  bool
+	Ayanamsha Ayanamsha
 }
 
 // PointPosResult Calculated positions for a single point
@@ -62,7 +62,7 @@ type PointRangeRequest struct {
 	MainValue bool
 	Position  bool
 	ObsPos    ObserverPosition
-	Ayanamsha int
+	Ayanamsha Ayanamsha
 }
 
 // PointRangeResult calculated value for position or speed for a given date/time, to be used in a range of positions.

@@ -31,7 +31,7 @@ func TestCalcPointPosViaFormulaPersephoneCarteret(t *testing.T) {
 		Coord:     domain.CoordEcliptical,
 		ObsPos:    domain.ObsPosGeocentric,
 		ProjType:  domain.ProjType2D,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	result, err := c.CalcPointPos(request)
 	if err != nil {
@@ -58,7 +58,7 @@ func TestCalcPointPosViaFormulaVulcanusCarteret(t *testing.T) {
 		Coord:     domain.CoordEcliptical,
 		ObsPos:    domain.ObsPosGeocentric,
 		ProjType:  domain.ProjType2D,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	result, err := c.CalcPointPos(request)
 	if err != nil {
@@ -85,7 +85,7 @@ func TestCalcPointPosViaFormulaApogeeDuval(t *testing.T) {
 		Coord:     domain.CoordEcliptical,
 		ObsPos:    domain.ObsPosGeocentric,
 		ProjType:  domain.ProjType2D,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	result, err := c.CalcPointPos(request)
 	if err != nil {

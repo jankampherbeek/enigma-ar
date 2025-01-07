@@ -23,51 +23,69 @@ import (
 	"unsafe"
 )
 
-// SeJulDayCalculator retrieves the julian day number for ephemeris time from the SE.
-type SeJulDayCalculator interface {
-	SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64
+// SwephPreparator handles the initialization of the SE
+type SwephPreparator interface {
+	SetEphePath(path string)
+	SetSidereal(ayanamsha domain.Ayanamsha)
 }
 
-// SeRevJulDayCalculator retrieves the date and time for a given jd nr from the SE.
-type SeRevJulDayCalculator interface {
-	SeRevCalcJd(jd float64, gragFlag int) (int, int, int, float64)
+// SwephJulDayCalculator retrieves the julian day number for ephemeris time from the SE.
+type SwephJulDayCalculator interface {
+	CalcJd(year int, month int, day int, hour float64, gregFlag int) float64
 }
 
-// SePointPosCalculator retrieves the positions and speed for ecliptical or equatorial coordinates.
-type SePointPosCalculator interface {
-	SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
+// SwephRevJulDayCalculator retrieves the date and time for a given jd nr from the SE.
+type SwephRevJulDayCalculator interface {
+	RevCalcJd(jd float64, gragFlag int) (int, int, int, float64)
 }
 
-// SeEpsilonCalculator retrieves the value for the obliquity of the earths axis, either true (corrected for nutation) or mean.
-type SeEpsilonCalculator interface {
-	SeCalcEpsilon(jdUt float64, trueEps bool) (float64, error)
+// SwephPointPosCalculator retrieves the positions and speed for ecliptical or equatorial coordinates.
+type SwephPointPosCalculator interface {
+	CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error)
 }
 
-// SeHorPosCalculator retrieves the horizontal positions (azimuth and altitude) from the SE.
-type SeHorPosCalculator interface {
-	SeCalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
+// SwephEpsilonCalculator retrieves the value for the obliquity of the earths axis, either true (corrected for nutation) or mean.
+type SwephEpsilonCalculator interface {
+	CalcEpsilon(jdUt float64, trueEps bool) (float64, error)
 }
 
-// SeHousePosCalculator retrieves the housepositions and several other mundane points from the SE.
-type SeHousePosCalculator interface {
-	SeCalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error)
+// SwephHorPosCalculator retrieves the horizontal positions (azimuth and altitude) from the SE.
+type SwephHorPosCalculator interface {
+	CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64
+}
+
+// SwephHousePosCalculator retrieves the housepositions and several other mundane points from the SE.
+type SwephHousePosCalculator interface {
+	CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error)
+}
+
+type SwephPreparation struct{}
+
+func NewSwephPreparation() SwephPreparation {
+	return SwephPreparation{}
 }
 
 // SetEphePath initializes the SE and defines the location for the ephemeris files.
-func SetEphePath(path string) {
+func (sp SwephPreparation) SetEphePath(path string) {
 	var _path *C.char = C.CString(path)
 	defer C.free(unsafe.Pointer(_path))
 	C.swe_set_ephe_path(_path)
 }
 
-type SeJulDayCalculation struct{}
-
-func NewSeJulDayCalculation() SeJulDayCalculator {
-	return SeJulDayCalculation{}
+// SetSidereal prepares the Se for sidereal calculations and defines the ayanamsha to be used
+func (sp SwephPreparation) SetSidereal(ayanamsha domain.Ayanamsha) {
+	ayan := C.int32(ayanamsha)
+	C.swe_set_sid_mode(ayan, 0.0, 0.0)
 }
 
-// SeJulDayCalculation accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
-func (jdc SeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
+type SwephJulDayCalculation struct{}
+
+func NewSwephJulDayCalculation() SwephJulDayCalculator {
+	return SwephJulDayCalculation{}
+}
+
+// SwephJulDayCalculation accesses the SE to calculate the Julian Day Number, given the values for the date, time and calendar.
+func (jdc SwephJulDayCalculation) CalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
 	cYear := C.int(year)
 	cMonth := C.int(month)
 	cDay := C.int(day)
@@ -77,14 +95,14 @@ func (jdc SeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float
 	return result
 }
 
-type SeRevJulDayCalculation struct{}
+type SwephRevJulDayCalculation struct{}
 
-func NewSeRevJulDayCalculation() SeRevJulDayCalculator {
-	return SeRevJulDayCalculation{}
+func NewSwephRevJulDayCalculation() SwephRevJulDayCalculator {
+	return SwephRevJulDayCalculation{}
 }
 
-// SeRevJulDayCalculation accesses the SE to calculate date and time from a julian day number. The return values are year,month,day and ut.
-func (rjdc SeRevJulDayCalculation) SeRevCalcJd(jd float64, gragFlag int) (int, int, int, float64) {
+// RevCalcJd accesses the SE to calculate date and time from a julian day number. The return values are year,month,day and ut.
+func (rjdc SwephRevJulDayCalculation) RevCalcJd(jd float64, gragFlag int) (int, int, int, float64) {
 	var cYear C.int
 	var cMonth C.int
 	var cDay C.int
@@ -93,15 +111,15 @@ func (rjdc SeRevJulDayCalculation) SeRevCalcJd(jd float64, gragFlag int) (int, i
 	return int(cYear), int(cMonth), int(cDay), float64(cHour)
 }
 
-type SePointPosCalculation struct{}
+type SwephPointPosCalculation struct{}
 
-func NewSePointPosCalculation() SePointPosCalculator {
-	return SePointPosCalculation{}
+func NewSwephPointPosCalculation() SwephPointPosCalculator {
+	return SwephPointPosCalculation{}
 }
 
-// SeCalcPointPos accesses the SE to calculate positions for celestial points.
+// SwephPointPosCalculation accesses the SE to calculate positions for celestial points.
 // The results that are returned are subsequently: longitude or ra, latitude or declination, distance, speed in long. or ra, speed in lat. or decl, speed in dist.
-func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
+func (ppc SwephPointPosCalculation) CalcPointPos(jdUt float64, body int, flags int) ([6]float64, error) {
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
@@ -110,7 +128,7 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
 	if result < 0 {
 		var emptyArray [6]float64
-		return emptyArray, fmt.Errorf("SeCalcPointPos error: %v", cSerr)
+		return emptyArray, fmt.Errorf("CalcPointPos error: %v", cSerr)
 	}
 
 	pos := make([]float64, 6)
@@ -120,13 +138,13 @@ func (ppc SePointPosCalculation) SeCalcPointPos(jdUt float64, body int, flags in
 	return [6]float64(pos), nil
 }
 
-type SeEpsilonCalculation struct{} // TODO create test for SeEpsilonCalculation
+type SwephEpsilonCalculation struct{} // TODO create test for SwephEpsilonCalculation
 
-func NewSeEpsilonCalculation() SeEpsilonCalculator {
-	return SeEpsilonCalculation{}
+func NewSwephEpsilonCalculation() SwephEpsilonCalculator {
+	return SwephEpsilonCalculation{}
 }
 
-func (ec SeEpsilonCalculation) SeCalcEpsilon(jdUt float64, trueEps bool) (float64, error) {
+func (ec SwephEpsilonCalculation) CalcEpsilon(jdUt float64, trueEps bool) (float64, error) {
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
@@ -135,7 +153,7 @@ func (ec SeEpsilonCalculation) SeCalcEpsilon(jdUt float64, trueEps bool) (float6
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
 	err := C.GoString(&cSerr[0])
 	if result < 0 {
-		return 0.0, fmt.Errorf("SeCalcEpsilon error: %v", err)
+		return 0.0, fmt.Errorf("CalcEpsilon error: %v", err)
 	}
 	if trueEps {
 		return float64(cPos[0]), nil
@@ -143,14 +161,14 @@ func (ec SeEpsilonCalculation) SeCalcEpsilon(jdUt float64, trueEps bool) (float6
 	return float64(cPos[1]), nil
 }
 
-type SeHorPosCalculation struct{}
+type SwephHorPosCalculation struct{}
 
-func NewSeHorPosCalculation() SeHorPosCalculator {
-	return SeHorPosCalculation{}
+func NewSwephHorPosCalculation() SwephHorPosCalculator {
+	return SwephHorPosCalculation{}
 }
 
-// SeCalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
-func (hpc SeHorPosCalculation) SeCalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
+// CalcHorPos converts equatorial coordinates to azimuth, true altitude and apparent altitude. The SE does not return a result code.
+func (hpc SwephHorPosCalculation) CalcHorPos(jdUt float64, geoLong float64, geoLat float64, geoHeight float64, pointRa float64, pointDecl float64, flags int) [3]float64 {
 	var cHorCoord [3]C.double
 	cJdUt := C.double(jdUt)
 	cFlags := C.int(flags)
@@ -168,16 +186,16 @@ func (hpc SeHorPosCalculation) SeCalcHorPos(jdUt float64, geoLong float64, geoLa
 	return [3]float64(pos)
 }
 
-type SeHousePosCalculation struct{}
+type SwephHousePosCalculation struct{}
 
-func NewSeHousePosCalculation() SeHousePosCalculator {
-	return SeHousePosCalculation{}
+func NewSwephHousePosCalculation() SwephHousePosCalculator {
+	return SwephHousePosCalculation{}
 }
 
-// SeCalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
+// CalcHousePos calculates mc, asc, and cusps for a given house system, jd, and location.
 // Values returned: array with cusps, starting at index 1, array with positions of asc, mc, armc, vertex, eq asc,
 // co-asc Koch, co-asc Munkasey and three empty values.
-func (hp SeHousePosCalculation) SeCalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
+func (hp SwephHousePosCalculation) CalcHousePos(houseSys rune, jdUt float64, geoLong float64, geoLat float64, flags int) ([]float64, []float64, error) {
 	cJdUt := C.double(jdUt)
 	cGeolat := C.double(geoLat)
 	cGeolong := C.double(geoLong)
@@ -206,18 +224,18 @@ func (hp SeHousePosCalculation) SeCalcHousePos(houseSys rune, jdUt float64, geoL
 
 // Coordinate transformation
 
-type SeCoordinateTransformer interface {
+type SwephCoordinateTransformer interface {
 	Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64
 }
 
-type SeCoordinateTransform struct{}
+type SwephCoordinateTransform struct{}
 
-func NewSeCoordinateTransform() *SeCoordinateTransform {
-	return &SeCoordinateTransform{}
+func NewSwephCoordinateTransform() *SwephCoordinateTransform {
+	return &SwephCoordinateTransform{}
 }
 
 // Transform ecliptic to equatorial or the other way around. Valuesin and valuesout contain resp. long, lat, distance or ra, decl, distance.
-func (ct SeCoordinateTransform) Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64 {
+func (ct SwephCoordinateTransform) Transform(valuesIn *[3]float64, eps float64, ec2Equ bool) []float64 {
 	cValuesIn := (*C.double)(&valuesIn[0])
 	var correctedEsp = math.Abs(eps) // SE expects positive epsilon for equatorial 2 ecliptical
 	if ec2Equ {                      // and negatieve epsilon for ecliptical to equatorial
@@ -232,11 +250,3 @@ func (ct SeCoordinateTransform) Transform(valuesIn *[3]float64, eps float64, ec2
 	}
 	return valuesOut
 }
-
-/*func Swe_cotrans(xpo *[6]float64, xpn *[6]float64, eps float64) {
-	_xpo := (*C.double)(&xpo[0])
-	_xpn := (*C.double)(&xpn[0])
-	_eps := C.double(eps)
-
-	C.swe_cotrans(_xpo, _xpn, _eps)
-}*/

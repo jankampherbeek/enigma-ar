@@ -17,7 +17,7 @@ import (
 const DELTA = 1e-7
 
 func TestJulDay(t *testing.T) {
-	result := SeJulDayCalculation{}.SeCalcJd(2024, 5, 6, 20.5, 1)
+	result := SwephJulDayCalculation{}.CalcJd(2024, 5, 6, 20.5, 1)
 	expected := 2460437.3541666665
 	difference := math.Abs(result - expected)
 	if difference > 0.000001 {
@@ -27,7 +27,7 @@ func TestJulDay(t *testing.T) {
 
 func TestRevJulDay(t *testing.T) {
 	jd := 2460437.3541666665
-	resultYear, resultMonth, resultDay, resultUt := SeRevJulDayCalculation{}.SeRevCalcJd(jd, 1)
+	resultYear, resultMonth, resultDay, resultUt := SwephRevJulDayCalculation{}.RevCalcJd(jd, 1)
 	expectedYear := 2024
 	expectedMonth := 5
 	expectedDay := 6
@@ -49,7 +49,7 @@ func TestPointPositions(t *testing.T) {
 	flags := domain.SeflgSwieph + domain.SeflgSpeed
 	// TODO check all 6 values
 	expected := []float64{132.309351305555, 1.309320472222, 1.106102572, 1.572654666667}
-	result, err := SePointPosCalculation{}.SeCalcPointPos(julDay, body, flags)
+	result, err := SwephPointPosCalculation{}.CalcPointPos(julDay, body, flags)
 	if err != nil {
 		t.Errorf("PointPositions(2_470_000, SeMercury, 256) returns error %s", err)
 	} else {
@@ -70,7 +70,7 @@ func TestHorizontalPosition(t *testing.T) {
 	pointDecl := -16.422932391786961
 	flags := 2048
 	expected := []float64{297.4812938568067, 0.0, 0.50662370470219853}
-	result := SeHorPosCalculation{}.SeCalcHorPos(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
+	result := SwephHorPosCalculation{}.CalcHorPos(jdUt, geoLong, geoLat, geoHeight, pointRa, pointDecl, flags)
 	for i := 0; i <= 2; i++ {
 		if math.Abs(result[i]-expected[i]) > DELTA {
 			t.Errorf("HorizontalPosition(2_434_406.8177, 6.9, 52.2166, 0.0, 0.0, 317.1878, -16.4229, 2048) = %f; want %f", result[i], expected[i])
@@ -84,7 +84,7 @@ func TestHousePositionEcliptical(t *testing.T) {
 	geoLat := 51.5
 	flags := domain.SeflgSwieph + domain.SeflgSpeed
 	var houseSys rune = 'P'
-	cuspResult, mcAscResult, err := SeHousePosCalculation{}.SeCalcHousePos(houseSys, julDay, geoLong, geoLat, flags)
+	cuspResult, mcAscResult, err := SwephHousePosCalculation{}.CalcHousePos(houseSys, julDay, geoLong, geoLat, flags)
 	expectedMc := 109.0150128333
 	expectedAsc := 194.5072978611
 	expectedCusp2 := 220.0397175278

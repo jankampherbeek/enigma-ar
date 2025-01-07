@@ -20,11 +20,11 @@ type RevJulDayCalculator interface {
 }
 
 type JulDayCalculation struct {
-	seCalc se.SeJulDayCalculator
+	seCalc se.SwephJulDayCalculator
 }
 
 func NewJulDayCalculation() JulDayCalculator {
-	sjc := se.NewSeJulDayCalculation()
+	sjc := se.NewSwephJulDayCalculation()
 	return JulDayCalculation{sjc}
 }
 
@@ -34,15 +34,15 @@ func (jdc JulDayCalculation) CalcJd(year int, month int, day int, ut float64, gr
 	if !greg {
 		gregFlag = 0
 	}
-	return jdc.seCalc.SeCalcJd(year, month, day, ut, gregFlag)
+	return jdc.seCalc.CalcJd(year, month, day, ut, gregFlag)
 }
 
 type RevJulDayCalculation struct {
-	seRevCalc se.SeRevJulDayCalculator
+	seRevCalc se.SwephRevJulDayCalculator
 }
 
 func NewRevJulDayCalculation() RevJulDayCalculator {
-	srjc := se.NewSeRevJulDayCalculation()
+	srjc := se.NewSwephRevJulDayCalculation()
 	return RevJulDayCalculation{srjc}
 }
 
@@ -52,5 +52,5 @@ func (rjdc RevJulDayCalculation) CalcRevJd(jd float64, greg bool) (int, int, int
 	if !greg {
 		gregFlag = 0
 	}
-	return rjdc.seRevCalc.SeRevCalcJd(jd, gregFlag)
+	return rjdc.seRevCalc.RevCalcJd(jd, gregFlag)
 }

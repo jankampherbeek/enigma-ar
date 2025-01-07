@@ -26,7 +26,7 @@ func TestCalcJd(t *testing.T) {
 
 type FakeSeJulDayCalculation struct{}
 
-func (fake FakeSeJulDayCalculation) SeCalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
+func (fake FakeSeJulDayCalculation) CalcJd(year int, month int, day int, hour float64, gregFlag int) float64 {
 	return 123.456
 }
 
@@ -49,6 +49,6 @@ func TestCalcRevJd(t *testing.T) {
 
 type FakeSeRevJulDayCalculation struct{}
 
-func (fake FakeSeRevJulDayCalculation) SeRevCalcJd(jd float64, gregFlag int) (int, int, int, float64) {
+func (fake FakeSeRevJulDayCalculation) RevCalcJd(jd float64, gregFlag int) (int, int, int, float64) {
 	return 2000, 1, 4, 0.5
 }

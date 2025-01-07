@@ -29,13 +29,13 @@ func (fcc FullChartCalculation) CalcFullChart(request domain.FullChartRequest) (
 
 	var response domain.FullChartResponse
 	pointsRequest := domain.PointPositionsRequest{
-		Points:   request.Points,
-		JdUt:     request.Jd,
-		GeoLong:  request.GeoLong,
-		GeoLat:   request.GeoLat,
-		Coord:    request.CoordSys,
-		ObsPos:   request.ObsPos,
-		Tropical: request.Ayanamsha == 0,
+		Points:    request.Points,
+		JdUt:      request.Jd,
+		GeoLong:   request.GeoLong,
+		GeoLat:    request.GeoLat,
+		Coord:     request.CoordSys,
+		ObsPos:    request.ObsPos,
+		Ayanamsha: request.Ayanamsha,
 	}
 	pointsResult, pointsErr := fcc.ppc.CalcPointPos(pointsRequest)
 	if pointsErr != nil {

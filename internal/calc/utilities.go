@@ -13,7 +13,7 @@ import (
 )
 
 // SeFlags calculates the total of all flags for the SE.
-func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, tropical bool) int {
+func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, ayan domain.Ayanamsha) int {
 	flags := domain.SeflgSwieph + domain.SeflgSpeed // always use SE + speed
 	if coord == domain.CoordEquatorial {
 		flags += domain.SeflgEquatorial
@@ -24,7 +24,7 @@ func SeFlags(coord domain.CoordinateSystem, obsPos domain.ObserverPosition, trop
 	if obsPos == domain.ObsPosHeliocentric {
 		flags += domain.SeflgHelioc
 	}
-	if coord == domain.CoordEcliptical && !tropical {
+	if coord == domain.CoordEcliptical && !(ayan == domain.AyanNone) {
 		flags += domain.SeflgSidereal
 	}
 	return flags

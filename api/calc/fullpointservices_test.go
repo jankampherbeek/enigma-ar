@@ -23,7 +23,7 @@ func TestFullPositionsInsufficientPoints(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -46,7 +46,7 @@ func TestFullPositionsJdTooEarly(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -69,7 +69,7 @@ func TestFullPositionsJdTooLate(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -92,7 +92,7 @@ func TestFullPositionsGeoLongTooSmall(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -115,7 +115,7 @@ func TestFullPositionsGeoLongTooLarge(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -138,7 +138,7 @@ func TestFullPositionsGeoLatTooSmall(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -161,7 +161,7 @@ func TestFullPositionsGeoLatTooLarge(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -184,7 +184,7 @@ func TestFullPositionsArmcTooSmall(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -207,7 +207,7 @@ func TestFullPositionsArmcTooLarge(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -230,7 +230,7 @@ func TestFullPositionsObliquityTooSmall(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
@@ -253,7 +253,7 @@ func TestFullPositionsObliquityTooLarge(t *testing.T) {
 		Coord:     0.0,
 		ObsPos:    0.0,
 		ProjType:  0.0,
-		Tropical:  false,
+		Ayanamsha: domain.AyanNone,
 	}
 	fps := NewFullPointService()
 	result, err := fps.FullPositions(request)
