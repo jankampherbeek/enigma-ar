@@ -12,6 +12,7 @@ import (
 	"enigma-ar/internal/analysis"
 	"errors"
 	"fmt"
+	"log/slog"
 )
 
 // HarmonicServer provides services for the calculation of harmonics
@@ -41,18 +42,22 @@ func (hs HarmonicService) Harmonics(actPositions []domain.SinglePosition, harmon
 		MinHarmonic = 1
 		MaxHarmonic = 100_000
 	)
+	slog.Info("Starting calculation of harmonics")
 
 	if harmonicNr < MinHarmonic || harmonicNr > MaxHarmonic {
+		slog.Error("Harmonic number out of range")
 		return nil, fmt.Errorf("harmonics failed, harmonicNr should be > 0.0 and <= 1000, but was %f", harmonicNr)
 	}
 	if len(actPositions) < 1 {
+		slog.Error("no data found")
 		return nil, errors.New("harmonics failed, no data found")
 	}
 	for _, pos := range actPositions {
 		if pos.Position < 0.0 || pos.Position >= 360.0 {
+			slog.Error("position out of range")
 			return nil, fmt.Errorf("harmonics failed, encountered position %f, this is outside range: >= 0.0 and < 360.0", pos.Position)
 		}
 	}
-
+	slog.Info("Completed calculation of harmonics")
 	return hs.hrmCalc.CalcHarmonics(actPositions, harmonicNr)
 }

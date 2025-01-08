@@ -11,9 +11,10 @@ import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/analysis"
 	"errors"
+	"log/slog"
 )
 
-// MidpointServer provides services for the calculation of midpoints
+// MidpointsServer provides services for the calculation of midpoints
 type MidpointsServer interface {
 	Midpoints(points []domain.SinglePosition) ([]domain.Midpoint, error)
 	OccupiedMidpoints(points []domain.SinglePosition, dial domain.MpDial, orb float64) ([]domain.OccupiedMidpoint, error)
@@ -45,11 +46,14 @@ const (
 // POST no errors -> returns slice of midpoints
 // POST errors: returns nil and error
 func (mps MidpointService) Midpoints(points []domain.SinglePosition) ([]domain.Midpoint, error) {
+	slog.Info("Started calculation of midpoints")
 	if len(points) < MinItemsForMP {
+		slog.Error("Not enough points")
 		return nil, errors.New("not enough points")
 	}
 	for i := 0; i < len(points); i++ {
 		if points[i].Position < MinPosForMP || points[i].Position >= MaxPosForMP {
+			slog.Error("position out of range")
 			return nil, errors.New("position must be between 0.0 and <360.0")
 		}
 	}
@@ -63,16 +67,22 @@ func (mps MidpointService) Midpoints(points []domain.SinglePosition) ([]domain.M
 // POST no errors -> returns nil
 // POST errors: returns nil and error
 func (mps MidpointService) OccupiedMidpoints(points []domain.SinglePosition, dial domain.MpDial, orb float64) ([]domain.OccupiedMidpoint, error) {
+
+	slog.Info("Started calculation of occupied midpoints")
 	if len(points) < MinItemsForCalcMP {
+		slog.Error("Not enough points")
 		return nil, errors.New("not enough points")
 	}
 	if orb <= MinOrbForMP || orb > MaxOrbForMP {
+		slog.Error("Orb out of range")
 		return nil, errors.New("orb must be between 0.0 and 10.0")
 	}
 	for i := 0; i < len(points); i++ {
 		if points[i].Position < MinPosForMP || points[i].Position >= MaxPosForMP {
+			slog.Error("position out of range")
 			return nil, errors.New("positions must be between 0.0 and <360.0")
 		}
 	}
+	slog.Info("Completed calculation of occupied midpoints")
 	return mps.mpCalc.CalcOccupiedMidpoints(points, dial, orb)
 }

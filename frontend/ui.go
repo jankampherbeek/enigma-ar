@@ -11,6 +11,7 @@ import (
 	"fyne.io/fyne/v2"
 	"fyne.io/fyne/v2/container"
 	"fyne.io/fyne/v2/widget"
+	"log/slog"
 )
 
 func (gm *GuiMgr) createChartsMain() *fyne.Container {
@@ -21,6 +22,8 @@ func (gm *GuiMgr) createChartsMain() *fyne.Container {
 }
 
 func MakeUI(app fyne.App) {
+	slog.Info("Creating UI")
+
 	mainWindow := app.NewWindow("Enigma 1.0")
 	guiMgr := NewGuiMgr(app, mainWindow)
 	settings := NewSettings()

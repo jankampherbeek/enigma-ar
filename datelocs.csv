@@ -9,3 +9,6 @@ Id|ChartId|Source|NameLocation|Rating|GeoLong|GeoLat|DateText|TimeText|Jd
 7|11||Somewhere +12:13:14 -15:16|r_rr_unknown|12.220555555555556|-15.266666666666667|1/1/1 r_cal_gregorian|1:1:1 r_tz_ut|1721425.5423726852
 8|12||" +1:1 -1:1"|r_rr_unknown|1.0166666666666666|-1.0166666666666666|1/1/1 r_cal_gregorian|1:1 r_tz_ut|1721425.5423611111
 9|13||" +0:0 +0:0"|r_rr_unknown|0|0|2024/12/30 r_cal_gregorian|22:00 r_tz_cet|2460675.375
+10|14||Enschede +6:54 -52:13|r_rr_unknown|6.9|-52.21666666666667|1953/1/29 r_cal_gregorian|8:37:30 r_tz_cet|2434406.8177083335
+11|15||" +0:0 +0:0"|r_rr_unknown|-0|-0|1/1/1 r_cal_gregorian|1:1 r_tz_ut|1721425.5423611111
+12|16||" +0:0 +0:0"|r_rr_unknown|0|-0|1/1/1 r_cal_gregorian|1:1 r_tz_ut|1721425.5423611111

@@ -11,6 +11,7 @@ import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/calc"
 	"errors"
+	"log/slog"
 )
 
 type FullChartServer interface {
@@ -32,6 +33,7 @@ func NewFullChartService() FullChartServer {
 // PRE MinGeoLat < = FullChartRequest.GeoLat < MaxGeoLat (geolat between -90.0 and 90.0)
 // POST No errors: returns calculated full chart response, otherwise returns empty full chart response
 func (fcs FullChartService) CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error) {
+	slog.Info("Start calculation of full chart")
 	emptyResponse := domain.FullChartResponse{
 		Points:    nil,
 		Mc:        domain.HousePosResult{},
@@ -41,16 +43,21 @@ func (fcs FullChartService) CalcFullChart(request domain.FullChartRequest) (doma
 		Cusps:     nil,
 	}
 	if len(request.Points) <= 0 {
+		slog.Error("points is empty")
 		return emptyResponse, errors.New("points is empty")
 	}
 	if request.Jd < domain.MinJdGeneral || request.Jd > domain.MaxJdGeneral {
+		slog.Error("jd is out of range")
 		return emptyResponse, errors.New("jd is out of range")
 	}
 	if request.GeoLong < domain.MinGeoLong || request.GeoLong > domain.MaxGeoLong {
+		slog.Error("geoLong is out of range")
 		return emptyResponse, errors.New("geoLong is out of range")
 	}
 	if request.GeoLat < domain.MinGeoLat || request.GeoLat > domain.MaxGeoLat {
+		slog.Error("geoLat is out of range")
 		return emptyResponse, errors.New("geoLat is out of range")
 	}
+	slog.Info("Completed calculation of full chart")
 	return fcs.fcc.CalcFullChart(request)
 }

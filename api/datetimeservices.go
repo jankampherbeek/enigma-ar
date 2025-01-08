@@ -10,6 +10,7 @@ package api
 import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/calc"
+	"log/slog"
 )
 
 // JulDayServer provides services for julian day related functionality.
@@ -34,7 +35,9 @@ func NewJulDayService() *JulDayService {
 
 // JulDay returns the calculated julian day number for ephemeris time.
 func (jds JulDayService) JulDay(request *domain.DateTime) float64 {
+	slog.Info("Starting calculation of JD")
 	jd := jds.jdCalc.CalcJd(request.Year, request.Month, request.Day, request.Ut, request.Greg)
+	slog.Info("Completed calculation of JD")
 	return jd
 }
 
@@ -49,7 +52,10 @@ func NewRevJulDayService() *RevJulDayService {
 	}
 }
 
-// RevJulDay returns date and time for a given jd. The returnvalues are year, month, day and ut.
+// RevJulDay returns date and time for a given jd. The return values are year, month, day and ut.
 func (rjds RevJulDayService) RevJulDay(jd float64, cal domain.Calendar) (int, int, int, float64) {
-	return rjds.revJdCalc.CalcRevJd(jd, cal == domain.CalGregorian)
+	slog.Info("Starting calculation of date/time from JD")
+	y, m, d, t := rjds.revJdCalc.CalcRevJd(jd, cal == domain.CalGregorian)
+	slog.Info("Completed calculation of date/time from JD")
+	return y, m, d, t
 }

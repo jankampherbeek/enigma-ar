@@ -11,6 +11,7 @@ import (
 	"enigma-ar/domain"
 	"enigma-ar/internal/analysis"
 	"errors"
+	"log/slog"
 	"math"
 )
 
@@ -39,8 +40,9 @@ func NewParallelService() *ParallelService {
 func (ps ParallelService) Parallels(actPositions []domain.SinglePosition, orb float64) ([]domain.MatchedParallel, error) {
 
 	const MaxDecl = 180.0
-
+	slog.Info("Started calculation of parallels")
 	if len(actPositions) < 2 {
+		slog.Error("Not enough positions")
 		return nil, errors.New("parallels failed, not enough data")
 	}
 	if orb <= 0.0 || orb >= 10.0 {
@@ -51,9 +53,11 @@ func (ps ParallelService) Parallels(actPositions []domain.SinglePosition, orb fl
 			pos1 := actPositions[i].Position
 			pos2 := actPositions[j].Position
 			if math.Abs(pos1) >= MaxDecl || math.Abs(pos2) >= MaxDecl {
+				slog.Error("Declination out of range")
 				return nil, errors.New("parallels failed, found declination >= 180.0")
 			}
 		}
 	}
+	slog.Info("Completed calculation of parallels")
 	return ps.parCalc.CalcParallels(actPositions, orb)
 }
