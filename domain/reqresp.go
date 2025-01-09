@@ -16,6 +16,18 @@ type DateTime struct {
 	Greg  bool
 }
 
+type DateTimeHms struct {
+	Year  int
+	Month int
+	Day   int
+	Hour  int
+	Min   int
+	Sec   int
+	Greg  bool
+	Dst   float64
+	TZone float64
+}
+
 // PointPositionsRequest Request for the calculation of all positions for one or more points
 type PointPositionsRequest struct {
 	Points    []ChartPoint
