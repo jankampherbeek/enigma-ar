@@ -28,6 +28,14 @@ type DateTimeHms struct {
 	TZone float64
 }
 
+type StandardInputItem struct {
+	ID           string
+	Name         string
+	GeoLongitude float64
+	GeoLatitude  float64
+	DateTime     DateTimeHms
+}
+
 // PointPositionsRequest Request for the calculation of all positions for one or more points
 type PointPositionsRequest struct {
 	Points    []ChartPoint

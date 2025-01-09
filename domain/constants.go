@@ -12,28 +12,31 @@ package domain
 // Min and max values
 const (
 	// TODO check min and max values for JD
-	MinJdGeneral     = -2946707.5 // -12999/08/02
-	MaxJdGeneral     = 7865293.5  // 16799/12/30
-	MinJdChiron      = 1967598.5  // 0675/01/01
-	MaxJdChiron      = 3419437.5  // 4650/01/01
-	MinJdPholus      = 641716.5   // -2958/01/01
-	MaxJdPholus      = 4390615.5  // 7308/12/30
-	MinJdCeresVesta  = -2946707.5 // -12999/08/02
-	MaxJdCeresVesta  = 5224242.5  // 9591/05/23
-	MinJdMinorPoints = 626157.5   // -3000/03/18  Nessus, Huya, Ixion, ORcus, Varuna, MakeMake, Haumea, Quaoar, Eris, Sedna
-	MaxJdMinorPoints = 5224242.5  // 9591/05/23
-	MinLongitude     = 0.0
-	MaxLongitude     = 360.0
-	MinArmc          = 0.0
-	MaxArmc          = 360.0
-	MinDeclination   = -180.0
-	MaxDeclination   = 180.0
-	MinObliquity     = 20.0
-	MaxObliquity     = 30.0
-	MinGeoLong       = -180.0
-	MaxGeoLong       = 180.0
-	MinGeoLat        = -90.0
-	MaxGeoLat        = 90.0
+	MinJdGeneral             = -2946707.5 // -12999/08/02
+	MaxJdGeneral             = 7865293.5  // 16799/12/30
+	MinJdChiron              = 1967598.5  // 0675/01/01
+	MaxJdChiron              = 3419437.5  // 4650/01/01
+	MinJdPholus              = 641716.5   // -2958/01/01
+	MaxJdPholus              = 4390615.5  // 7308/12/30
+	MinJdCeresVesta          = -2946707.5 // -12999/08/02
+	MaxJdCeresVesta          = 5224242.5  // 9591/05/23
+	MinJdMinorPoints         = 626157.5   // -3000/03/18  Nessus, Huya, Ixion, ORcus, Varuna, MakeMake, Haumea, Quaoar, Eris, Sedna
+	MaxJdMinorPoints         = 5224242.5  // 9591/05/23
+	MinLongitude             = 0.0
+	MaxLongitude             = 360.0
+	MinArmc                  = 0.0
+	MaxArmc                  = 360.0
+	MinDeclination           = -180.0
+	MaxDeclination           = 180.0
+	MinObliquity             = 20.0
+	MaxObliquity             = 30.0
+	MinGeoLong               = -180.0
+	MaxGeoLong               = 180.0
+	MinGeoLat                = -90.0
+	MaxGeoLat                = 90.0
+	MinMultiplicationCGroups = 1
+	MaxMultiplicationCGroups = 1000
+	MinSizeCGroups           = 2
 )
 
 // Astronomical constants

@@ -13,22 +13,14 @@ import (
 	"sort"
 )
 
-type StandardInputItem struct {
-	ID           string
-	Name         string
-	GeoLongitude float64
-	GeoLatitude  float64
-	DateTime     domain.DateTimeHms
-}
-
 type ControlGroupCreator interface {
-	CreateMultipleControlData(inputItems []StandardInputItem, multiplicity int) []StandardInputItem
+	CreateMultipleControlData(inputItems []domain.StandardInputItem, multiplicity int) []domain.StandardInputItem
 }
 
 type ControlGroupCreation struct {
 	dataHandler       CGDataHandler
 	cgRandomizer      CGroupRandomizer
-	controlGroupItems []StandardInputItem
+	controlGroupItems []domain.StandardInputItem
 	years             []int
 	months            []int
 	days              []int
@@ -48,8 +40,8 @@ func NewControlGroupCreation() ControlGroupCreator {
 	}
 }
 
-func (cgc ControlGroupCreation) CreateMultipleControlData(inputItems []StandardInputItem, multiplicity int) []StandardInputItem {
-	allControlData := make([]StandardInputItem, 0)
+func (cgc ControlGroupCreation) CreateMultipleControlData(inputItems []domain.StandardInputItem, multiplicity int) []domain.StandardInputItem {
+	allControlData := make([]domain.StandardInputItem, 0)
 	for i := 0; i < multiplicity; i++ {
 		controlDataForOneSet := cgc.createControlData(inputItems, i)
 		allControlData = append(allControlData, controlDataForOneSet...)
@@ -57,7 +49,7 @@ func (cgc ControlGroupCreation) CreateMultipleControlData(inputItems []StandardI
 	return allControlData
 }
 
-func (cgc ControlGroupCreation) createControlData(inputItems []StandardInputItem, sequence int) []StandardInputItem {
+func (cgc ControlGroupCreation) createControlData(inputItems []domain.StandardInputItem, sequence int) []domain.StandardInputItem {
 	cgc.controlGroupItems = cgc.controlGroupItems[:0] // Clear slice
 	cgc.processInputData(inputItems)
 	cgc.sortDaysAndShuffleOtherItems()
@@ -65,7 +57,7 @@ func (cgc ControlGroupCreation) createControlData(inputItems []StandardInputItem
 	return cgc.controlGroupItems
 }
 
-func (cgc ControlGroupCreation) processInputData(inputItems []StandardInputItem) {
+func (cgc ControlGroupCreation) processInputData(inputItems []domain.StandardInputItem) {
 
 	cgc.years = cgc.years[:0]
 	cgc.months = cgc.months[:0]
@@ -128,7 +120,7 @@ func (cgc ControlGroupCreation) processData(sequence int) {
 		dateTime := domain.DateTimeHms{Year: year, Month: month, Day: day, Hour: hour, Min: minute, Sec: second, Dst: dst}
 		id := counter
 		name := fmt.Sprintf("Controldata %d-%d", sequence, id)
-		item := StandardInputItem{
+		item := domain.StandardInputItem{
 			ID:           fmt.Sprintf("%d-%d", sequence, id),
 			Name:         name,
 			GeoLongitude: longitude,
