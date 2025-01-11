@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"math"
+	"path/filepath"
 	"unsafe"
 )
 
@@ -151,6 +152,12 @@ func (ppc SwephPointPosCalculation) CalcPointPos(jdUt float64, body int, flags i
 	cJdUt := C.double(jdUt)
 	cBody := C.int(body)
 	cFlags := C.int(flags)
+	// prepare SE
+	sep := string(filepath.Separator)
+	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
+	sp := NewSwephPreparation()
+	sp.SetEphePath(ephePath)
+
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
 	if result < 0 {
 		var emptyArray [6]float64

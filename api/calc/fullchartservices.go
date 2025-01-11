@@ -59,5 +59,6 @@ func (fcs FullChartService) CalcFullChart(request domain.FullChartRequest) (doma
 		return emptyResponse, errors.New("geoLat is out of range")
 	}
 	slog.Info("Completed calculation of full chart")
-	return fcs.fcc.CalcFullChart(request)
+	result, err := fcs.fcc.CalcFullChart(request)
+	return result, err
 }

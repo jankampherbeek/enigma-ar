@@ -14,6 +14,7 @@ import (
 	"enigma-ar/internal/se"
 	"fmt"
 	"math"
+	"path/filepath"
 )
 
 const (
@@ -124,6 +125,12 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartPoint, jdUt float64,
 	eclFlags, equFlags int, geoLong, geoLat float64) (domain.PointPosResult, error) {
 
+	// TODO check if this initalisation is required
+	sep := string(filepath.Separator)
+	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
+	sp := se.NewSwephPreparation()
+	sp.SetEphePath(ephePath)
+
 	var position domain.PointPosResult
 	//posEcl, errEcl := calc.sePointCalc.CalcPointPos(jdUt, index, eclFlags)
 	posEcl, errEcl := calc.sePointCalc.CalcPointPos(jdUt, int(point), eclFlags)
@@ -155,8 +162,6 @@ func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartP
 		AzimPos:   posHor[0],
 		AltitPos:  posHor[2],
 	}
-	fmt.Printf("point %v lonPos %f\n", point, posEcl[0])
-
 	return position, nil
 }
 
