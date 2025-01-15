@@ -117,6 +117,7 @@ type FullChartRequest struct {
 	ObsPos    ObserverPosition
 	ProjType  ProjectionType
 	Jd        float64
+	Obliquity float64
 	GeoLong   float64
 	GeoLat    float64
 }

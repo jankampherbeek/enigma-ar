@@ -181,7 +181,7 @@ func (ec SwephEpsilonCalculation) CalcEpsilon(jdUt float64, trueEps bool) (float
 	var cPos [6]C.double
 	cSerr := make([]C.char, C.AS_MAXCH)
 	cJdUt := C.double(jdUt)
-	cBody := C.int(domain.EclNut)
+	cBody := C.int(-1) // Key for obliquity
 	cFlags := C.int(domain.SeflgSwieph)
 	result := C.swe_calc_ut(cJdUt, cBody, cFlags, &cPos[0], &cSerr[0])
 	err := C.GoString(&cSerr[0])

@@ -27,6 +27,7 @@ func NewObliqueLongCalculation() ObliqueLongCalculator {
 
 // calcObliqueLongitudes calculates oblique longitudes for the given request
 func (olc ObliqueLongCalculation) calcObliqueLongitudes(points []domain.PointPosResult, armc, obliquity, geoLat, ayanOffset float64) ([]domain.PointPosResult, error) {
+
 	emptyResult := make([]domain.PointPosResult, 0)
 	result := make([]domain.PointPosResult, 0, len(points))
 	spLong, spLat, err := olc.calculateSouthPoint(armc, obliquity, geoLat)
@@ -44,6 +45,7 @@ func (olc ObliqueLongCalculation) calcObliqueLongitudes(points []domain.PointPos
 		resultItem.LonPos = oblLong
 		result = append(result, resultItem)
 	}
+
 	return result, nil
 }
 
@@ -80,6 +82,15 @@ func (olc ObliqueLongCalculation) oblLongForCelPoint(eclLon, eclLat, ayanamshaOf
 			correctedV = -absoluteV
 		}
 	}
+	//fmt.Printf("----------- DEBUG INFO ----------------------------\n")
+	//fmt.Printf("eclLon %v and eclLat %v\n", eclLon, eclLat)
+	//fmt.Printf("Southpoint longitude %v and latitude %v\n", longSp, latSp)
+	//fmt.Printf("Ayanamsha offset  %v\n", ayanamshaOffset)
+	//fmt.Printf("s: %v\n", s)
+	//fmt.Printf("v: %v\n", v)
+	//fmt.Printf("correctedV: %v\n", correctedV)
+	//fmt.Printf("----------- END DEBUG INFO ------------------------\n")
+
 	return ValueToRange(longPl+correctedV, 0.0, 360.0)
 }
 

@@ -7,7 +7,9 @@
 
 package calc
 
-import "enigma-ar/domain"
+import (
+	"enigma-ar/domain"
+)
 
 // FullChartCalculator calculates a full chart with celestial points and houses.
 type FullChartCalculator interface {
@@ -28,19 +30,6 @@ func NewFullChartCalculation() FullChartCalculator {
 func (fcc FullChartCalculation) CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error) {
 
 	var response domain.FullChartResponse
-	pointsRequest := domain.PointPositionsRequest{
-		Points:    request.Points,
-		JdUt:      request.Jd,
-		GeoLong:   request.GeoLong,
-		GeoLat:    request.GeoLat,
-		Coord:     request.CoordSys,
-		ObsPos:    request.ObsPos,
-		Ayanamsha: request.Ayanamsha,
-	}
-	pointsResult, pointsErr := fcc.ppc.CalcPointPos(pointsRequest)
-	if pointsErr != nil {
-		return response, pointsErr
-	}
 	houseRequest := domain.HousePosRequest{
 		HouseSys: request.HouseSys,
 		JdUt:     request.Jd,
@@ -51,13 +40,31 @@ func (fcc FullChartCalculation) CalcFullChart(request domain.FullChartRequest) (
 	if mundaneErr != nil {
 		return response, mundaneErr
 	}
+	armc := mundaneResult[1].RaPos
+	pointsRequest := domain.PointPositionsRequest{
+		Points:    request.Points,
+		JdUt:      request.Jd,
+		GeoLong:   request.GeoLong,
+		GeoLat:    request.GeoLat,
+		Armc:      armc,
+		Obliquity: request.Obliquity,
+		Coord:     request.CoordSys,
+		ObsPos:    request.ObsPos,
+		ProjType:  request.ProjType,
+		Ayanamsha: request.Ayanamsha,
+	}
+	pointsResult, pointsErr := fcc.ppc.CalcPointPos(pointsRequest)
+	if pointsErr != nil {
+		return response, pointsErr
+	}
+
 	// create response
 	response = domain.FullChartResponse{
 		Points:    pointsResult,
 		Mc:        mundaneResult[1],
 		Asc:       mundaneResult[0],
-		Vertex:    mundaneResult[3],
-		EastPoint: mundaneResult[4],
+		Vertex:    mundaneResult[2],
+		EastPoint: mundaneResult[3],
 		Cusps:     housesResult,
 	}
 	return response, nil

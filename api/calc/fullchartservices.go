@@ -34,6 +34,7 @@ func NewFullChartService() FullChartServer {
 // POST No errors: returns calculated full chart response, otherwise returns empty full chart response
 func (fcs FullChartService) CalcFullChart(request domain.FullChartRequest) (domain.FullChartResponse, error) {
 	slog.Info("Start calculation of full chart")
+	// TODO add PRE condition and test for obliquity
 	emptyResponse := domain.FullChartResponse{
 		Points:    nil,
 		Mc:        domain.HousePosResult{},

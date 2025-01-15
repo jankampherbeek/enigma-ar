@@ -35,10 +35,10 @@ func NewPointsElementsCalculation() PointsElementsCalculator {
 	return PointsElementsCalculation{}
 }
 
-// Calculate performs the calculation
+// Calculate performs the calculation. Returns longitude, latitude and distance in that sequence.
 func (c PointsElementsCalculation) Calculate(planetId int, jdUt float64, observerPosition domain.ObserverPosition) []float64 {
 	centuryFractionT := c.factorT(jdUt)
-	// no difference between geocentric and toocentric becasue of the distances involved
+	// no difference between geocentric and topocentric becasue of the distances involved
 	if observerPosition == domain.ObsPosGeocentric || observerPosition == domain.ObsPosTopocentric {
 		polarPlanetGeo := c.calcGeoPolarCoord(planetId, centuryFractionT)
 		return c.definePosition(polarPlanetGeo)

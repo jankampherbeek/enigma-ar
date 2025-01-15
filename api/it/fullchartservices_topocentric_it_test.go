@@ -18,9 +18,9 @@ import (
 	"testing"
 )
 
-// Integration tests for the calculation of a full chart
+// Integration tests for the calculation of topocentric positions
 
-func TestFullChartStandardPlanets(t *testing.T) {
+func TestFullChartTopocentricPositions(t *testing.T) {
 	// initialize SE
 	sep := string(filepath.Separator)
 	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
@@ -43,76 +43,62 @@ func TestFullChartStandardPlanets(t *testing.T) {
 		Points: []domain.ChartPoint{
 			domain.Sun,
 			domain.Moon,
-			domain.Jupiter,
-			domain.Pluto,
+			domain.Mercury,
 		},
 		HouseSys:  domain.HousesRegiomontanus,
 		Ayanamsha: domain.AyanNone,
 		CoordSys:  domain.CoordEcliptical,
-		ObsPos:    domain.ObsPosGeocentric,
+		ObsPos:    domain.ObsPosTopocentric,
 		ProjType:  domain.ProjType2D,
 		Jd:        jd,
 		GeoLong:   geoLong,
 		GeoLat:    geoLat,
 	})
 	if err != nil {
-		t.Errorf("Integration test for full chart standard planets failed with error: %v", err)
+		t.Errorf("Integration test for full chart topocentric podsitions failed with error: %v", err)
 	}
-	expSunLong := 57.590494694445 // 27 ta 35'25.7809
-	expSunLat := -0.000067944444  // -0° 0' 0.2446
-	expSunDist := 1.011558980
-	expSunLongSpeed := 0.963364 //0°57'48.1104
+	expSunLong := 57.588681277778  // 27 ta 35'19.2526
+	expSunLat := -0.00101452777778 // -0° 0' 3.6523
+	expSunDist := 1.011537390
+	expSunLongSpeed := 0.958007805555 // 0°57'28.8281
 	resSunLong := result.Points[0].LonPos
 	resSunLat := result.Points[0].LatPos
 	resSunDist := result.Points[0].RadvPos
 	resSunLongSpeed := result.Points[0].LonSpeed
-	match, errorTxt := pointPosEqual("Sun", expSunLong, resSunLong, expSunLat, resSunLat, expSunDist, resSunDist, expSunLongSpeed, resSunLongSpeed)
+	match, errorTxt := pointTopocentricEqual("Sun", expSunLong, resSunLong, expSunLat, resSunLat, expSunDist, resSunDist, expSunLongSpeed, resSunLongSpeed)
 	if !match {
 		t.Errorf(errorTxt)
 	}
 
-	expMoonLong := 116.706899111112 // 26 cn 42'24.8368
-	expMoonLat := -1.248205222222   // -1°14'53.5388
-	expMoonDist := 0.002477204
-	expMoonLongSpeed := 14.095998472222 // 14° 5'45.5945
+	expMoonLong := 116.74988125   // 26 cn 44'59.5725
+	expMoonLat := -1.666205444445 // -1°39'58.3396
+	expMoonDist := 0.002438640
+	expMoonLongSpeed := 9.913286944445 // 9°54'47.8330
 	resMoonLong := result.Points[1].LonPos
 	resMoonLat := result.Points[1].LatPos
 	resMoonDist := result.Points[1].RadvPos
 	resMoonLongSpeed := result.Points[1].LonSpeed
-	match, errorTxt = pointPosEqual("Moon", expMoonLong, resMoonLong, expMoonLat, resMoonLat, expMoonDist, resMoonDist, expMoonLongSpeed, resMoonLongSpeed)
+	match, errorTxt = pointTopocentricEqual("Moon", expMoonLong, resMoonLong, expMoonLat, resMoonLat, expMoonDist, resMoonDist, expMoonLongSpeed, resMoonLongSpeed)
 	if !match {
 		t.Errorf(errorTxt)
 	}
 
-	expJupLong := 357.103241833333 // 27 pi  6'11.6706
-	expJupLat := -1.100705416667   // -1° 6' 2.5395
-	expJupDist := 5.394679142
-	expJupLongSpeed := 0.1736915 // 0°10'25.2894
-	resJupLong := result.Points[2].LonPos
-	resJupLat := result.Points[2].LatPos
-	resJupDist := result.Points[2].RadvPos
-	resJupLongSpeed := result.Points[2].LonSpeed
-	match, errorTxt = pointPosEqual("Jupiter", expJupLong, resJupLong, expJupLat, resJupLat, expJupDist, resJupDist, expJupLongSpeed, resJupLongSpeed)
-	if !match {
-		t.Errorf(errorTxt)
-	}
-
-	expPluLong := 275.000652611111 // 5 cp  0' 2.3494
-	expPluLat := 5.155871111111    // 5° 9'21.1360
-	expPluDist := 31.028422017
-	expPluLongSpeed := -0.01886775 // -0° 1' 7.9239
-	resPluLong := result.Points[3].LonPos
-	resPluLat := result.Points[3].LatPos
-	resPluDist := result.Points[3].RadvPos
-	resPluLongSpeed := result.Points[3].LonSpeed
-	match, errorTxt = pointPosEqual("Pluto", expPluLong, resPluLong, expPluLat, resPluLat, expPluDist, resPluDist, expPluLongSpeed, resPluLongSpeed)
+	expMercuryLong := 34.365003361112 // 4 ta 21'54.0121
+	expMercuryLat := -3.323620805555  //  -3°19'25.0349
+	expMercuryDist := 0.702508140
+	expMercuryLongSpeed := 0.497060722222 // 0°29'49.4186
+	resMercuryLong := result.Points[2].LonPos
+	resMercuryLat := result.Points[2].LatPos
+	resMercuryDist := result.Points[2].RadvPos
+	resMercuryLongSpeed := result.Points[2].LonSpeed
+	match, errorTxt = pointTopocentricEqual("Mercury", expMercuryLong, resMercuryLong, expMercuryLat, resMercuryLat, expMercuryDist, resMercuryDist, expMercuryLongSpeed, resMercuryLongSpeed)
 	if !match {
 		t.Errorf(errorTxt)
 	}
 
 }
 
-func pointPosEqual(point string, longExp, longRes, latExp, latRes, distExp, distRes, speedExp, speedRes float64) (bool, string) {
+func pointTopocentricEqual(point string, longExp, longRes, latExp, latRes, distExp, distRes, speedExp, speedRes float64) (bool, string) {
 	const DELTA = 0.000001
 	noErrors := true
 	errorText := ""

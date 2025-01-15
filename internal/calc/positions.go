@@ -42,16 +42,20 @@ type HousePosCalculator interface {
 }
 
 type PointPosCalculation struct {
-	sePointCalc  se.SwephPointPosCalculator
-	seHorPosCalc se.SwephHorPosCalculator
-	sePrep       se.SwephPreparator
+	sePointCalc   se.SwephPointPosCalculator
+	seHorPosCalc  se.SwephHorPosCalculator
+	elementsCalc  PointsElementsCalculator
+	seEpsilonCalc se.SwephEpsilonCalculator
+	sePrep        se.SwephPreparator
 }
 
 func NewPointPosCalculation() PointPosCalculator {
 	ppc := se.NewSwephPointPosCalculation()
 	hpc := se.NewSwephHorPosCalculation()
+	elc := NewPointsElementsCalculation()
+	ec := se.NewSwephEpsilonCalculation()
 	prep := se.NewSwephPreparation()
-	return PointPosCalculation{ppc, hpc, prep}
+	return PointPosCalculation{ppc, hpc, elc, ec, prep}
 }
 
 // CalcPointPos calculates fully defined positions for one or more celestial points
@@ -65,6 +69,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 	geoLong := request.GeoLong
 	geoLat := request.GeoLat
 	altitude := 0.0 // altitude in meters
+
 	positions := make([]domain.PointPosResult, 0)
 	eclFlags := SeFlags(domain.CoordEcliptical, request.ObsPos, request.Ayanamsha)
 	equFlags := SeFlags(domain.CoordEquatorial, request.ObsPos, request.Ayanamsha)
@@ -96,7 +101,11 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 			}
 			positions = append(positions, position)
 		case domain.CalcElements:
-			// handle elements, use ayanoffset
+			position, err := calc.calcElements(point, jdUt, ayanOffset, request.ObsPos)
+			if err != nil {
+				return nil, fmt.Errorf("calc point positions failed for %v", point)
+			}
+			positions = append(positions, position)
 		case domain.CalcFormula:
 			position, err := calc.calcPointPosViaFormula(calcId, point, jdUt, eclFlags, equFlags, ayanOffset)
 			if err != nil {
@@ -112,6 +121,7 @@ func (calc PointPosCalculation) CalcPointPos(request domain.PointPositionsReques
 		}
 	}
 	if request.ProjType == domain.ProjTypeOblique { // handle oblique longitude
+
 		olc := NewObliqueLongCalculation()
 		newPositions, err := olc.calcObliqueLongitudes(positions, request.Armc, request.Obliquity, geoLat, ayanOffset)
 		if err != nil {
@@ -161,6 +171,33 @@ func (calc PointPosCalculation) calcPointPosViaSe(index int, point domain.ChartP
 		RadvSpeed: posEcl[5],
 		AzimPos:   posHor[0],
 		AltitPos:  posHor[2],
+	}
+	return position, nil
+}
+
+func (calc PointPosCalculation) calcElements(point domain.ChartPoint, jdUt float64,
+	ayanOffset float64, obsPos domain.ObserverPosition) (domain.PointPosResult, error) {
+	var position domain.PointPosResult
+	pointId := domain.AllChartPoints()[point].CalcId
+
+	// TODO add error checks
+	positions := calc.elementsCalc.Calculate(pointId, jdUt, obsPos)
+	lonPos := positions[0]
+	latPos := positions[1]
+	distance := positions[2]
+	posBefore := calc.elementsCalc.Calculate(pointId, jdUt-0.5, obsPos)
+	posAfter := calc.elementsCalc.Calculate(pointId, jdUt+0.5, obsPos)
+	lonSpeed := posAfter[0] - posBefore[0]
+	latSpeed := posAfter[1] - posBefore[1]
+	distanceSpeed := posAfter[2] - posBefore[2]
+	position = domain.PointPosResult{
+		Point:     point,
+		LonPos:    lonPos + ayanOffset,
+		LonSpeed:  lonSpeed,
+		LatPos:    latPos,
+		LatSpeed:  latSpeed,
+		RadvPos:   distance,
+		RadvSpeed: distanceSpeed,
 	}
 	return position, nil
 }
@@ -242,7 +279,6 @@ func (calc PointPosCalculation) calcApogeeDuval(jdUt float64, eclFlags, equFlags
 	if err != nil {
 		return Zero, fmt.Errorf("error in calculation %v", err)
 	}
-	//fmt.Printf("longSun: %f, longApogeeMean: %f, corrFactor: %f, valueInRange: %f\n", longSun.LonPos, longApogeeMean.LonPos, corrFactor, valueInRange)
 
 	return valueInRange, nil
 }
@@ -311,7 +347,7 @@ func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]d
 	hSysId := currentSystem.Code
 
 	var cuspPos = make([]domain.HousePosResult, 37)
-	var mcAscPos = make([]domain.HousePosResult, 10)
+	var mcAscPos = make([]domain.HousePosResult, 4)
 	eclFlags := domain.SeflgSwieph + domain.SeflgSpeed
 	//	equFlags := domain.SeflgSwieph + domain.SeflgSpeed + domain.SeflgEquatorial
 	cuspsEcl, otherPointsEcl, errEcl := hpc.seHouseCalc.CalcHousePos(hSysId, request.JdUt, request.GeoLong, request.GeoLat, eclFlags)
@@ -322,16 +358,16 @@ func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]d
 		if errEqu != nil {
 			return cuspPos, mcAscPos, errEqu
 		}*/
-	trueEps := true // use true obliquity (corrected for nutation)
-	eps, errEps := hpc.seEpsCalc.CalcEpsilon(request.JdUt, trueEps)
-	if errEps != nil {
-		return cuspPos, mcAscPos, errEps
+	trueObliquity := true // use true obliquity (corrected for nutation)
+	obliquity, errObl := hpc.seEpsCalc.CalcEpsilon(request.JdUt, trueObliquity)
+	if errObl != nil {
+		return cuspPos, mcAscPos, errObl
 	}
 	nrOfCuspValues := len(cuspsEcl)
 	lat := 0.0
-	// TODO combined method for cusps and other mundane points
+
 	for i := 1; i < nrOfCuspValues; i++ { // start with index 1, as the SE does the same
-		ra, decl := conversion.ChangeEclToEqu(cuspsEcl[i], lat, eps)
+		ra, decl := conversion.ChangeEclToEqu(cuspsEcl[i], lat, obliquity)
 		height := 0.0
 		horFlags := domain.SeflgEquatorial
 		posHor := hpc.seHorCalc.CalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, ra, decl, horFlags)
@@ -343,18 +379,25 @@ func (hpc HousePosCalculation) CalcHousePos(request domain.HousePosRequest) ([]d
 			AltitPos: posHor[1],
 		}
 	}
-	for i := 0; i < len(mcAscPos); i++ {
-		ra, decl := conversion.ChangeEclToEqu(otherPointsEcl[i], lat, eps)
-		height := 0.0
-		horFlags := domain.SeflgEquatorial
-		posHor := hpc.seHorCalc.CalcHorPos(request.JdUt, request.GeoLong, request.GeoLat, height, ra, decl, horFlags)
-		mcAscPos[i] = domain.HousePosResult{
-			LonPos:   cuspsEcl[i],
-			RaPos:    ra,
-			DeclPos:  decl,
-			AzimPos:  posHor[0],
-			AltitPos: posHor[1],
-		}
-	}
+
+	mcAscPos[0] = hpc.createHousePosResult(otherPointsEcl[0], lat, obliquity, request.JdUt, request.GeoLong, request.GeoLat) // Ascendant
+	mcAscPos[1] = hpc.createHousePosResult(otherPointsEcl[1], lat, obliquity, request.JdUt, request.GeoLong, request.GeoLat) // MC
+	mcAscPos[2] = hpc.createHousePosResult(otherPointsEcl[3], lat, obliquity, request.JdUt, request.GeoLong, request.GeoLat) // Vertex
+	mcAscPos[3] = hpc.createHousePosResult(otherPointsEcl[4], lat, obliquity, request.JdUt, request.GeoLong, request.GeoLat) // East point
+
 	return cuspPos, mcAscPos, nil
+}
+
+func (hpc HousePosCalculation) createHousePosResult(position, lat, obliquity, jd, geoLong, geoLat float64) domain.HousePosResult {
+	ra, decl := conversion.ChangeEclToEqu(position, lat, obliquity)
+	height := 0.0
+	horFlags := domain.SeflgEquatorial
+	posHor := hpc.seHorCalc.CalcHorPos(jd, geoLong, geoLat, height, ra, decl, horFlags)
+	return domain.HousePosResult{
+		LonPos:   position,
+		RaPos:    ra,
+		DeclPos:  decl,
+		AzimPos:  posHor[0],
+		AltitPos: posHor[1],
+	}
 }
