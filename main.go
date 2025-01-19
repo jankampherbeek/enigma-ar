@@ -53,7 +53,7 @@ func main() {
 
 func prepareLogging() {
 	// Configure Lumberjack for log rotation
-	logFilename := "." + string(filepath.Separator) + "log/enigma.log"
+	logFilename := "." + string(filepath.Separator) + "log" + string(filepath.Separator) + "enigma.log"
 	ljack := &lumberjack.Logger{
 		Filename:   logFilename,
 		MaxSize:    1,    // megabytes   TODO change maxsize of logfile into 10 after rollback functionality could be checked

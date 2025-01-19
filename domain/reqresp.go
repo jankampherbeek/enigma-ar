@@ -202,3 +202,20 @@ type ActualAspect = struct {
 	ActualOrb    float64
 	Exactness    int
 }
+
+// Country contains info about a country and its code
+type Country struct {
+	Code string
+	Name string
+}
+
+// City contains info about a city, including its coordinates
+type City struct {
+	Country      string
+	Name         string
+	GeoLat       string
+	GeoLong      string
+	Region       string
+	Elevation    string
+	IndicationTz string
+}

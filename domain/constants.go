@@ -7,6 +7,8 @@
 
 package domain
 
+import "path/filepath"
+
 // Constants that can be used globally
 
 // Min and max values
@@ -55,4 +57,9 @@ const (
 	SeflgEquatorial = 2048
 	SeflgTopoc      = 32768 // 32 * 1024
 	SeflgSidereal   = 65536 // 64 * 1024
+)
+
+// general purpose constants
+const (
+	PathSep = string(filepath.Separator)
 )
