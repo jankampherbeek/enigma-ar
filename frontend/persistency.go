@@ -14,7 +14,7 @@ import (
 	"strings"
 )
 
-// Prepare chart data to be persisted or read data from persistency
+// Prepare chart data to be persisted or read data from locandzone
 
 func persistCurrentChart() {
 	dv := GetDataVaultRadix()

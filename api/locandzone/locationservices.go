@@ -5,11 +5,11 @@
  *  Please check the file copyright.txt in the root of the source for further details.
  */
 
-package persistency
+package apilocandzone
 
 import (
 	"enigma-ar/domain"
-	"enigma-ar/internal/persistency"
+	"enigma-ar/internal/locandzone"
 	"errors"
 	"log/slog"
 )
@@ -21,12 +21,12 @@ type LocationServer interface {
 }
 
 type LocationService struct {
-	locHandler persistency.LocationHandler
+	locHandler locandzone.LocationHandler
 }
 
 func NewLocationService() LocationServer {
 	return LocationService{
-		locHandler: persistency.NewLocationHandling(),
+		locHandler: locandzone.NewLocationHandling(),
 	}
 }
 
