@@ -14,7 +14,7 @@ import (
 	"log/slog"
 )
 
-// LocationServer proviodes services for locations
+// LocationServer provides services for locations
 type LocationServer interface {
 	Countries() ([]domain.Country, error)
 	Cities(countryCode string) ([]domain.City, error)
