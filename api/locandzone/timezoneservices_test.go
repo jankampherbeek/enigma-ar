@@ -9,6 +9,7 @@ package apilocandzone
 
 import (
 	"enigma-ar/domain"
+	"math"
 	"testing"
 )
 
@@ -26,15 +27,15 @@ func TestActualTimeZone(t *testing.T) {
 		Dst:   0,
 		TZone: 0,
 	}
-	name, offset, err := tzs.ActualTimeZone(dateTime, tzIndication)
+	zoneInfo, err := tzs.ActualTimeZone(dateTime, tzIndication)
 	if err == nil {
-		t.Errorf("ActualTimeZone should have returned an error for an invalid tzIndication")
+		t.Errorf("ActualTimezone should have returned an error for an invalid tzIndication")
 	}
-	if name != "" {
-		t.Errorf("ActualTimeZone should have returned an empty string as name for an invalid tzIndication")
+	if zoneInfo.ZoneName != "" {
+		t.Errorf("ActualTimezone should have returned an empty string as name in the zoneInfo for an invalid tzIndication")
 	}
-	if offset != 0 {
-		t.Errorf("ActualTimeZone should have returned zero offset for an invalid tzIndication")
+	if math.Abs(zoneInfo.Offset) > 1e-8 {
+		t.Errorf("ActualTimezone should have returned zero zoneInfo for an invalid tzIndication")
 	}
 
 }

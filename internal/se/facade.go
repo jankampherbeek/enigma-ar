@@ -39,7 +39,12 @@ type SwephJulDayCalculator interface {
 
 // SwephRevJulDayCalculator retrieves the date and time for a given jd nr from the SE.
 type SwephRevJulDayCalculator interface {
-	RevCalcJd(jd float64, gragFlag int) (int, int, int, float64)
+	RevCalcJd(jd float64, gregFlag int) (int, int, int, float64)
+}
+
+// SwephDayOfWeekCalculator returns the weekday for a given JD. Monday=0 ... Sunday=6. Only Gregorian calendar.
+type SwephDayOfWeekCalculator interface {
+	DayOfWeek(jd float64) int
 }
 
 // SwephPointPosCalculator retrieves the positions and speed for ecliptical or equatorial coordinates.
@@ -136,6 +141,18 @@ func (rjdc SwephRevJulDayCalculation) RevCalcJd(jd float64, gragFlag int) (int, 
 	var cHour C.double
 	C.swe_revjul(C.double(jd), C.int(gragFlag), &cYear, &cMonth, &cDay, &cHour)
 	return int(cYear), int(cMonth), int(cDay), float64(cHour)
+}
+
+type SwephDayOfWeekCalculation struct{}
+
+func NewSwephDayOfWeekCalculation() SwephDayOfWeekCalculator {
+	return SwephDayOfWeekCalculation{}
+}
+
+func (sdow SwephDayOfWeekCalculation) DayOfWeek(jd float64) int {
+	CDow := C.swe_day_of_week(C.double(jd))
+	return int(CDow)
+
 }
 
 type SwephPointPosCalculation struct{}

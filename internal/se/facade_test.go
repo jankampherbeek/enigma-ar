@@ -54,6 +54,15 @@ func TestRevJulDay(t *testing.T) {
 	}
 }
 
+func TestDayOfWeek(t *testing.T) {
+	jd := 2460437.3541666665 // 2024/05/06 20:30 --> Monday
+	expectedDOW := 0
+	result := SwephDayOfWeekCalculation{}.DayOfWeek(jd)
+	if result != expectedDOW {
+		t.Errorf("DayOfWeek returns a wrong result for dow: %d", result)
+	}
+}
+
 func TestPointPositions(t *testing.T) {
 	sep := string(filepath.Separator)
 	ephePath := ".." + sep + ".." + sep + "sedata" // path is relative from current package
