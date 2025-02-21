@@ -20,12 +20,12 @@ type TimeZoneServer interface {
 }
 
 type TimeZoneService struct {
-	tzHandler locandzone.TimezoneHandler
+	tzHandler locandzone.TzHandler
 }
 
 func NewTimeZoneService() TimeZoneServer {
 	return TimeZoneService{
-		tzHandler: locandzone.NewTimezoneHandling(),
+		tzHandler: locandzone.NewTzHandling(),
 	}
 }
 
@@ -34,12 +34,12 @@ func NewTimeZoneService() TimeZoneServer {
 // POST if no errors occurred --> returns offset with offset in seconds, indication of DST and the name of the zone,
 // otherwise --> returns an empty zone info and an error
 func (tzs TimeZoneService) ActualTimeZone(dateTime domain.DateTimeHms, tzIndication string) (locandzone.ZoneInfo, error) {
-	emptyZone := locandzone.ZoneInfo{Offset: 0, ZoneName: "", DST: false}
+	emptyZone := locandzone.ZoneInfo{Offset: 0, TzName: "", Dst: false}
 	if len(tzIndication) < 5 {
 		slog.Error("Received invalid tzIndication: " + tzIndication)
 		return emptyZone, errors.New("invalid tzIndication")
 	}
-	offset, err := tzs.tzHandler.ActualTimezone(dateTime, tzIndication)
+	offset, err := tzs.tzHandler.CurrentTime(dateTime, tzIndication)
 	if err != nil {
 		// TODO handle error
 		return emptyZone, err

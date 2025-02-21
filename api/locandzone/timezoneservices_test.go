@@ -31,7 +31,7 @@ func TestActualTimeZone(t *testing.T) {
 	if err == nil {
 		t.Errorf("ActualTimezone should have returned an error for an invalid tzIndication")
 	}
-	if zoneInfo.ZoneName != "" {
+	if zoneInfo.TzName != "" {
 		t.Errorf("ActualTimezone should have returned an empty string as name in the zoneInfo for an invalid tzIndication")
 	}
 	if math.Abs(zoneInfo.Offset) > 1e-8 {
