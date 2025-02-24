@@ -199,5 +199,69 @@ func AllWheelTypes() []WheelTypeText {
 		{WheelTypePlanetsOutside, "r_wh_planets_outside"},
 		{WheelTypeSimpleCircle, "r_wh_simple_circle"},
 	}
+}
 
+type SymDirKey int
+
+const (
+	SymKeyOneDegree SymDirKey = iota
+	SymKeyMeanSun
+	SymKeyTrueSun
+)
+
+type SymDirKeyText struct {
+	Key    SymDirKey
+	TextId string
+}
+
+func AllSymDirKeys() []SymDirKeyText {
+	return []SymDirKeyText{
+		{SymKeyOneDegree, "r_prog_smkey_onedegree"},
+		{SymKeyMeanSun, "r_prog_smkey_meansun"},
+		{SymKeyTrueSun, "r_prog_smkey_truesun"},
+	}
+}
+
+type PrimDirKey int
+
+const (
+	PdKeyNaibod PrimDirKey = iota
+	PdKeyPtolemy
+	PdKeyBrahe
+	PdKeyPlacidus
+	PdKeyVanDam
+)
+
+type PrimDirKeyText struct {
+	Key    PrimDirKey
+	TextId string
+}
+
+func AllPrimDirKeys() []PrimDirKeyText {
+	return []PrimDirKeyText{
+		{PdKeyNaibod, "r_prog_prkey_naibod"},
+		{PdKeyPtolemy, "r_prog_prkey_ptolemy"},
+		{PdKeyBrahe, "r_prog_prkey_brahe"},
+		{PdKeyPlacidus, "r_prog_prkey_placidus"},
+		{PdKeyVanDam, "r_prog_prkey_vandam"},
+	}
+}
+
+type PrimDirMethods int
+
+const (
+	MethodPlacidus PrimDirMethods = iota
+	MethodRegiomontanus
+)
+
+type PrimDirMethodText struct {
+	Key    PrimDirMethods
+	TextId string
+}
+
+func AllPrimDirMethods() []PrimDirMethodText {
+	return []PrimDirMethodText{
+		{MethodPlacidus, "r_prog_prmethod_placidus"},
+		{MethodRegiomontanus, "r_prog_prmethod_regiomontanus"},
+	}
 }

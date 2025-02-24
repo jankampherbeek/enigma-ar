@@ -142,7 +142,7 @@ func TestCalcAspectsHappyFlow(t *testing.T) {
 				i, result[i].Pos2.Id, expected[i].Pos2.Id)
 		}
 		if result[i].ActualAspect != expected[i].ActualAspect {
-			t.Errorf("Aspect mismatch at index %d: got %d, want %d",
+			t.Errorf("Aspects mismatch at index %d: got %d, want %d",
 				i, result[i].ActualAspect, expected[i].ActualAspect)
 		}
 		difference = math.Abs(result[i].Pos1.Position - expected[i].Pos1.Position)

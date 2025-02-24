@@ -54,7 +54,7 @@ func TestFullChartHousesPlacidus(t *testing.T) {
 		GeoLat:    geoLat,
 	})
 	if err != nil {
-		t.Errorf("Integration test for full chart houses Placidus failed with error: %v", err)
+		t.Errorf("Integration test for full chart houses PdKeyPlacidus failed with error: %v", err)
 	}
 
 	expCusp3 := 263.6838888888888
@@ -166,7 +166,7 @@ func TestFullChartHousesPlacidusSouthernHemisphere(t *testing.T) {
 		GeoLat:    geoLat,
 	})
 	if err != nil {
-		t.Errorf("Integration test for full chart houses Placidus failed with error: %v", err)
+		t.Errorf("Integration test for full chart houses PdKeyPlacidus failed with error: %v", err)
 	}
 	expCusp6 := 2.225
 	resCusp6 := result.Cusps[6].LonPos
@@ -219,7 +219,7 @@ func TestFullChartHousesCampanusSouthernHemisphere(t *testing.T) {
 		GeoLat:    geoLat,
 	})
 	if err != nil {
-		t.Errorf("Integration test for full chart houses Placidus failed with error: %v", err)
+		t.Errorf("Integration test for full chart houses PdKeyPlacidus failed with error: %v", err)
 	}
 	expCusp1 := 233.110833333333
 	resCusp1 := result.Cusps[1].LonPos
