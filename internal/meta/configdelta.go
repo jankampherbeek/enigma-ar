@@ -44,31 +44,31 @@ func compareBasics(newCfgBasic, defaultCfgBasic domain.ConfigBasic) []CfgDelta {
 	var newDeltas []CfgDelta
 	if newCfgBasic.ObsPos != defaultCfgBasic.ObsPos {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "ObserverPosition",
+			cfgItem:  domain.CfgObspos,
 			newValue: strconv.Itoa(int(newCfgBasic.ObsPos)),
 		})
 	}
 	if newCfgBasic.Ayan != defaultCfgBasic.Ayan {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Ayanamsha",
+			cfgItem:  domain.CfgAyanamsha,
 			newValue: strconv.Itoa(int(newCfgBasic.Ayan)),
 		})
 	}
 	if newCfgBasic.ProjType != defaultCfgBasic.ProjType {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "ProjectionType",
+			cfgItem:  domain.CfgProjType,
 			newValue: strconv.Itoa(int(newCfgBasic.ProjType)),
 		})
 	}
 	if newCfgBasic.Houses != defaultCfgBasic.Houses {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "HouseSystem",
+			cfgItem:  domain.CfgHouseSystem,
 			newValue: strconv.Itoa(int(newCfgBasic.Houses)),
 		})
 	}
 	if newCfgBasic.Wheel != defaultCfgBasic.Wheel {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "WheelType",
+			cfgItem:  domain.CfgWheelType,
 			newValue: strconv.Itoa(int(newCfgBasic.Wheel)),
 		})
 	}
@@ -79,49 +79,49 @@ func compareOrbs(newCfgOrb, defaultCfgOrb domain.ConfigOrbs) []CfgDelta {
 	var newDeltas []CfgDelta
 	if math.Abs(newCfgOrb.BaseOrbAspects-defaultCfgOrb.BaseOrbAspects) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "BaseOrbAspects",
+			cfgItem:  domain.CfgBaseOrbAspects,
 			newValue: fmt.Sprintf("%f", newCfgOrb.BaseOrbAspects),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbDeclMidpoints-defaultCfgOrb.OrbDeclMidpoints) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbDeclMidpoints",
+			cfgItem:  domain.CfgOrbDeclMidpoints,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbDeclMidpoints),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbParallels-defaultCfgOrb.OrbParallels) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbParallels",
+			cfgItem:  domain.CfgOrbParallels,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbParallels),
 		})
 	}
 	if math.Abs(newCfgOrb.BaseOrbMidpoints-defaultCfgOrb.BaseOrbMidpoints) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "BaseOrbMidpoints",
+			cfgItem:  domain.CfgBaseOrbMidpoints,
 			newValue: fmt.Sprintf("%f", newCfgOrb.BaseOrbMidpoints),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbTransits-defaultCfgOrb.OrbTransits) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbTransits",
+			cfgItem:  domain.CfgOrbTransits,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbTransits),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbPrimDir-defaultCfgOrb.OrbPrimDir) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbPrimdir",
+			cfgItem:  domain.CfgOrbPrimDir,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbPrimDir),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbSecDir-defaultCfgOrb.OrbSecDir) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbSecDir",
+			cfgItem:  domain.CfgOrbSecDir,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbSecDir),
 		})
 	}
 	if math.Abs(newCfgOrb.OrbSymDir-defaultCfgOrb.OrbSymDir) > 1e-8 {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "OrbSymDir",
+			cfgItem:  domain.CfgOrbSymDir,
 			newValue: fmt.Sprintf("%f", newCfgOrb.OrbSymDir),
 		})
 	}
@@ -142,7 +142,7 @@ func compareAspects(newCfgAsp, defaultCfgAsp []domain.ConfigAspect) ([]CfgDelta,
 			details := fmt.Sprintf("use:%t|show:%t|factor:%f|glyph:%v|color:%v",
 				newAsp.IsUsed, newAsp.ShowInChart, newAsp.OrbFactor, newAsp.Glyph, newAsp.Color)
 			newDeltas = append(newDeltas, CfgDelta{
-				cfgItem:  "Aspect_" + strconv.Itoa(int(defAsp.ActualAspect)),
+				cfgItem:  domain.CfgAspectX + strconv.Itoa(int(defAsp.ActualAspect)),
 				newValue: details,
 			})
 		}
@@ -163,7 +163,7 @@ func comparePoints(newCfgPoints, defaultCfgPoints []domain.ConfigPoint) ([]CfgDe
 			details := fmt.Sprintf("use:%t|show:%t|factor:%f|glyph:%v", newPoint.IsUsed, newPoint.ShowInChart,
 				newPoint.OrbFactor, newPoint.Glyph)
 			newDeltas = append(newDeltas, CfgDelta{
-				cfgItem:  "Point_" + strconv.Itoa(int(defPoint.ActualPoint)),
+				cfgItem:  domain.CfgPointX + strconv.Itoa(int(defPoint.ActualPoint)),
 				newValue: details,
 			})
 		}
@@ -175,31 +175,31 @@ func compareProg(newCfgProg, defaultCfgProg domain.ConfigProg) []CfgDelta {
 	var newDeltas []CfgDelta
 	if newCfgProg.PrimDirMethod != defaultCfgProg.PrimDirMethod {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_PrimdirMethod",
+			cfgItem:  domain.CfgProgPrimDirMethod,
 			newValue: strconv.Itoa(int(newCfgProg.PrimDirMethod)),
 		})
 	}
 	if newCfgProg.PrimDirMundane != defaultCfgProg.PrimDirMundane {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_PrimdirMundane",
+			cfgItem:  domain.CfgProgPrimDirMundane,
 			newValue: strconv.FormatBool(newCfgProg.PrimDirMundane),
 		})
 	}
 	if newCfgProg.PrimDirTimeKey != defaultCfgProg.PrimDirTimeKey {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_PrimdirTimeKey",
+			cfgItem:  domain.CfgProgPrimDirTimeKey,
 			newValue: strconv.Itoa(int(newCfgProg.PrimDirTimeKey)),
 		})
 	}
 	if newCfgProg.SymDirTimeKey != defaultCfgProg.SymDirTimeKey {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_SymDirTimeKey",
+			cfgItem:  domain.CfgProgSymDirTimeKey,
 			newValue: strconv.Itoa(int(newCfgProg.SymDirTimeKey)),
 		})
 	}
 	if newCfgProg.SolarRelocate != defaultCfgProg.SolarRelocate {
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_SolarRelocate",
+			cfgItem:  domain.CfgProgSolarRelocate,
 			newValue: strconv.FormatBool(newCfgProg.SolarRelocate),
 		})
 	}
@@ -210,35 +210,35 @@ func compareProg(newCfgProg, defaultCfgProg domain.ConfigProg) []CfgDelta {
 		}
 		details := strings.Join(nrsAsStrings, "|")
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_TransitPoints",
+			cfgItem:  domain.CfgProgTransitPoints,
 			newValue: details,
 		})
 	}
 	if !reflect.DeepEqual(newCfgProg.SecDirPoints, defaultCfgProg.SecDirPoints) {
 		details := createDetailsForPoints(newCfgProg.SecDirPoints)
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_SecDirPoints",
+			cfgItem:  domain.CfgProgSecDirPoints,
 			newValue: details,
 		})
 	}
 	if !reflect.DeepEqual(newCfgProg.SymDirPoints, defaultCfgProg.SymDirPoints) {
 		details := createDetailsForPoints(newCfgProg.SymDirPoints)
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_SymDirPoints",
+			cfgItem:  domain.CfgProgSymDirPoints,
 			newValue: details,
 		})
 	}
 	if !reflect.DeepEqual(newCfgProg.PrimDirProm, defaultCfgProg.PrimDirProm) {
 		details := createDetailsForPoints(newCfgProg.PrimDirProm)
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_PrimDirProm",
+			cfgItem:  domain.CfgProgPrimDirProm,
 			newValue: details,
 		})
 	}
 	if !reflect.DeepEqual(newCfgProg.PrimDirSign, defaultCfgProg.PrimDirSign) {
 		details := createDetailsForPoints(newCfgProg.PrimDirSign)
 		newDeltas = append(newDeltas, CfgDelta{
-			cfgItem:  "Prog_PrimDirSign",
+			cfgItem:  domain.CfgProgPrimDirSign,
 			newValue: details,
 		})
 	}

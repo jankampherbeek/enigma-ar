@@ -20,7 +20,7 @@ func TestConfigDeltaHappyFlow(t *testing.T) {
 	newConfig := defaultConfig
 	newConfig.Basic.Houses = domain.HousesCampanus
 	expected := CfgDelta{
-		"HouseSystem",
+		domain.CfgHouseSystem,
 		"5",
 	}
 	result, err := ConfigDelta(newConfig)
@@ -55,24 +55,19 @@ func TestConfigDeltaAllBasics(t *testing.T) {
 	newConfig.Basic.ObsPos = domain.ObsPosHeliocentric
 	newConfig.Basic.ProjType = domain.ProjTypeOblique
 	expected := []CfgDelta{
-		CfgDelta{
-			cfgItem:  "HouseSystem",
+		{cfgItem: domain.CfgHouseSystem,
 			newValue: "9",
 		},
-		CfgDelta{
-			cfgItem:  "Ayanamsha",
+		{cfgItem: domain.CfgAyanamsha,
 			newValue: "1",
 		},
-		CfgDelta{
-			cfgItem:  "WheelType",
+		{cfgItem: domain.CfgWheelType,
 			newValue: "2",
 		},
-		CfgDelta{
-			cfgItem:  "ObserverPosition",
+		{cfgItem: domain.CfgObspos,
 			newValue: "2",
 		},
-		CfgDelta{
-			cfgItem:  "ProjectionType",
+		{cfgItem: domain.CfgProjType,
 			newValue: "1",
 		},
 	}
@@ -105,8 +100,8 @@ func TestConfigDeltaOrbs(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-	if result[0].cfgItem != "BaseOrbMidpoints" {
-		t.Errorf("expected: %v, got: %v", "BaseOrbMidpoints", result[0].cfgItem)
+	if result[0].cfgItem != domain.CfgBaseOrbMidpoints {
+		t.Errorf("expected: %v, got: %v", domain.CfgBaseOrbMidpoints, result[0].cfgItem)
 	}
 	if result[0].newValue != "2.000000" {
 		t.Errorf("expected: %v, got: %v", "2.000000", result[0].newValue)
@@ -125,7 +120,7 @@ func TestConfigDeltaAspects(t *testing.T) {
 	if len(result) != 2 {
 		t.Error("expected 2 results")
 	}
-	expCfgItem := "Aspect_1"
+	expCfgItem := domain.CfgAspectX + "1"
 	expValue := "use:true|show:true|factor:90.000000|glyph:59152|color:{255 0 0 255}"
 	if result[0].cfgItem != expCfgItem {
 		t.Errorf("expected: %v, got: %v", expCfgItem, result[0].cfgItem)
@@ -133,7 +128,7 @@ func TestConfigDeltaAspects(t *testing.T) {
 	if result[0].newValue != expValue {
 		t.Errorf("expected: %v, got: %v", expValue, result[0].newValue)
 	}
-	expCfgItem = "Aspect_2"
+	expCfgItem = domain.CfgAspectX + "2"
 	expValue = "use:true|show:true|factor:80.000000|glyph:59168|color:{128 128 128 255}"
 	if result[1].cfgItem != expCfgItem {
 		t.Errorf("expected: %v, got: %v", expCfgItem, result[1].cfgItem)
@@ -155,7 +150,7 @@ func TestConfigDeltaPoints(t *testing.T) {
 	if len(result) != 2 {
 		t.Error("expected 2 results")
 	}
-	expCfgItem := "Point_5"
+	expCfgItem := domain.CfgPointX + "5"
 	expValue := "use:true|show:true|factor:3.000000|glyph:57862"
 	if result[0].cfgItem != expCfgItem {
 		t.Errorf("expected: %v, got: %v", expCfgItem, result[0].cfgItem)
@@ -163,7 +158,7 @@ func TestConfigDeltaPoints(t *testing.T) {
 	if result[0].newValue != expValue {
 		t.Errorf("expected: %v, got: %v", expValue, result[0].newValue)
 	}
-	expCfgItem = "Point_6"
+	expCfgItem = domain.CfgPointX + "6"
 	expValue = "use:false|show:true|factor:60.000000|glyph:57863"
 	if result[1].cfgItem != expCfgItem {
 		t.Errorf("expected: %v, got: %v", expCfgItem, result[1].cfgItem)
@@ -185,8 +180,8 @@ func TestConfigDeltaProgBasics(t *testing.T) {
 	if len(result) != 1 {
 		t.Error("expected 1 result")
 	}
-	if result[0].cfgItem != "Prog_PrimdirMethod" {
-		t.Errorf("expected: %v, got: %v", "Prog_PrimdirMethod", result[0].cfgItem)
+	if result[0].cfgItem != domain.CfgProgPrimDirMethod {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgPrimDirMethod, result[0].cfgItem)
 	}
 	if result[0].newValue != strconv.Itoa(int(newConfig.Prog.PrimDirMethod)) {
 		t.Errorf("expected: %v, got: %v", expected, result[0].newValue)
@@ -206,8 +201,8 @@ func TestConfigDeltaProgSignificators(t *testing.T) {
 	if len(result) != 1 {
 		t.Error("expected 1 result")
 	}
-	if result[0].cfgItem != "Prog_PrimDirSign" {
-		t.Errorf("expected: %v, got: %v", "Prog_PrimDirSign", result[0].cfgItem)
+	if result[0].cfgItem != domain.CfgProgPrimDirSign {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgPrimDirSign, result[0].cfgItem)
 	}
 	details := "0|1|2"
 	if result[0].newValue != details {
@@ -228,8 +223,8 @@ func TestConfigDeltaProgPromissors(t *testing.T) {
 	if len(result) != 1 {
 		t.Error("expected 1 result")
 	}
-	if result[0].cfgItem != "Prog_PrimDirProm" {
-		t.Errorf("expected: %v, got: %v", "Prog_PrimDirProm", result[0].cfgItem)
+	if result[0].cfgItem != domain.CfgProgPrimDirProm {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgPrimDirProm, result[0].cfgItem)
 	}
 	details := "49|50"
 	if result[0].newValue != details {
