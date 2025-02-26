@@ -168,7 +168,7 @@ func TestConfigDeltaPoints(t *testing.T) {
 	}
 }
 
-func TestConfigDeltaProgBasics(t *testing.T) {
+func TestConfigDeltaProgBase(t *testing.T) {
 	defaultConfig := DefaultConfig()
 	newConfig := defaultConfig
 	newConfig.Prog.PrimDirMethod = domain.MethodRegiomontanus
@@ -227,6 +227,72 @@ func TestConfigDeltaProgPromissors(t *testing.T) {
 		t.Errorf("expected: %v, got: %v", domain.CfgProgPrimDirProm, result[0].cfgItem)
 	}
 	details := "49|50"
+	if result[0].newValue != details {
+		t.Errorf("expected: %v, got: %v", details, result[0].newValue)
+	}
+}
+
+func TestConfigDeltaTransitPoints(t *testing.T) {
+	defaultConfig := DefaultConfig()
+	newConfig := defaultConfig
+	newConfig.Prog.TransitPoints = []domain.ChartPoint{
+		domain.Jupiter, domain.Saturn,
+	}
+	result, err := ConfigDelta(newConfig)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(result) != 1 {
+		t.Error("expected 1 result")
+	}
+	if result[0].cfgItem != domain.CfgProgTransitPoints {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgTransitPoints, result[0].cfgItem)
+	}
+	details := "5|6"
+	if result[0].newValue != details {
+		t.Errorf("expected: %v, got: %v", details, result[0].newValue)
+	}
+}
+
+func TestConfigDeltaSecDirPoints(t *testing.T) {
+	defaultConfig := DefaultConfig()
+	newConfig := defaultConfig
+	newConfig.Prog.SecDirPoints = []domain.ChartPoint{
+		domain.Moon, domain.Venus,
+	}
+	result, err := ConfigDelta(newConfig)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(result) != 1 {
+		t.Error("expected 1 result")
+	}
+	if result[0].cfgItem != domain.CfgProgSecDirPoints {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgSecDirPoints, result[0].cfgItem)
+	}
+	details := "1|3"
+	if result[0].newValue != details {
+		t.Errorf("expected: %v, got: %v", details, result[0].newValue)
+	}
+}
+
+func TestConfigDeltaSymDirPoints(t *testing.T) {
+	defaultConfig := DefaultConfig()
+	newConfig := defaultConfig
+	newConfig.Prog.SymDirPoints = []domain.ChartPoint{
+		domain.Sun, domain.Uranus,
+	}
+	result, err := ConfigDelta(newConfig)
+	if err != nil {
+		t.Error(err)
+	}
+	if len(result) != 1 {
+		t.Error("expected 1 result")
+	}
+	if result[0].cfgItem != domain.CfgProgSymDirPoints {
+		t.Errorf("expected: %v, got: %v", domain.CfgProgSymDirPoints, result[0].cfgItem)
+	}
+	details := "0|7"
 	if result[0].newValue != details {
 		t.Errorf("expected: %v, got: %v", details, result[0].newValue)
 	}

@@ -153,6 +153,7 @@ func updateOrbs(c *domain.Config, item, value string) error {
 }
 
 func updateAspects(c *domain.Config, item, value string) error {
+
 	if strings.HasPrefix(item, domain.CfgAspectX) {
 		index := len(domain.CfgAspectX)
 		aspectNr, err := strconv.Atoi(item[index:])
@@ -162,6 +163,9 @@ func updateAspects(c *domain.Config, item, value string) error {
 		for i, asp := range c.Aspects {
 			if asp.ActualAspect == domain.Aspect(aspectNr) {
 				c.Aspects[i], err = constructAspect(aspectNr, value)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -178,6 +182,9 @@ func updatePoints(c *domain.Config, item, value string) error {
 		for i, point := range c.Points {
 			if point.ActualPoint == domain.ChartPoint(pointNr) {
 				c.Points[i], err = constructPoint(pointNr, value)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}
@@ -261,7 +268,7 @@ func constructAspect(aspectNr int, value string) (domain.ConfigAspect, error) {
 	if len(items) != 5 {
 		return domain.ConfigAspect{}, fmt.Errorf("wrong nr of items for aspect")
 	}
-	usedItems := strings.Split(items[0], "|")
+	usedItems := strings.Split(items[0], ":")
 	if len(usedItems) != 2 {
 		return domain.ConfigAspect{}, fmt.Errorf("wrong nr of items for isUsed")
 	}
@@ -269,20 +276,26 @@ func constructAspect(aspectNr int, value string) (domain.ConfigAspect, error) {
 	if err != nil {
 		return domain.ConfigAspect{}, err
 	}
-
-	show, err := strconv.ParseBool(items[1])
+	usedItems = strings.Split(items[1], ":")
+	show, err := strconv.ParseBool(usedItems[1])
 	if err != nil {
 		return domain.ConfigAspect{}, err
 	}
-	ofact, err := strconv.ParseFloat(items[2], 64)
+	usedItems = strings.Split(items[2], ":")
+	ofact, err := strconv.ParseFloat(usedItems[1], 64)
 	if err != nil {
 		return domain.ConfigAspect{}, err
 	}
-	runes := []rune(items[3])
-	gl := runes[0]
+	usedItems = strings.Split(items[3], ":")
+	runeStr := usedItems[1]
+	runeInt, _ := strconv.Atoi(runeStr)
+	gl := rune(runeInt)
 
-	col, err := rgbToNRGBA(items[4])
-
+	usedItems = strings.Split(items[4], ":")
+	col, err := rgbToNRGBA(usedItems[1])
+	if err != nil {
+		return domain.ConfigAspect{}, err
+	}
 	ca := domain.ConfigAspect{
 		ActualAspect: domain.Aspect(aspectNr),
 		IsUsed:       used,
@@ -299,7 +312,7 @@ func constructPoint(pointNr int, value string) (domain.ConfigPoint, error) {
 	if len(items) != 4 {
 		return domain.ConfigPoint{}, fmt.Errorf("wrong nr of items for point")
 	}
-	usedItems := strings.Split(items[0], "|")
+	usedItems := strings.Split(items[0], ":")
 	if len(usedItems) != 2 {
 		return domain.ConfigPoint{}, fmt.Errorf("wrong nr of items for isUsed")
 	}
@@ -307,17 +320,20 @@ func constructPoint(pointNr int, value string) (domain.ConfigPoint, error) {
 	if err != nil {
 		return domain.ConfigPoint{}, err
 	}
-
-	show, err := strconv.ParseBool(items[1])
+	usedItems = strings.Split(items[1], ":")
+	show, err := strconv.ParseBool(usedItems[1])
 	if err != nil {
 		return domain.ConfigPoint{}, err
 	}
-	ofact, err := strconv.ParseFloat(items[2], 64)
+	usedItems = strings.Split(items[2], ":")
+	ofact, err := strconv.ParseFloat(usedItems[1], 64)
 	if err != nil {
 		return domain.ConfigPoint{}, err
 	}
-	runes := []rune(items[3])
-	gl := runes[0]
+	usedItems = strings.Split(items[3], ":")
+	runeStr := usedItems[1]
+	runeInt, _ := strconv.Atoi(runeStr)
+	gl := rune(runeInt)
 
 	cp := domain.ConfigPoint{
 		ActualPoint: domain.ChartPoint(pointNr),
